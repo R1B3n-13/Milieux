@@ -34,10 +34,10 @@ public class UserServiceImpl implements UserService {
 
 		List<User> users = userRepository.findAll();
 
-		List<UserDto> userDtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
+		List<UserDto> dtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
 				.collect(Collectors.toList());
 
-		return new UserListResponseDto(200, true, "Users fetched successfully", userDtos);
+		return new UserListResponseDto(200, true, "Users fetched successfully!", dtos);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
 		UserDto dto = modelMapper.map(user, UserDto.class);
 
-		return new UserResponseDto(200, true, "User fetched successfully", dto);
+		return new UserResponseDto(200, true, "User fetched successfully!", dto);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
 		UserDto dto = modelMapper.map(user, UserDto.class);
 
-		return new UserResponseDto(200, true, "User fetched successfully", dto);
+		return new UserResponseDto(200, true, "User fetched successfully!", dto);
 	}
 
 	@Override
@@ -77,10 +77,10 @@ public class UserServiceImpl implements UserService {
 
 		List<User> users = userRepository.searchUsers(query);
 
-		List<UserDto> userDtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
+		List<UserDto> dtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
 				.collect(Collectors.toList());
 
-		return new UserListResponseDto(200, true, "Users fetched successfully", userDtos);
+		return new UserListResponseDto(200, true, "Users fetched successfully!", dtos);
 	}
 
 	@Override

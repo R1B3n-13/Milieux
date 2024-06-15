@@ -29,9 +29,9 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<UserListResponseDto> getAllUsers() {
 
-		UserListResponseDto responseDto = userService.getAllUsers();
+		UserListResponseDto responseDtos = userService.getAllUsers();
 
-		return ResponseEntity.ok(responseDto);
+		return ResponseEntity.ok(responseDtos);
 	}
 
 	@GetMapping("/{userId}")
@@ -61,9 +61,9 @@ public class UserController {
 	@GetMapping("/search")
 	public ResponseEntity<UserListResponseDto> searchUsers(@RequestParam("query") String query) {
 
-		UserListResponseDto responseDto = userService.searchUsers(query);
+		UserListResponseDto responseDtos = userService.searchUsers(query);
 
-		return ResponseEntity.ok(responseDto);
+		return ResponseEntity.ok(responseDtos);
 	}
 
 	@PutMapping("/update")

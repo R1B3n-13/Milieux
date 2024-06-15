@@ -1,7 +1,5 @@
 package com.milieux.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.milieux.dtos.responses.BaseResponseDto;
+import com.milieux.dtos.responses.PostListResponseDto;
+import com.milieux.dtos.responses.PostResponseDto;
 import com.milieux.models.Post;
 import com.milieux.services.PostService;
 import com.milieux.services.UserService;
@@ -42,27 +42,27 @@ public class PostController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Post>> getAllPosts() {
+	public ResponseEntity<PostListResponseDto> getAllPosts() {
 
-		List<Post> response = postService.getAllPosts();
+		PostListResponseDto responseDtos = postService.getAllPosts();
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(responseDtos);
 	}
 
 	@GetMapping("/{postId}")
-	public ResponseEntity<Post> getPostById(@PathVariable Integer postId) {
+	public ResponseEntity<PostResponseDto> getPostById(@PathVariable Integer postId) {
 
-		Post response = postService.getPostById(postId);
+		PostResponseDto responseDto = postService.getPostById(postId);
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(responseDto);
 	}
 
 	@GetMapping("/by-user_id/{userId}")
-	public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable Integer userId) {
+	public ResponseEntity<PostListResponseDto> getPostsByUserId(@PathVariable Integer userId) {
 
-		List<Post> response = postService.getPostsByUserId(userId);
+		PostListResponseDto responseDtos = postService.getPostsByUserId(userId);
 
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(responseDtos);
 	}
 
 	@PutMapping("/save/{postId}")

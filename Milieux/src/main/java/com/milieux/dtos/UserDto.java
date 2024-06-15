@@ -1,5 +1,6 @@
 package com.milieux.dtos;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class UserDto {
@@ -13,11 +14,13 @@ public class UserDto {
 	private List<Integer> followers;
 	private List<Integer> followings;
 
+	private ZonedDateTime createdAt;
+
 	public UserDto() {
 	}
 
 	public UserDto(Integer id, String firstName, String lastName, String gender, String email, List<Integer> followers,
-			List<Integer> followings) {
+			List<Integer> followings, ZonedDateTime createdAt) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -26,6 +29,7 @@ public class UserDto {
 		this.email = email;
 		this.followers = followers;
 		this.followings = followings;
+		this.createdAt = createdAt;
 	}
 
 	public Integer getId() {
@@ -82,5 +86,13 @@ public class UserDto {
 
 	public void setFollowings(List<Integer> followings) {
 		this.followings = followings;
+	}
+
+	public ZonedDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(ZonedDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 }

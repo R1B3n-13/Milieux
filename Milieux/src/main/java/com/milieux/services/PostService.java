@@ -1,19 +1,19 @@
 package com.milieux.services;
 
-import java.util.List;
-
 import com.milieux.dtos.responses.BaseResponseDto;
+import com.milieux.dtos.responses.PostListResponseDto;
+import com.milieux.dtos.responses.PostResponseDto;
 import com.milieux.models.Post;
 
 public interface PostService {
 
 	BaseResponseDto createPost(Post post, Integer userId);
 
-	List<Post> getAllPosts();
+	PostListResponseDto getAllPosts();
 
-	Post getPostById(Integer postId);
+	PostResponseDto getPostById(Integer postId);
 
-	List<Post> getPostsByUserId(Integer userId);
+	PostListResponseDto getPostsByUserId(Integer userId);
 
 	BaseResponseDto savePost(Integer postId, Integer userId);
 

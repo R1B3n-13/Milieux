@@ -1,11 +1,16 @@
 package com.milieux.services.impls;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.milieux.dtos.PostDto;
 import com.milieux.dtos.responses.BaseResponseDto;
+import com.milieux.dtos.responses.PostListResponseDto;
+import com.milieux.dtos.responses.PostResponseDto;
 import com.milieux.exceptions.PostAlreadySavedException;
 import com.milieux.exceptions.PostNotFoundException;
 import com.milieux.exceptions.UserNotAuthorizedException;
@@ -25,6 +30,9 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	@Override
 	public BaseResponseDto createPost(Post post, Integer userId) {
 
@@ -39,31 +47,46 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Post> getAllPosts() {
+	public PostListResponseDto getAllPosts() {
 
-		return postRepository.findAll();
+		List<Post> posts = postRepository.findAll();
+
+		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
+				.collect(Collectors.toList());
+
+		return new PostListResponseDto(200, true, "Posts fetched successfully!", dtos);
 	}
 
 	@Override
-	public Post getPostById(Integer postId) {
+	public PostResponseDto getPostById(Integer postId) {
 
-		return postRepository.findById(postId)
+		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
+
+		PostDto dto = modelMapper.map(post, PostDto.class);
+
+		return new PostResponseDto(200, true, "Post fetched successfully!", dto);
 	}
 
 	@Override
-	public List<Post> getPostsByUserId(Integer userId) {
+	public PostListResponseDto getPostsByUserId(Integer userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		return user.getPosts();
+		List<Post> posts = user.getPosts();
+
+		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
+				.collect(Collectors.toList());
+
+		return new PostListResponseDto(200, true, "Posts fetched successfully!", dtos);
 	}
 
 	@Override
 	public BaseResponseDto savePost(Integer postId, Integer userId) {
 
-		Post post = getPostById(postId);
+		Post post = postRepository.findById(postId)
+				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -84,7 +107,8 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public BaseResponseDto likePost(Integer postId, Integer userId) {
 
-		Post post = getPostById(postId);
+		Post post = postRepository.findById(postId)
+				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -108,7 +132,8 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public BaseResponseDto deletePost(Integer postId, Integer userId) {
 
-		Post post = getPostById(postId);
+		Post post = postRepository.findById(postId)
+				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
