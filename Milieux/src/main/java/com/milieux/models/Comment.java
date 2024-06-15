@@ -14,62 +14,45 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "posts")
-public class Post {
+@Table(name = "comments")
+public class Comment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+
+	private String text;
+	private String imagePath;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnore
 	private User user;
 
-	private String caption;
-	private String imagePath;
-	private String videoPath;
+	@ManyToOne
+	@JoinColumn(name = "post_id", nullable = false)
+	@JsonIgnore
+	private Post post;
 
 	@ManyToMany
-	@JoinTable(name = "post_likes", //
-			joinColumns = @JoinColumn(name = "post_id"), //
+	@JoinTable(name = "comment_likes", //
+			joinColumns = @JoinColumn(name = "comment_id"), //
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	@JsonIgnore
 	private List<User> likedByUsers = new ArrayList<>();
-
-	@OneToMany(mappedBy = "post")
-	@JsonIgnore
-	private List<Comment> comments = new ArrayList<>();
 
 	private ZonedDateTime createdAt;
 
 	@PrePersist
 	protected void onCreate() {
-
 		this.createdAt = ZonedDateTime.now();
 	}
 
-	public Post() {
-	}
-
-	public Post(Integer id, User user, String caption, String imagePath, String videoPath, List<User> likedByUsers,
-			List<Comment> comments, ZonedDateTime createdAt) {
-		super();
-		this.id = id;
-		this.user = user;
-		this.caption = caption;
-		this.imagePath = imagePath;
-		this.videoPath = videoPath;
-		this.likedByUsers = likedByUsers;
-		this.comments = comments;
-		this.createdAt = createdAt;
-	}
-
+	// Getters and Setters
 	public Integer getId() {
 		return id;
 	}
@@ -78,20 +61,12 @@ public class Post {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public String getText() {
+		return text;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getCaption() {
-		return caption;
-	}
-
-	public void setCaption(String caption) {
-		this.caption = caption;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public String getImagePath() {
@@ -102,12 +77,20 @@ public class Post {
 		this.imagePath = imagePath;
 	}
 
-	public String getVideoPath() {
-		return videoPath;
+	public User getUser() {
+		return user;
 	}
 
-	public void setVideoPath(String videoPath) {
-		this.videoPath = videoPath;
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
 	}
 
 	public List<User> getLikedByUsers() {
@@ -116,14 +99,6 @@ public class Post {
 
 	public void setLikedByUsers(List<User> likedByUsers) {
 		this.likedByUsers = likedByUsers;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
 	}
 
 	public ZonedDateTime getCreatedAt() {

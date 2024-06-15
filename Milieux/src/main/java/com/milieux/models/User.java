@@ -1,5 +1,6 @@
 package com.milieux.models;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -51,6 +53,14 @@ public class User {
 	@JsonIgnore
 	private List<Post> likedPosts = new ArrayList<>();
 
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<Comment> comments = new ArrayList<>();
+
+	@ManyToMany(mappedBy = "likedByUsers")
+	@JsonIgnore
+	private List<Post> likedComments = new ArrayList<>();
+
 	@ManyToMany
 	@JoinTable(name = "saved_posts", //
 			joinColumns = @JoinColumn(name = "user_id"), //
@@ -58,24 +68,32 @@ public class User {
 	@JsonIgnore
 	private List<Post> savedPosts = new ArrayList<>();
 
-	public User() {
+	private ZonedDateTime createdAt;
+
+	@PrePersist
+	protected void onCreate() {
+
+		this.createdAt = ZonedDateTime.now();
 	}
 
-	public User(Integer id, String firstName, String lastName, String email, String password, String gender,
+	public User(Integer id, String firstName, String lastName, String email, String gender, String password,
 			List<Integer> followers, List<Integer> followings, List<Post> posts, List<Post> likedPosts,
-			List<Post> savedPosts) {
+			List<Comment> comments, List<Post> likedComments, List<Post> savedPosts, ZonedDateTime createdAt) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.password = password;
 		this.gender = gender;
+		this.password = password;
 		this.followers = followers;
 		this.followings = followings;
 		this.posts = posts;
 		this.likedPosts = likedPosts;
+		this.comments = comments;
+		this.likedComments = likedComments;
 		this.savedPosts = savedPosts;
+		this.createdAt = createdAt;
 	}
 
 	public Integer getId() {
@@ -165,4 +183,29 @@ public class User {
 	public void setSavedPosts(List<Post> savedPosts) {
 		this.savedPosts = savedPosts;
 	}
+
+	public ZonedDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(ZonedDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public List<Post> getLikedComments() {
+		return likedComments;
+	}
+
+	public void setLikedComments(List<Post> likedComments) {
+		this.likedComments = likedComments;
+	}
+
 }
