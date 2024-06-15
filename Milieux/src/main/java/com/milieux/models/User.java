@@ -30,6 +30,7 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String gender;
 	private String password;
 
 	@ElementCollection
@@ -60,14 +61,16 @@ public class User {
 	public User() {
 	}
 
-	public User(Integer id, String firstName, String lastName, String email, String password, List<Integer> followers,
-			List<Integer> followings, List<Post> posts, List<Post> likedPosts, List<Post> savedPosts) {
+	public User(Integer id, String firstName, String lastName, String email, String password, String gender,
+			List<Integer> followers, List<Integer> followings, List<Post> posts, List<Post> likedPosts,
+			List<Post> savedPosts) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+		this.gender = gender;
 		this.followers = followers;
 		this.followings = followings;
 		this.posts = posts;
@@ -105,6 +108,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getPassword() {

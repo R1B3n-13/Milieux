@@ -7,19 +7,22 @@ public class UserDto {
 	private Integer id;
 	private String firstName;
 	private String lastName;
+	private String gender;
 	private String email;
+
 	private List<Integer> followers;
 	private List<Integer> followings;
 
 	public UserDto() {
 	}
 
-	public UserDto(Integer id, String firstName, String lastName, String email, List<Integer> followers,
+	public UserDto(Integer id, String firstName, String lastName, String gender, String email, List<Integer> followers,
 			List<Integer> followings) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.gender = gender;
 		this.email = email;
 		this.followers = followers;
 		this.followings = followings;
@@ -55,6 +58,14 @@ public class UserDto {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public List<Integer> getFollowers() {
