@@ -70,6 +70,9 @@ public class User {
 
 	private ZonedDateTime createdAt;
 
+	public User() {
+	}
+
 	@PrePersist
 	protected void onCreate() {
 

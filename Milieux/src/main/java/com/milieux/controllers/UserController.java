@@ -1,7 +1,5 @@
 package com.milieux.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.milieux.dtos.responses.BaseResponseDto;
+import com.milieux.dtos.responses.UserListResponseDto;
 import com.milieux.dtos.responses.UserResponseDto;
 import com.milieux.models.User;
 import com.milieux.services.UserService;
@@ -28,9 +27,9 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping
-	public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+	public ResponseEntity<UserListResponseDto> getAllUsers() {
 
-		List<UserResponseDto> responseDto = userService.getAllUsers();
+		UserListResponseDto responseDto = userService.getAllUsers();
 
 		return ResponseEntity.ok(responseDto);
 	}
@@ -60,9 +59,9 @@ public class UserController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<List<UserResponseDto>> searchUsers(@RequestParam("query") String query) {
+	public ResponseEntity<UserListResponseDto> searchUsers(@RequestParam("query") String query) {
 
-		List<UserResponseDto> responseDto = userService.searchUsers(query);
+		UserListResponseDto responseDto = userService.searchUsers(query);
 
 		return ResponseEntity.ok(responseDto);
 	}

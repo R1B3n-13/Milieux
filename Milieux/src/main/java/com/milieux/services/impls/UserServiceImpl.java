@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.milieux.dtos.UserDto;
 import com.milieux.dtos.responses.BaseResponseDto;
+import com.milieux.dtos.responses.UserListResponseDto;
 import com.milieux.dtos.responses.UserResponseDto;
 import com.milieux.exceptions.UserNotFoundException;
 import com.milieux.models.User;
@@ -29,17 +30,14 @@ public class UserServiceImpl implements UserService {
 	JwtUtils jwtUtils;
 
 	@Override
-	public List<UserResponseDto> getAllUsers() {
+	public UserListResponseDto getAllUsers() {
 
 		List<User> users = userRepository.findAll();
 
-		return users.stream().map(user -> {
+		List<UserDto> userDtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
+				.collect(Collectors.toList());
 
-			UserDto dto = modelMapper.map(user, UserDto.class);
-
-			return new UserResponseDto(200, true, "User fetched successfully", dto);
-
-		}).collect(Collectors.toList());
+		return new UserListResponseDto(200, true, "Users fetched successfully", userDtos);
 	}
 
 	@Override
@@ -75,17 +73,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserResponseDto> searchUsers(String query) {
+	public UserListResponseDto searchUsers(String query) {
 
 		List<User> users = userRepository.searchUsers(query);
 
-		return users.stream().map(user -> {
+		List<UserDto> userDtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
+				.collect(Collectors.toList());
 
-			UserDto dto = modelMapper.map(user, UserDto.class);
-
-			return new UserResponseDto(200, true, "User fetched successfully", dto);
-
-		}).collect(Collectors.toList());
+		return new UserListResponseDto(200, true, "Users fetched successfully", userDtos);
 	}
 
 	@Override

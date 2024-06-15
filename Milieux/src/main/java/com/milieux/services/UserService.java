@@ -1,14 +1,13 @@
 package com.milieux.services;
 
-import java.util.List;
-
 import com.milieux.dtos.responses.BaseResponseDto;
+import com.milieux.dtos.responses.UserListResponseDto;
 import com.milieux.dtos.responses.UserResponseDto;
 import com.milieux.models.User;
 
 public interface UserService {
 
-	public List<UserResponseDto> getAllUsers();
+	public UserListResponseDto getAllUsers();
 
 	public UserResponseDto getUserById(Integer userId);
 
@@ -16,7 +15,7 @@ public interface UserService {
 
 	public UserResponseDto getUserFromAuthHeader(String header);
 
-	public List<UserResponseDto> searchUsers(String query);
+	public UserListResponseDto searchUsers(String query);
 
 	public BaseResponseDto updateUser(User user, Integer userId);
 
