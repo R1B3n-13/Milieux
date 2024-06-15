@@ -1,0 +1,14 @@
+{
+	"properties": [
+		{
+			"name": "jwt.secret",
+			"type": "java.lang.String",
+			"description": "JWT secret key used for signing tokens"
+		},
+		{
+			"name": "jwt.expirationInMs",
+			"type": "java.lang.Integer",
+			"description": "Expiration time for JWT tokens in milliseconds"
+		}
+	]
+}
