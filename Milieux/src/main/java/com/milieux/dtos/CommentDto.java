@@ -4,21 +4,20 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.milieux.models.User;
-
 public class CommentDto {
 
 	private Integer id;
 	private String text;
 	private String imagePath;
 
-	private List<User> likedByUsers = new ArrayList<>();
+	private List<UserDto> likedByUsers = new ArrayList<>();
+
 	private ZonedDateTime createdAt;
 
 	public CommentDto() {
 	}
 
-	public CommentDto(Integer id, String text, String imagePath, List<User> likedByUsers, ZonedDateTime createdAt) {
+	public CommentDto(Integer id, String text, String imagePath, List<UserDto> likedByUsers, ZonedDateTime createdAt) {
 		super();
 		this.id = id;
 		this.text = text;
@@ -51,11 +50,11 @@ public class CommentDto {
 		this.imagePath = imagePath;
 	}
 
-	public List<User> getLikedByUsers() {
+	public List<UserDto> getLikedByUsers() {
 		return likedByUsers;
 	}
 
-	public void setLikedByUsers(List<User> likedByUsers) {
+	public void setLikedByUsers(List<UserDto> likedByUsers) {
 		this.likedByUsers = likedByUsers;
 	}
 

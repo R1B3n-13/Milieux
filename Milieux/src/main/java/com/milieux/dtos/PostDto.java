@@ -4,9 +4,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.milieux.models.Comment;
-import com.milieux.models.User;
-
 public class PostDto {
 
 	private Integer id;
@@ -14,16 +11,16 @@ public class PostDto {
 	private String imagePath;
 	private String videoPath;
 
-	private List<User> likedByUsers = new ArrayList<>();
-	private List<Comment> comments = new ArrayList<>();
+	private List<UserDto> likedByUsers = new ArrayList<>();
+	private List<CommentDto> comments = new ArrayList<>();
 
 	private ZonedDateTime createdAt;
 
 	public PostDto() {
 	}
 
-	public PostDto(Integer id, String caption, String imagePath, String videoPath, List<User> likedByUsers,
-			List<Comment> comments, ZonedDateTime createdAt) {
+	public PostDto(Integer id, String caption, String imagePath, String videoPath, List<UserDto> likedByUsers,
+			List<CommentDto> comments, ZonedDateTime createdAt) {
 		super();
 		this.id = id;
 		this.caption = caption;
@@ -66,19 +63,19 @@ public class PostDto {
 		this.videoPath = videoPath;
 	}
 
-	public List<User> getLikedByUsers() {
+	public List<UserDto> getLikedByUsers() {
 		return likedByUsers;
 	}
 
-	public void setLikedByUsers(List<User> likedByUsers) {
+	public void setLikedByUsers(List<UserDto> likedByUsers) {
 		this.likedByUsers = likedByUsers;
 	}
 
-	public List<Comment> getComments() {
+	public List<CommentDto> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(List<CommentDto> comments) {
 		this.comments = comments;
 	}
 
