@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.milieux.dtos.UserDto;
+import com.milieux.dtos.requests.UserRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.UserListResponseDto;
 import com.milieux.dtos.responses.UserResponseDto;
@@ -84,30 +85,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public BaseResponseDto updateUser(User user, Integer userId) {
+	public BaseResponseDto updateUser(UserRequestDto requestDto, Integer userId) {
 
 		User existingUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		if (user.getFirstName() != null) {
+		if (requestDto.getFirstName() != null) {
 
-			existingUser.setFirstName(user.getFirstName());
+			existingUser.setFirstName(requestDto.getFirstName());
 		}
-		if (user.getLastName() != null) {
+		if (requestDto.getLastName() != null) {
 
-			existingUser.setLastName(user.getLastName());
+			existingUser.setLastName(requestDto.getLastName());
 		}
-		if (user.getEmail() != null) {
+		if (requestDto.getEmail() != null) {
 
-			existingUser.setEmail(user.getEmail());
+			existingUser.setEmail(requestDto.getEmail());
 		}
-		if (user.getGender() != null) {
+		if (requestDto.getGender() != null) {
 
-			existingUser.setGender(user.getGender());
+			existingUser.setGender(requestDto.getGender());
 		}
-		if (user.getPassword() != null) {
+		if (requestDto.getPassword() != null) {
 
-			existingUser.setPassword(user.getPassword());
+			existingUser.setPassword(requestDto.getPassword());
 		}
 
 		userRepository.save(existingUser);

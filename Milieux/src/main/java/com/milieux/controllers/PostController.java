@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.milieux.dtos.requests.PostRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.PostListResponseDto;
 import com.milieux.dtos.responses.PostResponseDto;
-import com.milieux.models.Post;
 import com.milieux.services.PostService;
 import com.milieux.services.UserService;
 
@@ -31,12 +31,12 @@ public class PostController {
 	private UserService userService;
 
 	@PostMapping("/create")
-	public ResponseEntity<BaseResponseDto> createPost(@RequestBody Post post,
+	public ResponseEntity<BaseResponseDto> createPost(@RequestBody PostRequestDto requestDto,
 			@RequestHeader("Authorization") String header) {
 
 		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
-		BaseResponseDto responseDto = postService.createPost(post, userId);
+		BaseResponseDto responseDto = postService.createPost(requestDto, userId);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}

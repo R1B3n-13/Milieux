@@ -1,5 +1,6 @@
 package com.milieux.services.impls;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.milieux.dtos.requests.LoginRequestDto;
+import com.milieux.dtos.requests.UserRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.LoginResponseDto;
 import com.milieux.exceptions.UserAlreadyExistsException;
@@ -34,11 +36,16 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	AuthenticationManager authenticationManager;
 
+	@Autowired
+	ModelMapper modelMapper;
+
 	@Override
-	public BaseResponseDto register(User user) {
+	public BaseResponseDto register(UserRequestDto requestDto) {
 
 		try {
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+
+			User user = modelMapper.map(requestDto, User.class);
 
 			userRepository.save(user);
 
@@ -46,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
 
 		} catch (DataIntegrityViolationException e) {
 
-			throw new UserAlreadyExistsException("User already exists with email: " + user.getEmail());
+			throw new UserAlreadyExistsException("User already exists with email: " + requestDto.getEmail());
 		}
 	}
 

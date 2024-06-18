@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.milieux.dtos.requests.UserRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.UserListResponseDto;
 import com.milieux.dtos.responses.UserResponseDto;
-import com.milieux.models.User;
 import com.milieux.services.UserService;
 
 @RestController
@@ -67,12 +67,12 @@ public class UserController {
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<BaseResponseDto> updateUser(@RequestBody User user,
+	public ResponseEntity<BaseResponseDto> updateUser(@RequestBody UserRequestDto requestDto,
 			@RequestHeader("Authorization") String header) {
 
 		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
-		BaseResponseDto responseDto = userService.updateUser(user, userId);
+		BaseResponseDto responseDto = userService.updateUser(requestDto, userId);
 
 		return ResponseEntity.ok(responseDto);
 	}

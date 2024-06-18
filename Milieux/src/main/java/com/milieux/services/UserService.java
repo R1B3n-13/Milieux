@@ -1,9 +1,9 @@
 package com.milieux.services;
 
+import com.milieux.dtos.requests.UserRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.UserListResponseDto;
 import com.milieux.dtos.responses.UserResponseDto;
-import com.milieux.models.User;
 
 public interface UserService {
 
@@ -17,7 +17,7 @@ public interface UserService {
 
 	public UserListResponseDto searchUsers(String query);
 
-	public BaseResponseDto updateUser(User user, Integer userId);
+	public BaseResponseDto updateUser(UserRequestDto requestDto, Integer userId);
 
 	public BaseResponseDto followUser(Integer userId1, Integer userId2);
 

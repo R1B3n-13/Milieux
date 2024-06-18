@@ -1,13 +1,13 @@
 package com.milieux.services;
 
+import com.milieux.dtos.requests.PostRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.PostListResponseDto;
 import com.milieux.dtos.responses.PostResponseDto;
-import com.milieux.models.Post;
 
 public interface PostService {
 
-	BaseResponseDto createPost(Post post, Integer userId);
+	BaseResponseDto createPost(PostRequestDto requestDto, Integer userId);
 
 	PostListResponseDto getAllPosts();
 

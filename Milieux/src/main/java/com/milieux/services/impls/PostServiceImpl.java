@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.milieux.dtos.PostDto;
+import com.milieux.dtos.requests.PostRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.PostListResponseDto;
 import com.milieux.dtos.responses.PostResponseDto;
@@ -34,10 +35,12 @@ public class PostServiceImpl implements PostService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public BaseResponseDto createPost(Post post, Integer userId) {
+	public BaseResponseDto createPost(PostRequestDto requestDto, Integer userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
+
+		Post post = modelMapper.map(requestDto, Post.class);
 
 		post.setUser(user);
 

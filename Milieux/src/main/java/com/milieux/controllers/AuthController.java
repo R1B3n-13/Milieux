@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.milieux.dtos.requests.LoginRequestDto;
+import com.milieux.dtos.requests.UserRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.LoginResponseDto;
-import com.milieux.models.User;
 import com.milieux.services.AuthService;
 
 @RestController
@@ -22,9 +22,9 @@ public class AuthController {
 	private AuthService authService;
 
 	@PostMapping("/register")
-	public ResponseEntity<BaseResponseDto> register(@RequestBody User user) {
+	public ResponseEntity<BaseResponseDto> register(@RequestBody UserRequestDto requestDto) {
 
-		BaseResponseDto responseDto = authService.register(user);
+		BaseResponseDto responseDto = authService.register(requestDto);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
