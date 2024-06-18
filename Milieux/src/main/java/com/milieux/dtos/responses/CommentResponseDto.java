@@ -4,21 +4,21 @@ import com.milieux.dtos.CommentDto;
 
 public class CommentResponseDto extends BaseResponseDto {
 
-	private CommentDto commentDto;
+	private CommentDto comment;
 
 	public CommentResponseDto() {
 	}
 
-	public CommentResponseDto(int statusCode, boolean success, String message, CommentDto commentDto) {
+	public CommentResponseDto(int statusCode, boolean success, String message, CommentDto comment) {
 		super(statusCode, success, message);
-		this.commentDto = commentDto;
+		this.comment = comment;
 	}
 
-	public CommentDto getCommentDto() {
-		return commentDto;
+	public CommentDto getComment() {
+		return comment;
 	}
 
-	public void setCommentDto(CommentDto commentDto) {
-		this.commentDto = commentDto;
+	public void setComment(CommentDto comment) {
+		this.comment = comment;
 	}
 }

@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ public class CommentController {
 	@Autowired
 	UserService userService;
 
-	@GetMapping("/create/{postId}")
+	@PostMapping("/create/post/{postId}")
 	public ResponseEntity<BaseResponseDto> createComment(@RequestBody CommentRequestDto requestDto,
 			@PathVariable Integer postId, @RequestHeader("Authorization") String header) {
 
@@ -45,7 +47,7 @@ public class CommentController {
 		return ResponseEntity.ok(responseDto);
 	}
 
-	@GetMapping("/like/{commentId}")
+	@PutMapping("/like/{commentId}")
 	public ResponseEntity<BaseResponseDto> likeComment(@PathVariable Integer commentId,
 			@RequestHeader("Authorization") String header) {
 
