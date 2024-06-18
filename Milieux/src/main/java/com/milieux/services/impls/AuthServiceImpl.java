@@ -34,10 +34,10 @@ public class AuthServiceImpl implements AuthService {
 	private JwtUtils jwtUtil;
 
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 
 	@Override
 	public BaseResponseDto register(UserRequestDto requestDto) {

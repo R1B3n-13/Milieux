@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 	private ModelMapper modelMapper;
 
 	@Autowired
-	JwtUtils jwtUtils;
+	private JwtUtils jwtUtils;
 
 	@Override
 	public UserListResponseDto getAllUsers() {

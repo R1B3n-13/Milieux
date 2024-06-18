@@ -42,6 +42,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new BaseResponseDto(409, false, ex.getMessage()), HttpStatus.CONFLICT);
 	}
 
+	@ExceptionHandler(CommentNotFoundException.class)
+	public ResponseEntity<BaseResponseDto> handleCommentNotFoundException(CommentNotFoundException ex) {
+
+		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
+	}
+
 	@ExceptionHandler(AuthTokenNotFoundException.class)
 	public ResponseEntity<BaseResponseDto> handleAuthTokenNotFoundException(AuthTokenNotFoundException ex) {
 
@@ -63,6 +69,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<BaseResponseDto> handleGeneralException(Exception ex) {
 
-		return new ResponseEntity<>(new BaseResponseDto(500, false, "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new BaseResponseDto(500, false, "Internal server error"),
+				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
