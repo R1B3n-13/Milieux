@@ -1,5 +1,7 @@
 package com.milieux.dtos;
 
+import java.time.ZonedDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,4 +17,6 @@ public class StoryDto {
 	private String title;
 	private String imagePath;
 	private String videoPath;
+
+	private ZonedDateTime createdAt;
 }
