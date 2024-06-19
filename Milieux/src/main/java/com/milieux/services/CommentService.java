@@ -6,9 +6,9 @@ import com.milieux.dtos.responses.CommentResponseDto;
 
 public interface CommentService {
 
-	public BaseResponseDto createComment(CommentRequestDto requestDto, Integer postId, Integer userId);
+	public BaseResponseDto createComment(CommentRequestDto requestDto, Long postId, Long userId);
 
-	public CommentResponseDto getCommentById(Integer commentId);
+	public CommentResponseDto getCommentById(Long commentId);
 
-	public BaseResponseDto likeComment(Integer commentId, Integer userId);
+	public BaseResponseDto likeComment(Long commentId, Long userId);
 }

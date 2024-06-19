@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public BaseResponseDto createComment(CommentRequestDto requestDto, Integer postId, Integer userId) {
+	public BaseResponseDto createComment(CommentRequestDto requestDto, Long postId, Long userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public CommentResponseDto getCommentById(Integer commentId) {
+	public CommentResponseDto getCommentById(Long commentId) {
 
 		Comment comment = commentRepository.findById(commentId)
 				.orElseThrow(() -> new CommentNotFoundException("No comment found with id: " + commentId));
@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public BaseResponseDto likeComment(Integer commentId, Integer userId) {
+	public BaseResponseDto likeComment(Long commentId, Long userId) {
 
 		Comment comment = commentRepository.findById(commentId)
 				.orElseThrow(() -> new CommentNotFoundException("No comment found with id: " + commentId));

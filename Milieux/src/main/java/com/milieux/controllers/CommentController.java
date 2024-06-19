@@ -30,9 +30,9 @@ public class CommentController {
 
 	@PostMapping("/create/post/{postId}")
 	public ResponseEntity<BaseResponseDto> createComment(@RequestBody CommentRequestDto requestDto,
-			@PathVariable Integer postId, @RequestHeader("Authorization") String header) {
+			@PathVariable Long postId, @RequestHeader("Authorization") String header) {
 
-		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = commentService.createComment(requestDto, postId, userId);
 
@@ -40,7 +40,7 @@ public class CommentController {
 	}
 
 	@GetMapping("/{commentId}")
-	public ResponseEntity<CommentResponseDto> getCommentById(@PathVariable Integer commentId) {
+	public ResponseEntity<CommentResponseDto> getCommentById(@PathVariable Long commentId) {
 
 		CommentResponseDto responseDto = commentService.getCommentById(commentId);
 
@@ -48,10 +48,10 @@ public class CommentController {
 	}
 
 	@PutMapping("/like/{commentId}")
-	public ResponseEntity<BaseResponseDto> likeComment(@PathVariable Integer commentId,
+	public ResponseEntity<BaseResponseDto> likeComment(@PathVariable Long commentId,
 			@RequestHeader("Authorization") String header) {
 
-		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = commentService.likeComment(commentId, userId);
 

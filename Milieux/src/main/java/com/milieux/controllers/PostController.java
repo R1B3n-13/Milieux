@@ -34,7 +34,7 @@ public class PostController {
 	public ResponseEntity<BaseResponseDto> createPost(@RequestBody PostRequestDto requestDto,
 			@RequestHeader("Authorization") String header) {
 
-		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = postService.createPost(requestDto, userId);
 
@@ -50,7 +50,7 @@ public class PostController {
 	}
 
 	@GetMapping("/{postId}")
-	public ResponseEntity<PostResponseDto> getPostById(@PathVariable Integer postId) {
+	public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long postId) {
 
 		PostResponseDto responseDto = postService.getPostById(postId);
 
@@ -58,7 +58,7 @@ public class PostController {
 	}
 
 	@GetMapping("/by-user_id/{userId}")
-	public ResponseEntity<PostListResponseDto> getPostsByUserId(@PathVariable Integer userId) {
+	public ResponseEntity<PostListResponseDto> getPostsByUserId(@PathVariable Long userId) {
 
 		PostListResponseDto responseDtos = postService.getPostsByUserId(userId);
 
@@ -66,10 +66,10 @@ public class PostController {
 	}
 
 	@PutMapping("/save/{postId}")
-	public ResponseEntity<BaseResponseDto> savePost(@PathVariable Integer postId,
+	public ResponseEntity<BaseResponseDto> savePost(@PathVariable Long postId,
 			@RequestHeader("Authorization") String header) {
 
-		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = postService.savePost(postId, userId);
 
@@ -77,10 +77,10 @@ public class PostController {
 	}
 
 	@PutMapping("/like/{postId}")
-	public ResponseEntity<BaseResponseDto> likePost(@PathVariable Integer postId,
+	public ResponseEntity<BaseResponseDto> likePost(@PathVariable Long postId,
 			@RequestHeader("Authorization") String header) {
 
-		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = postService.likePost(postId, userId);
 
@@ -88,10 +88,10 @@ public class PostController {
 	}
 
 	@DeleteMapping("/delete/{postId}")
-	public ResponseEntity<BaseResponseDto> deletePost(@PathVariable Integer postId,
+	public ResponseEntity<BaseResponseDto> deletePost(@PathVariable Long postId,
 			@RequestHeader("Authorization") String header) {
 
-		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = postService.deletePost(postId, userId);
 

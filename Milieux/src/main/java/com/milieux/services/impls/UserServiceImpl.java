@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserResponseDto getUserById(Integer userId) {
+	public UserResponseDto getUserById(Long userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public BaseResponseDto updateUser(UserRequestDto requestDto, Integer userId) {
+	public BaseResponseDto updateUser(UserRequestDto requestDto, Long userId) {
 
 		User existingUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public BaseResponseDto followUser(Integer userId1, Integer userId2) {
+	public BaseResponseDto followUser(Long userId1, Long userId2) {
 
 		User user1 = userRepository.findById(userId1)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId1));
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public BaseResponseDto deleteUser(Integer userId) {
+	public BaseResponseDto deleteUser(Long userId) {
 
 		User existingUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));

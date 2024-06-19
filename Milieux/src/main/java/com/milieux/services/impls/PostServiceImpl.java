@@ -35,7 +35,7 @@ public class PostServiceImpl implements PostService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public BaseResponseDto createPost(PostRequestDto requestDto, Integer userId) {
+	public BaseResponseDto createPost(PostRequestDto requestDto, Long userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -61,7 +61,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostResponseDto getPostById(Integer postId) {
+	public PostResponseDto getPostById(Long postId) {
 
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
@@ -72,7 +72,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostListResponseDto getPostsByUserId(Integer userId) {
+	public PostListResponseDto getPostsByUserId(Long userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -86,7 +86,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public BaseResponseDto savePost(Integer postId, Integer userId) {
+	public BaseResponseDto savePost(Long postId, Long userId) {
 
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
@@ -108,7 +108,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public BaseResponseDto likePost(Integer postId, Integer userId) {
+	public BaseResponseDto likePost(Long postId, Long userId) {
 
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
@@ -133,7 +133,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public BaseResponseDto deletePost(Integer postId, Integer userId) {
+	public BaseResponseDto deletePost(Long postId, Long userId) {
 
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));

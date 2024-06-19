@@ -1,9 +1,5 @@
 package com.milieux.dtos;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,13 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto {
+public class StoryDto {
 
 	private Long id;
-	private String text;
+	private String title;
 	private String imagePath;
-
-	private List<UserDto> likedByUsers = new ArrayList<>();
-
-	private ZonedDateTime createdAt;
+	private String videoPath;
 }

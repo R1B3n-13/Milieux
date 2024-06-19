@@ -35,7 +35,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 
 	private String firstName;
 	private String lastName;
@@ -46,12 +46,12 @@ public class User {
 	@ElementCollection
 	@CollectionTable(name = "user_followers")
 	@Column(name = "follower_id")
-	private List<Integer> followers = new ArrayList<>();
+	private List<Long> followers = new ArrayList<>();
 
 	@ElementCollection
 	@CollectionTable(name = "user_followings")
 	@Column(name = "following_id")
-	private List<Integer> followings = new ArrayList<>();
+	private List<Long> followings = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user")
 	@JsonIgnore
@@ -68,6 +68,10 @@ public class User {
 	@ManyToMany(mappedBy = "likedByUsers")
 	@JsonIgnore
 	private List<Post> likedComments = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<Story> stories = new ArrayList<>();
 
 	@ManyToMany
 	@JoinTable(name = "saved_posts", //

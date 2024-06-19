@@ -35,7 +35,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<UserResponseDto> getUserById(@PathVariable Integer userId) {
+	public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long userId) {
 
 		UserResponseDto responseDto = userService.getUserById(userId);
 
@@ -70,7 +70,7 @@ public class UserController {
 	public ResponseEntity<BaseResponseDto> updateUser(@RequestBody UserRequestDto requestDto,
 			@RequestHeader("Authorization") String header) {
 
-		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = userService.updateUser(requestDto, userId);
 
@@ -78,10 +78,10 @@ public class UserController {
 	}
 
 	@PutMapping("/follow/{userId2}")
-	public ResponseEntity<BaseResponseDto> followUser(@PathVariable Integer userId2,
+	public ResponseEntity<BaseResponseDto> followUser(@PathVariable Long userId2,
 			@RequestHeader("Authorization") String header) {
 
-		Integer userId1 = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId1 = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = userService.followUser(userId1, userId2);
 
@@ -91,7 +91,7 @@ public class UserController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<BaseResponseDto> deleteUser(@RequestHeader("Authorization") String header) {
 
-		Integer userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
 		BaseResponseDto responseDto = userService.deleteUser(userId);
 

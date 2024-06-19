@@ -7,17 +7,17 @@ import com.milieux.dtos.responses.PostResponseDto;
 
 public interface PostService {
 
-	BaseResponseDto createPost(PostRequestDto requestDto, Integer userId);
+	BaseResponseDto createPost(PostRequestDto requestDto, Long userId);
 
 	PostListResponseDto getAllPosts();
 
-	PostResponseDto getPostById(Integer postId);
+	PostResponseDto getPostById(Long postId);
 
-	PostListResponseDto getPostsByUserId(Integer userId);
+	PostListResponseDto getPostsByUserId(Long userId);
 
-	BaseResponseDto savePost(Integer postId, Integer userId);
+	BaseResponseDto savePost(Long postId, Long userId);
 
-	BaseResponseDto likePost(Integer postId, Integer userId);
+	BaseResponseDto likePost(Long postId, Long userId);
 
-	BaseResponseDto deletePost(Integer postId, Integer userId);
+	BaseResponseDto deletePost(Long postId, Long userId);
 }

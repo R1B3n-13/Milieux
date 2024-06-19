@@ -14,14 +14,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDto {
 
-	private Integer id;
+	private Long id;
 	private String firstName;
 	private String lastName;
 	private String gender;
 	private String email;
 
-	private List<Integer> followers;
-	private List<Integer> followings;
+	private List<Long> followers;
+	private List<Long> followings;
 
 	private ZonedDateTime createdAt;
 }

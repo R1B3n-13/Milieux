@@ -9,7 +9,7 @@ public interface UserService {
 
 	public UserListResponseDto getAllUsers();
 
-	public UserResponseDto getUserById(Integer userId);
+	public UserResponseDto getUserById(Long userId);
 
 	public UserResponseDto getUserByEmail(String email);
 
@@ -17,9 +17,9 @@ public interface UserService {
 
 	public UserListResponseDto searchUsers(String query);
 
-	public BaseResponseDto updateUser(UserRequestDto requestDto, Integer userId);
+	public BaseResponseDto updateUser(UserRequestDto requestDto, Long userId);
 
-	public BaseResponseDto followUser(Integer userId1, Integer userId2);
+	public BaseResponseDto followUser(Long userId1, Long userId2);
 
-	public BaseResponseDto deleteUser(Integer userId);
+	public BaseResponseDto deleteUser(Long userId);
 }
