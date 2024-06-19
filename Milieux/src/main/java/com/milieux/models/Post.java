@@ -17,9 +17,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "posts")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Post {
 
 	@Id
@@ -52,85 +60,5 @@ public class Post {
 	protected void onCreate() {
 
 		this.createdAt = ZonedDateTime.now();
-	}
-
-	public Post() {
-	}
-
-	public Post(Integer id, User user, String caption, String imagePath, String videoPath, List<User> likedByUsers,
-			List<Comment> comments, ZonedDateTime createdAt) {
-		super();
-		this.id = id;
-		this.user = user;
-		this.caption = caption;
-		this.imagePath = imagePath;
-		this.videoPath = videoPath;
-		this.likedByUsers = likedByUsers;
-		this.comments = comments;
-		this.createdAt = createdAt;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getCaption() {
-		return caption;
-	}
-
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
-
-	public String getImagePath() {
-		return imagePath;
-	}
-
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
-
-	public String getVideoPath() {
-		return videoPath;
-	}
-
-	public void setVideoPath(String videoPath) {
-		this.videoPath = videoPath;
-	}
-
-	public List<User> getLikedByUsers() {
-		return likedByUsers;
-	}
-
-	public void setLikedByUsers(List<User> likedByUsers) {
-		this.likedByUsers = likedByUsers;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public ZonedDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(ZonedDateTime createdAt) {
-		this.createdAt = createdAt;
 	}
 }

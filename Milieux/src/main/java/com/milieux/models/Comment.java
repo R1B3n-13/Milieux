@@ -16,9 +16,17 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "comments")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment {
 
 	@Id
@@ -49,63 +57,7 @@ public class Comment {
 
 	@PrePersist
 	protected void onCreate() {
+
 		this.createdAt = ZonedDateTime.now();
-	}
-
-	// Getters and Setters
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public String getImagePath() {
-		return imagePath;
-	}
-
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Post getPost() {
-		return post;
-	}
-
-	public void setPost(Post post) {
-		this.post = post;
-	}
-
-	public List<User> getLikedByUsers() {
-		return likedByUsers;
-	}
-
-	public void setLikedByUsers(List<User> likedByUsers) {
-		this.likedByUsers = likedByUsers;
-	}
-
-	public ZonedDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(ZonedDateTime createdAt) {
-		this.createdAt = createdAt;
 	}
 }
