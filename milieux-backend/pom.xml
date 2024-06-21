@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.milieux</groupId>
-	<artifactId>Milieux-Backend</artifactId>
+	<artifactId>milieux-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Milieux</name>
 	<description>A BizNet project</description>
