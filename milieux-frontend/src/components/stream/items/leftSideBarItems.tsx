@@ -17,7 +17,7 @@ import MemoryLineIcon from "@/components/icons/MemoryLineIcon";
 import VideoFilledIcon from "@/components/icons/VideoFilledIcon";
 import VideoLineIcon from "@/components/icons/VideoLineIcon";
 
-const LeftSidebarItems = [
+const leftSidebarItems = [
   {
     name: "Followings",
     path: "/followings",
@@ -74,4 +74,4 @@ const LeftSidebarItems = [
   },
 ];
 
-export default LeftSidebarItems;
+export default leftSidebarItems;
