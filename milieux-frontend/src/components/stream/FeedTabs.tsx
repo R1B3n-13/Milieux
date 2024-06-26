@@ -1,14 +1,25 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { Card, CardContent } from "@/components/ui/Card";
 import FeedCard from "./FeedCard";
-import feedItems from "./items/feedItems";
+import {
+  getBBCFeeds,
+  getESPNFeeds,
+  getWiredFeeds,
+} from "@/services/feed/feedService";
 
-export function FeedTabs() {
+const FeedTabs = async () => {
+  const bbcFeedPromise = getBBCFeeds();
+  const wiredFeedPromise = getWiredFeeds();
+  const ESPNFeedPromise = getESPNFeeds();
+
+  const [bbcFeedItems, wiredFeedItems, ESPNFeedItems] = await Promise.all([
+    bbcFeedPromise,
+    wiredFeedPromise,
+    ESPNFeedPromise,
+  ]);
+
   return (
-    <Tabs
-      defaultValue="bbci"
-      className="w-full"
-    >
+    <Tabs defaultValue="bbci" className="w-full">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="bbci">BBC</TabsTrigger>
         <TabsTrigger value="wired">Wired</TabsTrigger>
@@ -16,9 +27,9 @@ export function FeedTabs() {
       </TabsList>
 
       <TabsContent value="bbci">
-        <Card className="overflow-y-scroll max-h-56">
+        <Card className="max-h-[calc(100vh-10em)] overflow-y-auto bg-muted shadow-lg">
           <CardContent className="space-y-2">
-            {feedItems.bbci.map((feed, index) => (
+            {bbcFeedItems.map((feed, index) => (
               <FeedCard key={index} feed={feed} />
             ))}
           </CardContent>
@@ -26,9 +37,9 @@ export function FeedTabs() {
       </TabsContent>
 
       <TabsContent value="wired">
-        <Card className="overflow-y-scroll max-h-56">
+        <Card className="max-h-[calc(100vh-10em)] overflow-y-auto bg-muted shadow-lg">
           <CardContent className="space-y-2">
-            {feedItems.wired.map((feed, index) => (
+            {wiredFeedItems.map((feed, index) => (
               <FeedCard key={index} feed={feed} />
             ))}
           </CardContent>
@@ -36,9 +47,9 @@ export function FeedTabs() {
       </TabsContent>
 
       <TabsContent value="espn">
-        <Card className="overflow-y-scroll max-h-56">
+        <Card className="max-h-[calc(100vh-10em)] overflow-y-auto bg-muted shadow-lg">
           <CardContent className="space-y-2">
-            {feedItems.espn.map((feed, index) => (
+            {ESPNFeedItems.map((feed, index) => (
               <FeedCard key={index} feed={feed} />
             ))}
           </CardContent>
@@ -46,4 +57,6 @@ export function FeedTabs() {
       </TabsContent>
     </Tabs>
   );
-}
+};
+
+export default FeedTabs;
