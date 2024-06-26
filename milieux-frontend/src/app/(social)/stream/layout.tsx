@@ -1,4 +1,5 @@
 import LeftSideBar from "@/components/stream/LeftSideBar";
+import RightSideBar from "@/components/stream/RightSideBar";
 import React from "react";
 
 const StreamLayout = ({ children }: { children: React.ReactNode }) => {
@@ -11,7 +12,9 @@ const StreamLayout = ({ children }: { children: React.ReactNode }) => {
 
         <div>{children}</div>
 
-        <div>03</div>
+        <div>
+          <RightSideBar />
+        </div>
       </div>
     </>
   );

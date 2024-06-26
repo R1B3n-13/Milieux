@@ -16,7 +16,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="flex font-medium text-slate-700 transition-all">
+    <div className="flex font-medium text-slate-700 transition-all bg-muted py-2 px-4">
       <div className="flex items-center justify-center gap-7">
         <div className="cursor-pointer">logo</div>
         <Input
@@ -30,7 +30,9 @@ const NavBar = () => {
           <div
             key={item.name}
             className={`flex h-full p-2 items-center justify-center gap-2 cursor-pointer ${
-              activeItem === item.path ? "bg-gray-300" : "hover:bg-gray-200"
+              activeItem === item.path
+                ? "bg-gray-200 shadow-md border border-slate-300"
+                : "hover:bg-gray-200"
             }`}
             onClick={() => handleItemClick(item.path)}
           >
