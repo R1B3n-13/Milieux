@@ -9,7 +9,7 @@ const FeedCard = ({ feed }: { feed: z.infer<typeof FeedSchema> }) => {
       <div className="flex items-center space-x-2">
         <Image
           src={feed.thumbnail || ""}
-          alt="thumbnail"
+          alt="thumb"
           width={50}
           height={50}
         />

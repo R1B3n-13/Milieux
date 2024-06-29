@@ -5,14 +5,14 @@ import React from "react";
 const StreamLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <div className="grid grid-cols-3">
-        <div>
+      <div className="grid grid-cols-11">
+        <div className="col-span-3">
           <LeftSideBar />
         </div>
 
-        <div>{children}</div>
+        <div className="col-span-4">{children}</div>
 
-        <div>
+        <div className="col-span-4">
           <RightSideBar />
         </div>
       </div>

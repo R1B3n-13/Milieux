@@ -21,7 +21,7 @@ const NavBar = () => {
         <div className="cursor-pointer">logo</div>
         <Input
           type="search"
-          className="cursor-pointer hover:border hover:border-gray-500"
+          className="cursor-pointer bg-gray-50 border-gray-300 hover:border hover:border-gray-400"
         />
       </div>
 
