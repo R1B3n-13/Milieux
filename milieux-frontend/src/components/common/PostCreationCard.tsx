@@ -8,7 +8,7 @@ const PostCreationCard = () => {
     <div className="flex ml-auto w-11/12">
       <Card className="mt-10 bg-muted shadow-md">
         <CardHeader>
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex items-center gap-4">
             <div className="cursor-pointer">
               <Avatar>
                 <AvatarImage />
@@ -17,7 +17,7 @@ const PostCreationCard = () => {
                 </AvatarFallback>
               </Avatar>
             </div>
-            <div className=" w-[90%] cursor-pointer rounded-full text-gray-500 bg-gray-50 border border-gray-400">
+            <div className=" w-full cursor-pointer rounded-full text-gray-500 bg-gray-50 border border-gray-400">
               <div className="flex items center py-2 px-4">
                 <p className="mr-1">What’s brewing,</p>
                 <p>Sadik Al Barid?</p>
@@ -26,11 +26,11 @@ const PostCreationCard = () => {
           </div>
         </CardHeader>
 
-        {/* <CardContent className="p-0 m-0">
+        <CardContent className="p-0 m-0">
           <div className="flex items-center justify-center">
             <Image src={""} alt="" width={614} height={0} />
           </div>
-        </CardContent> */}
+        </CardContent>
       </Card>
     </div>
   );
