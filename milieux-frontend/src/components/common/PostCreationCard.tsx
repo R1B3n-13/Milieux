@@ -1,6 +1,9 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/Avatar";
 import AvatarIcon from "@/components/icons/AvatarIcon";
-import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { Card, CardHeader, CardFooter } from "@/components/ui/Card";
+import ImageFilledIcon from "../icons/ImageFilledIcon";
+import VideoFilledIcon2 from "../icons/VideoFilledIcon2";
+import ArticleFilledIcon from "../icons/ArticleFilledIcon";
 
 const PostCreationCard = () => {
   return (
@@ -24,6 +27,18 @@ const PostCreationCard = () => {
             </div>
           </div>
         </CardHeader>
+
+        <CardFooter className="flex items-center justify-center gap-32 text-xl text-slate-700">
+          <div className="cursor-pointer">
+            <ImageFilledIcon />
+          </div>
+          <div className="cursor-pointer">
+            <VideoFilledIcon2 />
+          </div>
+          <div className="cursor-pointer">
+            <ArticleFilledIcon />
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );
