@@ -9,7 +9,7 @@ const PostCreationCard = () => {
   return (
     <div className="flex ml-auto w-11/12 transition-all">
       <Card className="mt-10 bg-muted shadow-md w-full">
-        <CardHeader>
+        <CardHeader className="pb-4 mb-0">
           <div className="flex items-center gap-4">
             <div className="cursor-pointer">
               <Avatar>
@@ -28,15 +28,18 @@ const PostCreationCard = () => {
           </div>
         </CardHeader>
 
-        <CardFooter className="flex items-center justify-center gap-32 text-xl text-slate-700">
-          <div className="cursor-pointer">
+        <CardFooter className="flex pb-3 pt-0 m-0 items-center justify-center gap-3 text-xl text-slate-700">
+          <div className="flex rounded-sm w-full py-2 items-center justify-center cursor-pointer gap-2 hover:bg-white">
             <ImageFilledIcon />
+            <p className="text-base">Image</p>
           </div>
-          <div className="cursor-pointer">
+          <div className="flex rounded-sm w-full py-2 items-center justify-center cursor-pointer gap-2 hover:bg-white">
             <VideoFilledIcon2 />
+            <p className="text-base">Video</p>
           </div>
-          <div className="cursor-pointer">
+          <div className="flex rounded-sm w-full py-2 items-center justify-center cursor-pointer gap-2 hover:bg-white">
             <ArticleFilledIcon />
+            <p className="text-base">Article</p>
           </div>
         </CardFooter>
       </Card>
