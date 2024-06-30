@@ -282,11 +282,13 @@ const RegisterForm = () => {
                       <FormLabel>Category</FormLabel>
                       <FormControl>
                         <Select
-                          defaultValue={field.value}
                           onValueChange={field.onChange}
+                          defaultValue={field.value}
                         >
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a category" />
+                            <SelectValue placeholder="Select a category">
+                              {field.value}
+                            </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -300,8 +302,12 @@ const RegisterForm = () => {
                             </SelectGroup>
 
                             <SelectGroup>
-                              <SelectLabel>Other</SelectLabel>
-                              <SelectItem value="other">Other</SelectItem>
+                              <SelectLabel>Other :</SelectLabel>
+                              <Input
+                                onChange={field.onChange}
+                                className="w-full"
+                                placeholder="Please specify..."
+                              />
                             </SelectGroup>
                           </SelectContent>
                         </Select>

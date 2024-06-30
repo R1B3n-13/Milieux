@@ -1,12 +1,11 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/Avatar";
 import AvatarIcon from "@/components/icons/AvatarIcon";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
-import Image from "next/image";
 
 const PostCreationCard = () => {
   return (
     <div className="flex ml-auto w-11/12 transition-all">
-      <Card className="mt-10 bg-muted shadow-md">
+      <Card className="mt-10 bg-muted shadow-md w-full">
         <CardHeader>
           <div className="flex items-center gap-4">
             <div className="cursor-pointer">
@@ -25,12 +24,6 @@ const PostCreationCard = () => {
             </div>
           </div>
         </CardHeader>
-
-        <CardContent className="p-0 m-0">
-          <div className="flex items-center justify-center">
-            <Image src={""} alt="" width={614} height={0} />
-          </div>
-        </CardContent>
       </Card>
     </div>
   );

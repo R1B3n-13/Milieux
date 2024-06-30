@@ -22,7 +22,6 @@ export const RegisterSchema = z
     confirmPassword: z.string(),
   })
   .superRefine((data, ctx) => {
-    console.log(data.isBusiness)
     if (data.password !== data.confirmPassword) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
