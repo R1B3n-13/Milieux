@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const PostCreationCard = () => {
   return (
-    <div className="flex ml-auto w-11/12">
+    <div className="flex ml-auto w-11/12 transition-all">
       <Card className="mt-10 bg-muted shadow-md">
         <CardHeader>
           <div className="flex items-center gap-4">
@@ -17,7 +17,7 @@ const PostCreationCard = () => {
                 </AvatarFallback>
               </Avatar>
             </div>
-            <div className=" w-full cursor-pointer rounded-full text-gray-500 bg-gray-50 border border-gray-400">
+            <div className=" w-full cursor-pointer rounded-full text-gray-500 bg-gray-50 border border-gray-400 hover:border-gray-500">
               <div className="flex items center py-2 px-4">
                 <p className="mr-1">What’s brewing,</p>
                 <p>Sadik Al Barid?</p>

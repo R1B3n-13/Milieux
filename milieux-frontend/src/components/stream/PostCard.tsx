@@ -16,7 +16,7 @@ import BookmarkLineIcon from "../icons/BookmarkLineIcon";
 
 const PostCard = () => {
   return (
-    <div className="flex ml-auto w-11/12">
+    <div className="flex ml-auto w-11/12 transition-all">
       <Card className="mt-5 bg-muted shadow-md">
         <CardHeader className="pb-3">
           <div className="flex gap-4">

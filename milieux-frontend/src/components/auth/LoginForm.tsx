@@ -15,12 +15,11 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { z } from "zod";
-import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import sequentialResolver from "@/lib/sequentialResolver";
 
 const LoginForm = () => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     resolver: async (values, context, options) => {
@@ -47,17 +46,15 @@ const LoginForm = () => {
   });
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    setLoading(true);
+    setIsLoading(true);
     console.log(data);
   };
-
-  const { pending } = useFormStatus();
 
   return (
     <CardWrapper
       label="Login to your account"
       title="Login"
-      backButtonHref="/auth/register"
+      backButtonHref="/register"
       backButtonLabel="Don't have an account? Register here."
     >
       <Form {...form}>
@@ -96,8 +93,8 @@ const LoginForm = () => {
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={pending}>
-            {loading ? "Loading..." : "Login"}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Loading..." : "Login"}
           </Button>
         </form>
       </Form>

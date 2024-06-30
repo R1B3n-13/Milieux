@@ -2,21 +2,52 @@ import { z } from "zod";
 
 export const RegisterSchema = z
   .object({
+    isBusiness: z.boolean({
+      required_error: "isBusiness is required",
+      invalid_type_error: "isBusiness must be a boolean",
+    }),
     name: z.string().min(1, {
       message: "Name is required",
     }),
     email: z.string().email({
       message: "Please enter a valid email address",
     }),
-    gender: z.string(),
+    userType: z.object({
+      gender: z.string().optional(),
+      category: z.string().optional(),
+    }),
     password: z.string().min(8, {
       message: "Password must be at least 8 characters long",
     }),
     confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
+  .superRefine((data, ctx) => {
+    console.log(data.isBusiness)
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+      });
+    }
+
+    if (data.isBusiness && !data.userType.category) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Category must be provided",
+        path: ["userType.category"],
+      });
+    }
+
+    if (!data.isBusiness && !data.userType.gender) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please select your gender",
+        path: ["userType.gender"],
+      });
+    }
+
+    return true;
   });
 
 export const LoginSchema = z
@@ -28,4 +59,6 @@ export const LoginSchema = z
       message: "Password is required",
     }),
   })
-  .refine(() => {});
+  .refine(() => {
+    return true;
+  });

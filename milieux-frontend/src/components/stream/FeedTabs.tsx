@@ -11,12 +11,12 @@ import FeedTabsWrapper from "./FeedTabsWrapper";
 const FeedTabs = async () => {
   const bbcFeedPromise = getBBCFeeds();
   const wiredFeedPromise = getWiredFeeds();
-  const ESPNFeedPromise = getESPNFeeds();
+  const espnFeedPromise = getESPNFeeds();
 
-  const [bbcFeedItems, wiredFeedItems, ESPNFeedItems] = await Promise.all([
+  const [bbcFeedItems, wiredFeedItems, espnFeedItems] = await Promise.all([
     bbcFeedPromise,
     wiredFeedPromise,
-    ESPNFeedPromise,
+    espnFeedPromise,
   ]);
 
   return (
@@ -51,7 +51,7 @@ const FeedTabs = async () => {
         <TabsContent value="espn">
           <Card className="max-h-[calc(100vh-12em)] overflow-y-auto bg-muted shadow-md">
             <CardContent className="space-y-2">
-              {ESPNFeedItems.map((feed, index) => (
+              {espnFeedItems.map((feed, index) => (
                 <FeedCard key={index} feed={feed} />
               ))}
             </CardContent>
