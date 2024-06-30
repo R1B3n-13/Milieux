@@ -3,6 +3,10 @@ package com.milieux.models;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,11 +40,15 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	private Boolean isBusiness;
 
 	private String name;
 	private String email;
-	private String gender;
 	private String password;
+	
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<String, String> userType;
 
 	@ElementCollection
 	@CollectionTable(name = "user_followers")

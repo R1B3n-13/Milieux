@@ -98,9 +98,9 @@ public class UserServiceImpl implements UserService {
 
 			existingUser.setEmail(requestDto.getEmail());
 		}
-		if (requestDto.getGender() != null) {
+		if (requestDto.getUserType() != null) {
 
-			existingUser.setGender(requestDto.getGender());
+			existingUser.setUserType(requestDto.getUserType());
 		}
 		if (requestDto.getPassword() != null) {
 
