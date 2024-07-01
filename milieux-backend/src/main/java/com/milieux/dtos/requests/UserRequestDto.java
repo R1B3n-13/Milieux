@@ -1,5 +1,7 @@
 package com.milieux.dtos.requests;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +13,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserRequestDto {
 
-	private String firstName;
-	private String lastName;
+	private Boolean isBusiness;
+	
+	private String name;
 	private String email;
-	private String gender;
 	private String password;
+	
+	private Map<String, String> userType;
 }

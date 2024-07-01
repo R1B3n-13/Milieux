@@ -90,21 +90,17 @@ public class UserServiceImpl implements UserService {
 		User existingUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		if (requestDto.getFirstName() != null) {
+		if (requestDto.getName() != null) {
 
-			existingUser.setFirstName(requestDto.getFirstName());
-		}
-		if (requestDto.getLastName() != null) {
-
-			existingUser.setLastName(requestDto.getLastName());
+			existingUser.setName(requestDto.getName());
 		}
 		if (requestDto.getEmail() != null) {
 
 			existingUser.setEmail(requestDto.getEmail());
 		}
-		if (requestDto.getGender() != null) {
+		if (requestDto.getUserType() != null) {
 
-			existingUser.setGender(requestDto.getGender());
+			existingUser.setUserType(requestDto.getUserType());
 		}
 		if (requestDto.getPassword() != null) {
 

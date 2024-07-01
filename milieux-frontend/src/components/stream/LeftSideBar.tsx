@@ -12,20 +12,20 @@ const LeftSidebar = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-1/2 h-screen bg-muted font-medium text-slate-700 transition-all">
-      <div className="h-3" />
+    <div className="flex flex-col gap-3 w-2/3 h-screen border-r shadow-sm text-slate-700 transition-all">
+      <div className="h-5" />
       {leftSidebarItems.map((item) => (
         <div
           key={item.name}
-          className={`flex px-5 py-3 items-center justify-start gap-3 cursor-pointer ${
-            activeItem === item.path ? "bg-gray-300" : "hover:bg-gray-200"
+          className={`flex rounded-lg px-3 py-3 mx-3 items-center justify-start gap-4 cursor-pointer ${
+            activeItem === item.path ? "bg-gray-200" : "hover:bg-gray-200"
           }`}
           onClick={() => handleItemClick(item.path)}
         >
-          <div className="text-2xl">
+          <div className={`text-3xl ${item.iconColor}`}>
             {activeItem === item.path ? item.filledIcon : item.lineIcon}
           </div>
-          {item.name}
+          <p className="font-semibold">{item.name}</p>
         </div>
       ))}
     </div>

@@ -2,6 +2,7 @@ package com.milieux.dtos;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,10 +16,13 @@ import lombok.Setter;
 public class UserDto {
 
 	private Long id;
-	private String firstName;
-	private String lastName;
-	private String gender;
+	
+	private Boolean isBusiness;
+	
+	private String name;
 	private String email;
+	
+	private Map<String, String> userType;
 
 	private List<Long> followers;
 	private List<Long> followings;
