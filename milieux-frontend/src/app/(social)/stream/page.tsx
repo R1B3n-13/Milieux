@@ -1,6 +1,6 @@
 import PostCreationCard from "@/components/common/PostCreationCard";
 import PostCard from "@/components/stream/PostCard";
-import { getBBCFeeds } from "@/services/feed/feedService";
+import { getBBCFeeds } from "@/services/feedService";
 import React from "react";
 
 const StreamPage = async () => {

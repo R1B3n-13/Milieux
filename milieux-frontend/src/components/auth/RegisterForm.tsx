@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/Select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
 import categoryItems from "./items/categoryItems";
+import { registerUser } from "@/services/authService";
 
 const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -78,9 +79,18 @@ const RegisterForm = () => {
     });
   };
 
-  const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
+  const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
     setIsLoading(true);
-    console.log(data);
+
+    const responseData = await registerUser(data);
+
+    if (!responseData) {
+      console.log("no data");
+    } else if (!responseData.success) {
+      console.log(responseData.message);
+    }
+
+    setIsLoading(false);
   };
 
   return (
@@ -305,7 +315,9 @@ const RegisterForm = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup className="flex items-center justify-center gap-2 mt-1 mr-1">
-                              <SelectItem value="other" className="w-1/5">Other</SelectItem>
+                              <SelectItem value="other" className="w-1/5">
+                                Other
+                              </SelectItem>
                               <Input
                                 onChange={(e) => {
                                   const value = e.target.value;
