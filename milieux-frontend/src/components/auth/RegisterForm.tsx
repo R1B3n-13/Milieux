@@ -29,9 +29,12 @@ import {
   SelectValue,
 } from "@/components/ui/Select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
+import categoryItems from "./items/categoryItems";
 
 const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [otherCategory, setOtherCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: async (values, context, options) => {
@@ -282,32 +285,45 @@ const RegisterForm = () => {
                       <FormLabel>Category</FormLabel>
                       <FormControl>
                         <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          onValueChange={(value) => {
+                            if (value !== "other") {
+                              setSelectedCategory(value);
+                              setOtherCategory("");
+                              field.onChange(value);
+                            } else {
+                              setSelectedCategory("other");
+                              field.onChange(otherCategory);
+                            }
+                          }}
                         >
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select a category">
-                              {field.value}
+                              {selectedCategory !== "other"
+                                ? field.value
+                                : otherCategory}
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="Merchandise">
-                                Merchandise
-                              </SelectItem>
-                              <SelectItem value="Tech">Tech</SelectItem>
-                              <SelectItem value="Sports Gears">
-                                Sports Gears
-                              </SelectItem>
-                            </SelectGroup>
-
-                            <SelectGroup>
-                              <SelectLabel>Other :</SelectLabel>
+                            <SelectGroup className="flex items-center justify-center gap-2 mt-1 mr-1">
+                              <SelectItem value="other" className="w-1/5">Other</SelectItem>
                               <Input
-                                onChange={field.onChange}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  setOtherCategory(value);
+                                  field.onChange(value);
+                                }}
+                                disabled={selectedCategory !== "other"}
                                 className="w-full"
                                 placeholder="Please specify..."
                               />
+                            </SelectGroup>
+
+                            <SelectGroup>
+                              {categoryItems.map((category) => (
+                                <SelectItem value={category}>
+                                  {category}
+                                </SelectItem>
+                              ))}
                             </SelectGroup>
                           </SelectContent>
                         </Select>

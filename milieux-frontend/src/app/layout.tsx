@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <main className="bg-muted">{children}</main>
         <Toaster />
       </body>
     </html>

@@ -29,6 +29,10 @@ export const navItems = [
 ];
 
 export const actionItems = [
-  { name: "Notification", icon: <NotificationLineIcon /> },
-  { name: "Chat", icon: <ChatLineIcon /> },
+  {
+    name: "Notification",
+    icon: <NotificationLineIcon />,
+    iconColor: "text-rose-600",
+  },
+  { name: "Chat", icon: <ChatLineIcon />, iconColor: "text-blue-600" },
 ];
