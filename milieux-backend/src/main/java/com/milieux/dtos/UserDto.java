@@ -22,7 +22,7 @@ public class UserDto {
 	private String name;
 	private String email;
 	
-	private Map<String, String> userType;
+	private Map<String, Object> userType;
 
 	private List<Long> followers;
 	private List<Long> followings;

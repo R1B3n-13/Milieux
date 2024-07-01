@@ -19,5 +19,5 @@ public class UserRequestDto {
 	private String email;
 	private String password;
 	
-	private Map<String, String> userType;
+	private Map<String, Object> userType;
 }
