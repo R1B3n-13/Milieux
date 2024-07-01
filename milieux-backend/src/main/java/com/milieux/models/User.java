@@ -48,7 +48,7 @@ public class User {
 	private String password;
 	
     @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, String> userType;
+    private Map<String, Object> userType;
 
 	@ElementCollection
 	@CollectionTable(name = "user_followers")
