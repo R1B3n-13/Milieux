@@ -17,8 +17,8 @@ public class StoryListResponseDto extends BaseResponseDto {
 
 	private List<StoryDto> stories;
 
-	public StoryListResponseDto(int statusCode, boolean success, String message, List<StoryDto> stories) {
-		super(statusCode, success, message);
+	public StoryListResponseDto(int status, boolean success, String message, List<StoryDto> stories) {
+		super(status, success, message);
 		this.stories = stories;
 	}
 }

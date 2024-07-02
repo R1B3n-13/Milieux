@@ -15,8 +15,8 @@ public class UserResponseDto extends BaseResponseDto {
 
 	private UserDto user;
 
-	public UserResponseDto(int statusCode, boolean success, String message, UserDto user) {
-		super(statusCode, success, message);
+	public UserResponseDto(int status, boolean success, String message, UserDto user) {
+		super(status, success, message);
 		this.user = user;
 	}
 }
