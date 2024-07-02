@@ -12,6 +12,7 @@ import {
 import { RegisterSchema } from "@/schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { z } from "zod";
@@ -24,15 +25,18 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
 import categoryItems from "./items/categoryItems";
-import { registerUser } from "@/services/authService";
+import { registerUser } from "@/actions/authActions";
+import Loading from "../common/Loading";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const [otherCategory, setOtherCategory] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -82,12 +86,15 @@ const RegisterForm = () => {
   const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
     setIsLoading(true);
 
-    const responseData = await registerUser(data);
+    const response = await registerUser(data);
 
-    if (!responseData) {
-      console.log("no data");
-    } else if (!responseData.success) {
-      console.log(responseData.message);
+    if (response.error) {
+      toast.error(response.error);
+    } else if (!response.success) {
+      toast.error(response.message);
+    } else {
+      toast.success(response.message);
+      router.push("/login");
     }
 
     setIsLoading(false);
@@ -108,8 +115,8 @@ const RegisterForm = () => {
             onValueChange={handleTabChange}
           >
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="casual">Casual User</TabsTrigger>
-              <TabsTrigger value="business">Business User</TabsTrigger>
+              <TabsTrigger value="casual">Casual</TabsTrigger>
+              <TabsTrigger value="business">Business</TabsTrigger>
             </TabsList>
 
             <TabsContent value="casual">
@@ -349,7 +356,7 @@ const RegisterForm = () => {
           </Tabs>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Loading..." : "Register"}
+            {isLoading ? <Loading text="Loading..." /> : "Register"}
           </Button>
         </form>
       </Form>

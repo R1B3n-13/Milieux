@@ -5,7 +5,7 @@ import {
   getBBCFeeds,
   getESPNFeeds,
   getWiredFeeds,
-} from "@/services/feedService";
+} from "@/actions/feedActions";
 import FeedTabsWrapper from "./FeedTabsWrapper";
 
 const FeedTabs = async () => {

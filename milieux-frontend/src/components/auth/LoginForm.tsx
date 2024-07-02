@@ -17,8 +17,14 @@ import { Button } from "@/components/ui/Button";
 import { z } from "zod";
 import { useState } from "react";
 import sequentialResolver from "@/lib/sequentialResolver";
+import Loading from "../common/Loading";
+import { loginUser } from "@/actions/authActions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
@@ -45,9 +51,21 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof LoginSchema>) => {
+  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     setIsLoading(true);
-    console.log(data);
+
+    const response = await loginUser(data);
+
+    if (response.error) {
+      toast.error(response.error);
+    } else if (!response.success) {
+      toast.error(response.message);
+    } else {
+      toast.success(response.message);
+      router.push("/stream");
+    }
+
+    setIsLoading(false);
   };
 
   return (
@@ -94,7 +112,7 @@ const LoginForm = () => {
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Loading..." : "Login"}
+            {isLoading ? <Loading text="Loading..." /> : "Login"}
           </Button>
         </form>
       </Form>

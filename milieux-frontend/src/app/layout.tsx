@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <main className="bg-muted">{children}</main>
-        <Toaster />
+        <Toaster richColors/>
       </body>
     </html>
   );
