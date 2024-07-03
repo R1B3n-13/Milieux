@@ -52,10 +52,18 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostListResponseDto getAllPosts() {
 
-		List<Post> posts = postRepository.findAll();
+		List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
 
-		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
-				.collect(Collectors.toList());
+		List<PostDto> dtos = posts.stream().map(post -> {
+
+			PostDto postDto = modelMapper.map(post, PostDto.class);
+
+			postDto.setOwnerName(post.getUser().getName());
+			postDto.setOwnerId(post.getUser().getId());
+
+			return postDto;
+
+		}).collect(Collectors.toList());
 
 		return new PostListResponseDto(200, true, "Posts fetched successfully!", dtos);
 	}

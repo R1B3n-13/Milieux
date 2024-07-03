@@ -19,6 +19,9 @@ public class PostDto {
 	private String caption;
 	private String imagePath;
 	private String videoPath;
+	
+	private Long ownerId;
+	private String ownerName;
 
 	private List<UserDto> likedByUsers = new ArrayList<>();
 	private List<CommentDto> comments = new ArrayList<>();
