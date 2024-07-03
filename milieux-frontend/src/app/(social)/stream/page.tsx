@@ -1,11 +1,11 @@
 import PostCreationCard from "@/components/common/PostCreationCard";
-import PostCard from "@/components/stream/PostCard";
+import StreamPostList from "@/components/stream/StreamPostList";
 
 const StreamPage = async () => {
   return (
-    <div>
+    <div className="flex flex-col px-44 h-screen overflow-y-auto no-scrollbar">
       <PostCreationCard />
-      <PostCard />
+      <StreamPostList />
     </div>
   );
 };

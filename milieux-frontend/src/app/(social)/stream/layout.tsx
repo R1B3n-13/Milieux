@@ -6,13 +6,13 @@ const StreamLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <div className="grid grid-cols-11">
-        <div className="col-span-3">
+        <div className="col-span-2">
           <LeftSideBar />
         </div>
 
-        <div className="col-span-4">{children}</div>
+        <div className="col-span-6">{children}</div>
 
-        <div className="col-span-4">
+        <div className="col-span-3">
           <RightSideBar />
         </div>
       </div>

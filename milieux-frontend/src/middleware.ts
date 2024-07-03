@@ -6,14 +6,9 @@ export async function middleware(request: NextRequest) {
 
   const currentPath = request.nextUrl.pathname;
 
-  if (currentPath.startsWith("/stream") && user.ok === false) {
-    const url = new URL("/login", request.url);
-    return NextResponse.redirect(url, 302);
+  if (currentPath.startsWith("/stream") && user.success === false) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
 }
-
-// export const config = {
-//   matcher: ["/((?!login|register).*)"],
-// };

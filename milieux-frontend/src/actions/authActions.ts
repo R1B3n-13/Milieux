@@ -31,8 +31,9 @@ export async function registerUser(userData: z.infer<typeof RegisterSchema>) {
   } catch (error) {
     console.error("Registration Service Error:", error);
     return {
-      error: "Uh oh! Something went wrong. Please try again.",
       status: 500,
+      success: false,
+      message: "Uh oh! Something went wrong. Please try again.",
     };
   }
 }
@@ -65,8 +66,9 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
   } catch (error) {
     console.error("Login Service Error:", error);
     return {
-      error: "Uh oh! Something went wrong. Please try again.",
       status: 500,
+      success: false,
+      message: "Uh oh! Something went wrong. Please try again.",
     };
   }
 }

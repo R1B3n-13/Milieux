@@ -1,20 +1,17 @@
-"use server";
-
 import getAuthToken from "@/utils/getAuthToken";
 
 const backendUrl = process.env.BACKEND_URL;
 
-export async function getUserFromAuthToken() {
+export async function getAllPosts() {
   try {
-    const url = new URL("/users/profile", backendUrl);
+    const url = new URL("/posts", backendUrl);
 
     const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
         success: false,
-        message: "Loading user failed.",
-        user: null,
+        message: "Jwt auth token is missing",
       };
 
     const response = await fetch(url, {
@@ -23,19 +20,15 @@ export async function getUserFromAuthToken() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
       },
-      cache: "no-cache",
     });
 
-    const responseData = await response.json();
-
-    return responseData;
+    return response.json();
   } catch (error) {
-    console.error("Loading user failed:", error);
+    console.error("Fetching Post Resulted in Error:", error);
     return {
-      status: 401,
+      status: 500,
       success: false,
-      message: "Loading user failed.",
-      user: null,
+      message: "Uh oh! Something went wrong. Please try again.",
     };
   }
 }

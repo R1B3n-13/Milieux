@@ -56,9 +56,7 @@ const LoginForm = () => {
 
     const response = await loginUser(data);
 
-    if (response.error) {
-      toast.error(response.error);
-    } else if (!response.success) {
+    if (!response.success) {
       toast.error(response.message);
     } else {
       toast.success(response.message);

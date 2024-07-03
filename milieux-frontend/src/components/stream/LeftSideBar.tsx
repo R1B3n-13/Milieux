@@ -12,7 +12,7 @@ const LeftSidebar = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-2/3 h-screen border-r shadow-sm text-slate-700 transition-all">
+    <div className="flex flex-col gap-3 w-full h-screen border-r shadow-sm text-slate-700 transition-all">
       <div className="h-5" />
       {leftSidebarItems.map((item) => (
         <div

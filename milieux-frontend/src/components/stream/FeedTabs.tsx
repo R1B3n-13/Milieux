@@ -35,7 +35,7 @@ const FeedTabs = async () => {
         </TabsList>
 
         <TabsContent value="bbci">
-          <Card className="max-h-[calc(100vh-12em)] overflow-y-auto bg-white shadow-md">
+          <Card className="max-h-[calc(100vh-12em)] overflow-y-auto no-scrollbar bg-white shadow-md">
             <CardContent className="space-y-2">
               {bbcFeedItems.map((feed, index) => (
                 <FeedCard key={index} feed={feed} />
@@ -45,7 +45,7 @@ const FeedTabs = async () => {
         </TabsContent>
 
         <TabsContent value="wired">
-          <Card className="max-h-[calc(100vh-12em)] overflow-y-auto bg-white shadow-md">
+          <Card className="max-h-[calc(100vh-12em)] overflow-y-auto no-scrollbar bg-white shadow-md">
             <CardContent className="space-y-2">
               {wiredFeedItems.map((feed, index) => (
                 <FeedCard key={index} feed={feed} />
@@ -55,7 +55,7 @@ const FeedTabs = async () => {
         </TabsContent>
 
         <TabsContent value="espn">
-          <Card className="max-h-[calc(100vh-12em)] overflow-y-auto bg-white shadow-md">
+          <Card className="max-h-[calc(100vh-12em)] overflow-y-auto no-scrollbar bg-white shadow-md">
             <CardContent className="space-y-2">
               {espnFeedItems.map((feed, index) => (
                 <FeedCard key={index} feed={feed} />
