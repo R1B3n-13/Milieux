@@ -18,8 +18,8 @@ import PostSchema from "@/schemas/postSchema";
 
 const PostCard = ({ post }: { post: z.infer<typeof PostSchema> }) => {
   return (
-    <div className="flex ml-auto w-11/12 transition-all">
-      <Card className="mt-5 bg-white shadow-md">
+    <div className="flex transition-all">
+      <Card className="mb-5 bg-white shadow-md">
         <CardHeader className="pb-3">
           <div className="flex gap-4">
             <div className="cursor-pointer">
@@ -51,7 +51,7 @@ const PostCard = ({ post }: { post: z.infer<typeof PostSchema> }) => {
                 <Image
                   src={post.imagePath}
                   alt="post image"
-                  width={614}
+                  width={653}
                   height={0}
                 />
               </div>
