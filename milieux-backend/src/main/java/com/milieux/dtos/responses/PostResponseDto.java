@@ -15,8 +15,8 @@ public class PostResponseDto extends BaseResponseDto {
 
 	private PostDto postDto;
 
-	public PostResponseDto(int statusCode, boolean success, String message, PostDto postDto) {
-		super(statusCode, success, message);
+	public PostResponseDto(int status, boolean success, String message, PostDto postDto) {
+		super(status, success, message);
 		this.postDto = postDto;
 	}
 }

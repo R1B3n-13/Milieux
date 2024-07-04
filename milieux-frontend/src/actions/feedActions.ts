@@ -1,3 +1,5 @@
+"use server";
+
 import FeedSchema from "@/schemas/feedSchema";
 import Parser from "rss-parser";
 
@@ -28,15 +30,19 @@ const fetchFeeds = async (
 
 export const getBBCFeeds = async () => {
   const feedURL = "https://feeds.bbci.co.uk/news/rss.xml";
-  return fetchFeeds(feedURL, { item: [["media:thumbnail", "thumbnail"]] });
+  return await fetchFeeds(feedURL, {
+    item: [["media:thumbnail", "thumbnail"]],
+  });
 };
 
 export const getWiredFeeds = async () => {
   const feedURL = "https://www.wired.com/feed/rss";
-  return fetchFeeds(feedURL, { item: [["media:thumbnail", "thumbnail"]] });
+  return await fetchFeeds(feedURL, {
+    item: [["media:thumbnail", "thumbnail"]],
+  });
 };
 
 export const getESPNFeeds = async () => {
   const feedURL = "https://www.espn.com/espn/rss/";
-  return fetchFeeds(feedURL);
+  return await fetchFeeds(feedURL);
 };

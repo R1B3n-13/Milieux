@@ -15,8 +15,8 @@ public class CommentResponseDto extends BaseResponseDto {
 
 	private CommentDto comment;
 
-	public CommentResponseDto(int statusCode, boolean success, String message, CommentDto comment) {
-		super(statusCode, success, message);
+	public CommentResponseDto(int status, boolean success, String message, CommentDto comment) {
+		super(status, success, message);
 		this.comment = comment;
 	}
 }

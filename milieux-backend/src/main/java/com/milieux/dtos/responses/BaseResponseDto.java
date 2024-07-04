@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BaseResponseDto {
 
-	private int statusCode;
+	private int status;
 	private boolean success;
 	private String message;
 }

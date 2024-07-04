@@ -13,8 +13,8 @@ public class LoginResponseDto extends BaseResponseDto {
 
 	private String token;
 
-	public LoginResponseDto(int statusCode, boolean success, String message, String token) {
-		super(statusCode, success, message);
+	public LoginResponseDto(int status, boolean success, String message, String token) {
+		super(status, success, message);
 		this.token = token;
 	}
 }
