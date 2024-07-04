@@ -1,4 +1,4 @@
-import { getAllPosts } from "@/actions/postAction";
+import { getAllPosts } from "@/actions/postActions";
 import PostCard from "../common/PostCard";
 import { z } from "zod";
 import PostSchema from "@/schemas/postSchema";

@@ -2,23 +2,27 @@ import { z } from "zod";
 
 const PostSchema = z
   .object({
-    id: z.number(),
-    caption: z.string().nullable(),
-    imagePath: z.string().url().nullable(),
-    videoPath: z.string().url().nullable(),
-    ownerId: z.number(),
-    ownerName: z.string(),
-    likedByUsers: z.array(z.any()),
-    comments: z.array(z.any()),
-    createdAt: z.string().transform((str) => new Date(str)),
+    id: z.number().optional(),
+    caption: z.string().optional(),
+    imagePath: z.string().url().optional(),
+    videoPath: z.string().url().optional(),
+    ownerId: z.number().optional(),
+    ownerName: z.string().optional(),
+    likedByUsers: z.array(z.any()).optional(),
+    comments: z.array(z.any()).optional(),
+    createdAt: z
+      .string()
+      .transform((str) => new Date(str))
+      .optional(),
   })
   .refine(
     (data) =>
-      data.caption !== null ||
-      data.imagePath !== null ||
-      data.videoPath !== null,
+      data.caption !== undefined ||
+      data.imagePath !== undefined ||
+      data.videoPath !== undefined,
     {
       message: "At least one of caption, image, or video must be provided",
+      path: ["caption"],
     }
   );
 

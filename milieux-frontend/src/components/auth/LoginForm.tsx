@@ -27,7 +27,7 @@ const LoginForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: async (values, context, options) => {
       const zodPromise = zodResolver(LoginSchema)(values, context, options);
 

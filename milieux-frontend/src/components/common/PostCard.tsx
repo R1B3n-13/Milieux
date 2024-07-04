@@ -19,7 +19,7 @@ import PostSchema from "@/schemas/postSchema";
 const PostCard = ({ post }: { post: z.infer<typeof PostSchema> }) => {
   return (
     <div className="flex transition-all">
-      <Card className="mb-5 bg-white shadow-md">
+      <Card className="mb-5 bg-white shadow-md w-full">
         <CardHeader className="pb-3">
           <div className="flex gap-4">
             <div className="cursor-pointer">
@@ -35,7 +35,7 @@ const PostCard = ({ post }: { post: z.infer<typeof PostSchema> }) => {
                 {post.ownerName}
               </CardTitle>
               <CardDescription className="mt-1 cursor-default">
-                {new Date(post.createdAt).toLocaleString()}
+                {new Date(post.createdAt || "").toLocaleString()}
               </CardDescription>
             </div>
           </div>
@@ -43,15 +43,17 @@ const PostCard = ({ post }: { post: z.infer<typeof PostSchema> }) => {
 
         <CardContent className="px-0">
           <div className="flex flex-col">
-            <p className="pb-3 px-6 text-slate-700 font-medium">
-              {post.caption}
-            </p>
+            {post.caption && (
+              <p className="pb-3 px-6 text-slate-700 font-medium">
+                {post.caption}
+              </p>
+            )}
             {post.imagePath && (
               <div className="flex items-center justify-center">
                 <Image
                   src={post.imagePath}
                   alt="post image"
-                  width={653}
+                  width={685}
                   height={0}
                 />
               </div>

@@ -8,7 +8,7 @@ const RightSideBar = () => {
         <div className="text-amber-600">
           <TrendFilledIcon />
         </div>
-        <h1 className="ml-2">What's Trending?</h1>
+        <h1 className="ml-2">What&apos;s Trending?</h1>
       </div>
       <FeedTabs />
     </div>
