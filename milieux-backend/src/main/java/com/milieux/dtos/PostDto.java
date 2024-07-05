@@ -16,7 +16,7 @@ import lombok.Setter;
 public class PostDto {
 
 	private Long id;
-	private String caption;
+	private String text;
 	private String imagePath;
 	private String videoPath;
 	

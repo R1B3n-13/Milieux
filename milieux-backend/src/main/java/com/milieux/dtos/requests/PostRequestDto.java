@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostRequestDto {
 
-	private String caption;
+	private String text;
 	private String imagePath;
 	private String videoPath;
 }
