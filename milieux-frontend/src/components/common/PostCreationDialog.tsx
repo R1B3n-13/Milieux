@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -10,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -49,6 +50,18 @@ export default function PostCreationDialog({
     string | ArrayBuffer | null
   >(null);
 
+  const form = useForm<z.infer<typeof PostSchema>>({
+    resolver: zodResolver(PostSchema),
+
+    defaultValues: {
+      text: undefined,
+      imagePath: undefined,
+      videoPath: undefined,
+    },
+  });
+
+  const { setValue } = form;
+
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -57,26 +70,41 @@ export default function PostCreationDialog({
       fReader.readAsDataURL(file);
 
       fReader.onloadend = function (event) {
-        setSelectedImage(event.target?.result || "");
+        const result = event.target?.result;
+        if (result) {
+          setSelectedImage(result);
+          setValue("imagePath", result as string);
+        }
       };
     }
   };
 
   const clearImage = () => {
     setSelectedImage(null);
+    setValue("imagePath", undefined);
   };
 
-  const handleVideoChange = () => {};
+  const handleVideoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
 
-  const form = useForm<z.infer<typeof PostSchema>>({
-    resolver: zodResolver(PostSchema),
+      const fReader = new FileReader();
+      fReader.readAsDataURL(file);
 
-    defaultValues: {
-      caption: undefined,
-      imagePath: undefined,
-      videoPath: undefined,
-    },
-  });
+      fReader.onloadend = function (event) {
+        const result = event.target?.result;
+        if (result) {
+          setSelectedVideo(result);
+          setValue("videoPath", result as string);
+        }
+      };
+    }
+  };
+
+  const clearVideo = () => {
+    setSelectedVideo(null);
+    setValue("videoPath", undefined);
+  };
 
   const onSubmit = async (data: z.infer<typeof PostSchema>) => {
     setIsLoading(true);
@@ -133,7 +161,7 @@ export default function PostCreationDialog({
             <div className="space-y-4">
               <FormField
                 control={form.control}
-                name="caption"
+                name="text"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -215,7 +243,10 @@ export default function PostCreationDialog({
                           id="video-input"
                           type="file"
                           accept="video/*"
-                          onChange={handleVideoChange}
+                          onChange={(event) => {
+                            handleVideoChange(event);
+                            field.onChange(event);
+                          }}
                           style={{ display: "none" }}
                         />
                         <FormLabel htmlFor="video-input">
@@ -235,9 +266,11 @@ export default function PostCreationDialog({
             </div>
 
             <DialogFooter>
+              {/* <DialogClose asChild> */}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? <Loading text="Loading..." /> : "Post"}
               </Button>
+              {/* </DialogClose> */}
             </DialogFooter>
           </form>
         </Form>

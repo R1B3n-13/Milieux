@@ -17,6 +17,7 @@ import { z } from "zod";
 import PostSchema from "@/schemas/postSchema";
 
 const PostCard = ({ post }: { post: z.infer<typeof PostSchema> }) => {
+  console.log(post);
   return (
     <div className="flex transition-all">
       <Card className="mb-5 bg-white shadow-md w-full">
@@ -43,9 +44,9 @@ const PostCard = ({ post }: { post: z.infer<typeof PostSchema> }) => {
 
         <CardContent className="px-0">
           <div className="flex flex-col">
-            {post.caption && (
+            {post.text && (
               <p className="pb-3 px-6 text-slate-700 font-medium">
-                {post.caption}
+                {post.text}
               </p>
             )}
             {post.imagePath && (
