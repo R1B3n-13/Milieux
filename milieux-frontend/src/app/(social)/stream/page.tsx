@@ -1,6 +1,5 @@
 import PostCreationCard from "@/components/common/PostCreationCard";
 import StreamPostList from "@/components/stream/StreamPostList";
-import { CldUploadWidget } from "next-cloudinary";
 
 const StreamPage = () => {
   return (
