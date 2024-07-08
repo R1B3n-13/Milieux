@@ -54,18 +54,8 @@ public class PostServiceImpl implements PostService {
 
 		List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
 
-		List<PostDto> dtos = posts.stream().map(post -> {
-
-			PostDto postDto = modelMapper.map(post, PostDto.class);
-
-			postDto.setOwnerName(post.getUser().getName());
-			postDto.setOwnerId(post.getUser().getId());
-			
-			postDto.setTotalComments(post.getComments().size());
-
-			return postDto;
-
-		}).collect(Collectors.toList());
+		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
+				.collect(Collectors.toList());
 
 		return new PostListResponseDto(200, true, "Posts fetched successfully!", dtos);
 	}
@@ -77,9 +67,6 @@ public class PostServiceImpl implements PostService {
 				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
 
 		PostDto dto = modelMapper.map(post, PostDto.class);
-
-		dto.setOwnerName(post.getUser().getName());
-		dto.setOwnerId(post.getUser().getId());
 
 		return new PostResponseDto(200, true, "Post fetched successfully!", dto);
 	}
@@ -95,9 +82,6 @@ public class PostServiceImpl implements PostService {
 		List<PostDto> dtos = posts.stream().map(post -> {
 
 			PostDto postDto = modelMapper.map(post, PostDto.class);
-
-			postDto.setOwnerName(post.getUser().getName());
-			postDto.setOwnerId(post.getUser().getId());
 
 			return postDto;
 
