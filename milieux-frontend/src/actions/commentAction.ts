@@ -1,10 +1,19 @@
-import getAuthToken from "@/utils/getAuthToken";
+"use server";
+
+import CommentSchema from "@/schemas/commentSchema";
+import getAuthToken from "@/actions/authActions";
+import { z } from "zod";
 
 const backendUrl = process.env.BACKEND_URL;
 
-export async function getCommentByPostId(postId: number | undefined) {
+export async function createComment(
+  commentData: z.infer<typeof CommentSchema>,
+  postId: number | undefined
+) {
   try {
-    const url = new URL(`/comments/by-post_id/${postId}`, backendUrl);
+    if (!postId) throw new Error("Invalid post id.");
+
+    const url = new URL(`/comments/create/post/${postId}`, backendUrl);
 
     const authToken = await getAuthToken();
     if (!authToken)
@@ -15,17 +24,18 @@ export async function getCommentByPostId(postId: number | undefined) {
       };
 
     const response = await fetch(url, {
-      method: "GET",
+      method: "Post",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
       },
+      body: JSON.stringify(commentData),
       cache: "no-cache",
     });
 
     return response.json();
   } catch (error) {
-    console.error("Fetching comments resulted in error:", error);
+    console.error("Creating comment resulted in error:", error);
     return {
       status: 500,
       success: false,

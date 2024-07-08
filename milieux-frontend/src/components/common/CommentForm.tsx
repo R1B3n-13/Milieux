@@ -22,8 +22,9 @@ import CloseFilledIcon from "../icons/CloseFilledIcon";
 import uploadToCloudinary from "@/actions/cloudinaryActions";
 import CommentSchema from "@/schemas/commentSchema";
 import SendFilledIcon from "../icons/SendFilledIcon";
+import { createComment } from "@/actions/commentAction";
 
-export default function CommentForm() {
+export default function CommentForm({ postId }: { postId: number | undefined }) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<
     string | ArrayBuffer | null
@@ -64,29 +65,30 @@ export default function CommentForm() {
   const onSubmit = async (data: z.infer<typeof CommentSchema>) => {
     setIsLoading(true);
 
-    // if (selectedImage) {
-    //   const uploadResult = await uploadToCloudinary(selectedImage as string);
+    if (selectedImage) {
+      const uploadResult = await uploadToCloudinary(selectedImage as string);
 
-    //   if (!uploadResult.success) {
-    //     toast.error("Upload failed.");
-    //     setIsLoading(false);
-    //     return;
-    //   } else {
-    //     data.imagePath = uploadResult.url || "";
-    //   }
-    // }
+      if (!uploadResult.success) {
+        toast.error("Upload failed.");
+        setIsLoading(false);
+        return;
+      } else {
+        data.imagePath = uploadResult.url || "";
+      }
+    }
 
-    // const response = await createComment(data);
+    const response = await createComment(data, postId);
 
-    // if (!response.success) {
-    //   toast.error("Something went wrong.");
-    // } else {
-    //   toast.success("Remark added successfully!");
-    // }
+    if (!response.success) {
+      toast.error("Something went wrong.");
+    } else {
+      toast.success("Remark added successfully!");
+    }
 
-    // setIsLoading(false);
-    
+    setIsLoading(false);
+
     setSelectedImage(null);
+
     form.reset({ text: "", imagePath: "" });
   };
 
@@ -107,7 +109,7 @@ export default function CommentForm() {
                     style={{ border: "none" }}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="flex justify-center pb-2" />
               </FormItem>
             )}
           />
@@ -136,7 +138,6 @@ export default function CommentForm() {
                     </FormLabel>
                   </>
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />

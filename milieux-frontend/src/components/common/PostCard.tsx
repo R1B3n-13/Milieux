@@ -21,6 +21,7 @@ import LoveFilledIcon from "../icons/LoveFilledIcon";
 import revalidateLike from "@/actions/revalidationActions";
 import AppreciationList from "./AppreciationList";
 import CommentForm from "./CommentForm";
+import RemarkList from "./RemarkList";
 
 const PostCard = ({
   post,
@@ -49,7 +50,7 @@ const PostCard = ({
             </div>
             <div>
               <CardTitle className="mt-1 font-semibold text-slate-700 cursor-pointer">
-                {post.ownerName}
+                {post.user?.name}
               </CardTitle>
               <CardDescription className="mt-1 cursor-default">
                 {new Date(post.createdAt || "").toLocaleString()}
@@ -109,7 +110,7 @@ const PostCard = ({
                     : "appreciations"}
                 </p>
               }
-              likedByUsers={post.likedByUsers}
+              likedByUsers={post.likedByUsers || []}
             />
           </div>
 
@@ -117,12 +118,17 @@ const PostCard = ({
             <div className="cursor-pointer">
               <RemarkLineIcon />
             </div>
-            <p className="text-sm text-gray-500 cursor-pointer hover:underline">
-              {post.totalComments}{" "}
-              {post.totalComments === 1 || post.totalComments === 0
-                ? "remark"
-                : "remarks"}
-            </p>
+            <RemarkList
+              dialogButton={
+                <p className="text-sm text-gray-500 cursor-pointer hover:underline">
+                  {post.comments?.length}{" "}
+                  {post.comments?.length === 1 || post.comments?.length === 0
+                    ? "remark"
+                    : "remarks"}
+                </p>
+              }
+              comments={post.comments || []}
+            />
           </div>
 
           <div className="ml-auto cursor-pointer">
@@ -130,7 +136,7 @@ const PostCard = ({
           </div>
         </CardFooter>
 
-        <CommentForm />
+        <CommentForm postId={post.id} />
       </Card>
     </div>
   );

@@ -15,7 +15,7 @@ const AppreciationList = ({
   likedByUsers,
 }: {
   dialogButton: JSX.Element;
-  likedByUsers: any[] | undefined;
+  likedByUsers: z.infer<typeof UserSchema>[];
 }) => {
   return (
     <Dialog>

@@ -1,7 +1,7 @@
 "use server";
 
 import PostSchema from "@/schemas/postSchema";
-import getAuthToken from "@/utils/getAuthToken";
+import getAuthToken from "@/actions/authActions";
 import { z } from "zod";
 
 const backendUrl = process.env.BACKEND_URL;

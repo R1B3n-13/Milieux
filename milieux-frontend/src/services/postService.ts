@@ -1,4 +1,4 @@
-import getAuthToken from "@/utils/getAuthToken";
+import getAuthToken from "@/actions/authActions";
 
 const backendUrl = process.env.BACKEND_URL;
 
