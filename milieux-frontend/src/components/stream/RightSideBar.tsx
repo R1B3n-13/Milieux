@@ -1,5 +1,6 @@
 import TrendFilledIcon from "../icons/TrendFilledIcon";
 import FeedTabs from "./FeedTabs";
+import FeedTabsWrapper from "./FeedTabsWrapper";
 
 const RightSideBar = () => {
   return (
@@ -10,7 +11,9 @@ const RightSideBar = () => {
         </div>
         <h1 className="ml-2">What&apos;s Trending?</h1>
       </div>
-      <FeedTabs />
+      {/* <FeedTabsWrapper>
+        <FeedTabs />
+      </FeedTabsWrapper> */}
     </div>
   );
 };

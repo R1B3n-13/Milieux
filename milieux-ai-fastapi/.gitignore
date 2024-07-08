@@ -1,5 +1,6 @@
 .venv
 .env
+.vscode
 __pycache__
 service_account_key.json
 rough.txt

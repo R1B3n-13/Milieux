@@ -1,13 +1,17 @@
-import { getAllPosts } from "@/actions/postActions";
+import { getAllPosts } from "@/services/postService";
 import PostCard from "../common/PostCard";
 import { z } from "zod";
 import PostSchema from "@/schemas/postSchema";
-import { getUserFromAuthToken } from "@/actions/userActions";
+import { getUserFromAuthToken } from "@/services/userService";
 
 const StreamPostList = async () => {
-  const postResponse = await getAllPosts();
+  const postResponsePromise = getAllPosts();
+  const loggedInUserResponsePromise = getUserFromAuthToken();
 
-  const loggedInUserResponse = await getUserFromAuthToken();
+  const [postResponse, loggedInUserResponse] = await Promise.all([
+    postResponsePromise,
+    loggedInUserResponsePromise,
+  ]);
 
   return (
     <div>
