@@ -36,7 +36,7 @@ const AppreciationList = ({
                   <div className="cursor-pointer">
                     <Avatar>
                       <AvatarImage />
-                      <AvatarFallback className="text-3xl text-gray-500">
+                      <AvatarFallback className="text-4xl text-gray-500">
                         <AvatarIcon />
                       </AvatarFallback>
                     </Avatar>

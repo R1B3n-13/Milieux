@@ -23,8 +23,13 @@ import uploadToCloudinary from "@/actions/cloudinaryActions";
 import CommentSchema from "@/schemas/commentSchema";
 import SendFilledIcon from "../icons/SendFilledIcon";
 import { createComment } from "@/actions/commentAction";
+import { revalidateComment } from "@/actions/revalidationActions";
 
-export default function CommentForm({ postId }: { postId: number | undefined }) {
+export default function CommentForm({
+  postId,
+}: {
+  postId: number | undefined;
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<
     string | ArrayBuffer | null
@@ -90,6 +95,8 @@ export default function CommentForm({ postId }: { postId: number | undefined }) 
     setSelectedImage(null);
 
     form.reset({ text: "", imagePath: "" });
+
+    revalidateComment();
   };
 
   return (
@@ -132,7 +139,7 @@ export default function CommentForm({ postId }: { postId: number | undefined }) 
                       style={{ display: "none" }}
                     />
                     <FormLabel htmlFor="image-input-comment">
-                      <div className="cursor-pointer text-gray-400 text-lg">
+                      <div className="cursor-pointer text-gray-500 text-lg">
                         <ImageFilledIcon />
                       </div>
                     </FormLabel>

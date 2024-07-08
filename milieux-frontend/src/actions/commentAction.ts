@@ -31,6 +31,9 @@ export async function createComment(
       },
       body: JSON.stringify(commentData),
       cache: "no-cache",
+      next: {
+        tags: ["createComment"],
+      },
     });
 
     return response.json();

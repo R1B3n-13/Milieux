@@ -18,10 +18,11 @@ import { z } from "zod";
 import PostSchema from "@/schemas/postSchema";
 import { likePost } from "@/actions/postActions";
 import LoveFilledIcon from "../icons/LoveFilledIcon";
-import revalidateLike from "@/actions/revalidationActions";
+import { revalidateLike } from "@/actions/revalidationActions";
 import AppreciationList from "./AppreciationList";
-import CommentForm from "./CommentForm";
+import CommentForm from "./RemarkForm";
 import RemarkList from "./RemarkList";
+import RemarkFilledIcon from "../icons/RemarkFilledIcon";
 
 const PostCard = ({
   post,
@@ -116,7 +117,14 @@ const PostCard = ({
 
           <div className="flex items-center gap-2">
             <div className="cursor-pointer">
-              <RemarkLineIcon />
+              {post.comments?.find((comment) => comment.user?.id === userId) !==
+              undefined ? (
+                <div className="text-blue-600">
+                  <RemarkFilledIcon />
+                </div>
+              ) : (
+                <RemarkLineIcon />
+              )}
             </div>
             <RemarkList
               dialogButton={

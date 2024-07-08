@@ -2,6 +2,10 @@
 
 import { revalidateTag } from "next/cache";
 
-export default async function revalidateLike() {
+export async function revalidateLike() {
   revalidateTag("likePost");
+}
+
+export async function revalidateComment() {
+  revalidateTag("createComment");
 }
