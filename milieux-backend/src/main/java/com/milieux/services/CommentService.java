@@ -2,6 +2,7 @@ package com.milieux.services;
 
 import com.milieux.dtos.requests.CommentRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
+import com.milieux.dtos.responses.CommentListResponseDto;
 import com.milieux.dtos.responses.CommentResponseDto;
 
 public interface CommentService {
@@ -11,4 +12,6 @@ public interface CommentService {
 	public CommentResponseDto getCommentById(Long commentId);
 
 	public BaseResponseDto likeComment(Long commentId, Long userId);
+
+	public CommentListResponseDto getCommentsByPostId(Long postId);
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.milieux.dtos.requests.CommentRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
+import com.milieux.dtos.responses.CommentListResponseDto;
 import com.milieux.dtos.responses.CommentResponseDto;
 import com.milieux.services.CommentService;
 import com.milieux.services.UserService;
@@ -45,6 +46,14 @@ public class CommentController {
 		CommentResponseDto responseDto = commentService.getCommentById(commentId);
 
 		return ResponseEntity.ok(responseDto);
+	}
+	
+	@GetMapping("/by-post_id/{postId}")
+	public ResponseEntity<CommentListResponseDto> getPostsByUserId(@PathVariable Long postId) {
+
+		CommentListResponseDto responseDtos = commentService.getCommentsByPostId(postId);
+
+		return ResponseEntity.ok(responseDtos);
 	}
 
 	@PutMapping("/like/{commentId}")

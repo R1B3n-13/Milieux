@@ -24,7 +24,8 @@ public class PostDto {
 	private String ownerName;
 
 	private List<UserDto> likedByUsers = new ArrayList<>();
-	private List<CommentDto> comments = new ArrayList<>();
+	
+	private int totalComments;
 
 	private ZonedDateTime createdAt;
 }
