@@ -337,7 +337,7 @@ const RegisterForm = () => {
 
                             <SelectGroup>
                               {categoryItems.map((category) => (
-                                <SelectItem value={category}>
+                                <SelectItem key={category} value={category}>
                                   {category}
                                 </SelectItem>
                               ))}

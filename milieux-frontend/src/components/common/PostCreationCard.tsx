@@ -5,6 +5,7 @@ import ImageFilledIcon from "../icons/ImageFilledIcon";
 import VideoFilledIcon2 from "../icons/VideoFilledIcon2";
 import ArticleFilledIcon from "../icons/ArticleFilledIcon";
 import { getUserFromAuthToken } from "@/actions/userActions";
+import PostCreationDialog from "./PostCreationDialog";
 
 const PostCreationCard = async () => {
   const response = await getUserFromAuthToken();
@@ -22,12 +23,17 @@ const PostCreationCard = async () => {
                 </AvatarFallback>
               </Avatar>
             </div>
-            <div className=" w-full cursor-pointer rounded-full text-gray-500 bg-gray-50 border border-gray-400 hover:border-gray-600">
-              <div className="flex items center py-2 px-4">
-                <p className="mr-1">What’s brewing,</p>
-                <p>{response.user.name}?</p>
-              </div>
-            </div>
+            <PostCreationDialog
+              dialogButton={
+                <div className=" w-full cursor-pointer rounded-full text-gray-500 bg-gray-50 border border-gray-400 hover:border-gray-600">
+                  <div className="flex items center py-2 px-4">
+                    <p className="mr-1">What’s brewing,</p>
+                    <p>{response.user.name}?</p>
+                  </div>
+                </div>
+              }
+              username={response.user.name}
+            />
           </div>
         </CardHeader>
 

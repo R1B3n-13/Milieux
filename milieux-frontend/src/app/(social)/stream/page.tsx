@@ -1,9 +1,9 @@
 import PostCreationCard from "@/components/common/PostCreationCard";
 import StreamPostList from "@/components/stream/StreamPostList";
 
-const StreamPage = async () => {
+const StreamPage = () => {
   return (
-    <div className="flex flex-col px-44 h-screen overflow-y-auto no-scrollbar">
+    <div className="flex flex-col px-40 h-screen overflow-y-auto no-scrollbar">
       <PostCreationCard />
       <StreamPostList />
     </div>
