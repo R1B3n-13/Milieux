@@ -9,7 +9,7 @@ const PostSchema = z
     ownerId: z.number().optional(),
     ownerName: z.string().optional(),
     likedByUsers: z.array(z.any()).optional(),
-    comments: z.array(z.any()).optional(),
+    totalComments: z.number().optional(),
     createdAt: z
       .string()
       .transform((str) => new Date(str))
@@ -17,11 +17,11 @@ const PostSchema = z
   })
   .refine(
     (data) =>
-      data.text !== undefined ||
-      data.imagePath !== undefined ||
-      data.videoPath !== undefined,
+      (data.text !== undefined && data.text !== "") ||
+      (data.imagePath !== undefined && data.imagePath !== "") ||
+      (data.videoPath !== undefined && data.videoPath !== ""),
     {
-      message: "At least one of caption, image, or video must be provided",
+      message: "Empty post is not allowed",
       path: ["text"],
     }
   );

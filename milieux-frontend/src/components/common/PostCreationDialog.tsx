@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/Button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -11,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -142,6 +141,11 @@ export default function PostCreationDialog({
     }
 
     setIsLoading(false);
+
+    setSelectedImage(null);
+    setSelectedVideo(null);
+
+    form.reset({ text: "", imagePath: "", videoPath: "" });
   };
 
   return (
@@ -168,7 +172,7 @@ export default function PostCreationDialog({
                       <Textarea
                         {...field}
                         placeholder={`What's brewing, ${username}?`}
-                        className="h-40"
+                        className="h-40 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400"
                       />
                     </FormControl>
                     <FormMessage />
@@ -207,7 +211,7 @@ export default function PostCreationDialog({
                     <FormControl>
                       <div className="flex rounded-lg w-full p-2 items-center justify-center cursor-pointer gap-2 hover:bg-muted">
                         <Input
-                          id="image-input"
+                          id="image-input-post"
                           type="file"
                           accept="image/*"
                           onChange={(event) => {
@@ -216,7 +220,7 @@ export default function PostCreationDialog({
                           }}
                           style={{ display: "none" }}
                         />
-                        <FormLabel htmlFor="image-input">
+                        <FormLabel htmlFor="image-input-post">
                           <div className="flex items-center justify-center gap-2 cursor-pointer">
                             <div className="text-blue-600">
                               <ImageFilledIcon />
@@ -266,11 +270,9 @@ export default function PostCreationDialog({
             </div>
 
             <DialogFooter>
-              {/* <DialogClose asChild> */}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? <Loading text="Loading..." /> : "Post"}
               </Button>
-              {/* </DialogClose> */}
             </DialogFooter>
           </form>
         </Form>

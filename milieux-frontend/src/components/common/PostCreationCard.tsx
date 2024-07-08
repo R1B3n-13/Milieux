@@ -4,7 +4,7 @@ import { Card, CardHeader, CardFooter } from "@/components/ui/Card";
 import ImageFilledIcon from "../icons/ImageFilledIcon";
 import VideoFilledIcon2 from "../icons/VideoFilledIcon2";
 import ArticleFilledIcon from "../icons/ArticleFilledIcon";
-import { getUserFromAuthToken } from "@/actions/userActions";
+import { getUserFromAuthToken } from "@/services/userService";
 import PostCreationDialog from "./PostCreationDialog";
 
 const PostCreationCard = async () => {

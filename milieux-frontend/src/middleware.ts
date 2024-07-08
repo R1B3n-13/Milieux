@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserFromAuthToken } from "./actions/userActions";
+import { getUserFromAuthToken } from "./services/userService";
 
 export async function middleware(request: NextRequest) {
   const user = await getUserFromAuthToken();

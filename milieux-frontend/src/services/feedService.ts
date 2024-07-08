@@ -1,5 +1,3 @@
-"use server";
-
 import FeedSchema from "@/schemas/feedSchema";
 import Parser from "rss-parser";
 

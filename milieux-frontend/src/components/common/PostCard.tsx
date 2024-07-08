@@ -20,6 +20,7 @@ import { likePost } from "@/actions/postActions";
 import LoveFilledIcon from "../icons/LoveFilledIcon";
 import revalidateLike from "@/actions/revalidationActions";
 import AppreciationList from "./AppreciationList";
+import CommentForm from "./CommentForm";
 
 const PostCard = ({
   post,
@@ -69,8 +70,9 @@ const PostCard = ({
                 <Image
                   src={post.imagePath}
                   alt="post image"
-                  width={685}
+                  width={1000}
                   height={0}
+                  className="w-full"
                 />
               </div>
             )}
@@ -99,7 +101,7 @@ const PostCard = ({
             </div>
             <AppreciationList
               dialogButton={
-                <p className="text-sm mr-10 text-gray-500 cursor-pointer">
+                <p className="text-sm mr-10 text-gray-500 cursor-pointer hover:underline">
                   {post.likedByUsers?.length}{" "}
                   {post.likedByUsers?.length === 1 ||
                   post.likedByUsers?.length === 0
@@ -115,9 +117,9 @@ const PostCard = ({
             <div className="cursor-pointer">
               <RemarkLineIcon />
             </div>
-            <p className="text-sm text-gray-500 cursor-pointer">
-              {post.comments?.length}{" "}
-              {post.comments?.length === 1 || post.comments?.length === 0
+            <p className="text-sm text-gray-500 cursor-pointer hover:underline">
+              {post.totalComments}{" "}
+              {post.totalComments === 1 || post.totalComments === 0
                 ? "remark"
                 : "remarks"}
             </p>
@@ -127,6 +129,8 @@ const PostCard = ({
             <BookmarkLineIcon />
           </div>
         </CardFooter>
+
+        <CommentForm />
       </Card>
     </div>
   );

@@ -1,5 +1,3 @@
-"use server";
-
 import getAuthToken from "@/utils/getAuthToken";
 
 const backendUrl = process.env.BACKEND_URL;
