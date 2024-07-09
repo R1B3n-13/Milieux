@@ -19,10 +19,7 @@ public class CommentDto {
 	private String text;
 	private String imagePath;
 	
-	private Long ownerId;
-	private String ownerName;
-	
-	private Long postId;
+	private UserDto user;
 
 	private List<UserDto> likedByUsers = new ArrayList<>();
 

@@ -16,22 +16,32 @@ import RemarkLineIcon from "../icons/RemarkLineIcon";
 import BookmarkLineIcon from "../icons/BookmarkLineIcon";
 import { z } from "zod";
 import PostSchema from "@/schemas/postSchema";
-import { likePost } from "@/actions/postActions";
+import { likePost, savePost } from "@/actions/postActions";
 import LoveFilledIcon from "../icons/LoveFilledIcon";
-import revalidateLike from "@/actions/revalidationActions";
+import { revalidateLike, revalidateSave } from "@/actions/revalidationActions";
 import AppreciationList from "./AppreciationList";
-import CommentForm from "./CommentForm";
+import CommentForm from "./RemarkForm";
+import RemarkList from "./RemarkList";
+import RemarkFilledIcon from "../icons/RemarkFilledIcon";
+import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
 
 const PostCard = ({
   post,
   userId,
+  isSaved,
 }: {
   post: z.infer<typeof PostSchema>;
   userId: number;
+  isSaved: boolean;
 }) => {
   const handleLoveIconClick = async () => {
     await likePost(post.id);
     revalidateLike();
+  };
+
+  const handleBookmarkIconClick = async () => {
+    await savePost(post.id);
+    revalidateSave();
   };
 
   return (
@@ -49,7 +59,7 @@ const PostCard = ({
             </div>
             <div>
               <CardTitle className="mt-1 font-semibold text-slate-700 cursor-pointer">
-                {post.ownerName}
+                {post.user?.name}
               </CardTitle>
               <CardDescription className="mt-1 cursor-default">
                 {new Date(post.createdAt || "").toLocaleString()}
@@ -109,28 +119,49 @@ const PostCard = ({
                     : "appreciations"}
                 </p>
               }
-              likedByUsers={post.likedByUsers}
+              likedByUsers={post.likedByUsers || []}
             />
           </div>
 
           <div className="flex items-center gap-2">
             <div className="cursor-pointer">
-              <RemarkLineIcon />
+              {post.comments?.find((comment) => comment.user?.id === userId) !==
+              undefined ? (
+                <div className="text-blue-600">
+                  <RemarkFilledIcon />
+                </div>
+              ) : (
+                <RemarkLineIcon />
+              )}
             </div>
-            <p className="text-sm text-gray-500 cursor-pointer hover:underline">
-              {post.totalComments}{" "}
-              {post.totalComments === 1 || post.totalComments === 0
-                ? "remark"
-                : "remarks"}
-            </p>
+            <RemarkList
+              dialogButton={
+                <p className="text-sm text-gray-500 cursor-pointer hover:underline">
+                  {post.comments?.length}{" "}
+                  {post.comments?.length === 1 || post.comments?.length === 0
+                    ? "remark"
+                    : "remarks"}
+                </p>
+              }
+              comments={post.comments || []}
+            />
           </div>
 
-          <div className="ml-auto cursor-pointer">
-            <BookmarkLineIcon />
+          <div
+            className="ml-auto cursor-pointer"
+            onClick={handleBookmarkIconClick}
+          >
+            {isSaved ? (
+              <div className="text-cyan-600">
+                <BookmarkFilledIcon />
+              </div>
+            ) : (
+              <BookmarkLineIcon />
+            )}
           </div>
         </CardFooter>
 
-        <CommentForm />
+        <CommentForm postId={post.id} />
       </Card>
     </div>
   );

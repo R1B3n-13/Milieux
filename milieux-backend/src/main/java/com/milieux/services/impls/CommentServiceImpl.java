@@ -65,11 +65,6 @@ public class CommentServiceImpl implements CommentService {
 
 		CommentDto dto = modelMapper.map(comment, CommentDto.class);
 
-		dto.setOwnerName(comment.getUser().getName());
-		dto.setOwnerId(comment.getUser().getId());
-
-		dto.setPostId(comment.getPost().getId());
-
 		return new CommentResponseDto(200, true, "Comment fetched successfully!", dto);
 	}
 
@@ -81,18 +76,8 @@ public class CommentServiceImpl implements CommentService {
 
 		List<Comment> comments = post.getComments();
 
-		List<CommentDto> dtos = comments.stream().map(comment -> {
-
-			CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
-
-			commentDto.setOwnerName(comment.getUser().getName());
-			commentDto.setOwnerId(comment.getUser().getId());
-
-			commentDto.setPostId(postId);
-
-			return commentDto;
-
-		}).collect(Collectors.toList());
+		List<CommentDto> dtos = comments.stream().map(comment -> modelMapper.map(comment, CommentDto.class))
+				.collect(Collectors.toList());
 
 		return new CommentListResponseDto(200, true, "Comments fetched successfully!", dtos);
 	}

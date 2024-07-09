@@ -36,12 +36,6 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(PostAlreadySavedException.class)
-	public ResponseEntity<BaseResponseDto> handlePostAlreadySavedException(PostAlreadySavedException ex) {
-
-		return new ResponseEntity<>(new BaseResponseDto(409, false, ex.getMessage()), HttpStatus.CONFLICT);
-	}
-
 	@ExceptionHandler(CommentNotFoundException.class)
 	public ResponseEntity<BaseResponseDto> handleCommentNotFoundException(CommentNotFoundException ex) {
 

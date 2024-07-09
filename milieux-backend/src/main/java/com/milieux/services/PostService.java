@@ -15,6 +15,8 @@ public interface PostService {
 
 	PostListResponseDto getPostsByUserId(Long userId);
 
+	PostListResponseDto getSavedPosts(Long userId);
+
 	BaseResponseDto savePost(Long postId, Long userId);
 
 	BaseResponseDto likePost(Long postId, Long userId);

@@ -72,3 +72,8 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
     };
   }
 }
+
+export default async function getAuthToken() {
+  const authToken = cookies().get("jwt")?.value;
+  return authToken;
+}

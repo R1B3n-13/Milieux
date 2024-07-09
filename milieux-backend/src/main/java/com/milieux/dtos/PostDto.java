@@ -19,13 +19,11 @@ public class PostDto {
 	private String text;
 	private String imagePath;
 	private String videoPath;
-	
-	private Long ownerId;
-	private String ownerName;
+
+	private UserDto user;
 
 	private List<UserDto> likedByUsers = new ArrayList<>();
-	
-	private int totalComments;
+	private List<CommentDto> comments = new ArrayList<>();
 
 	private ZonedDateTime createdAt;
 }

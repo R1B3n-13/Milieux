@@ -1,4 +1,6 @@
 import { z } from "zod";
+import CommentSchema from "./commentSchema";
+import UserSchema from "./userSchema";
 
 const PostSchema = z
   .object({
@@ -6,10 +8,9 @@ const PostSchema = z
     text: z.string().optional(),
     imagePath: z.string().url().optional(),
     videoPath: z.string().url().optional(),
-    ownerId: z.number().optional(),
-    ownerName: z.string().optional(),
-    likedByUsers: z.array(z.any()).optional(),
-    totalComments: z.number().optional(),
+    user: UserSchema.optional(),
+    likedByUsers: z.array(UserSchema).optional(),
+    comments: z.array(CommentSchema).optional(),
     createdAt: z
       .string()
       .transform((str) => new Date(str))

@@ -65,6 +65,16 @@ public class PostController {
 		return ResponseEntity.ok(responseDtos);
 	}
 
+	@GetMapping("/saved")
+	public ResponseEntity<PostListResponseDto> getSavedPosts(@RequestHeader("Authorization") String header) {
+
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
+
+		PostListResponseDto responseDtos = postService.getSavedPosts(userId);
+
+		return ResponseEntity.ok(responseDtos);
+	}
+
 	@PutMapping("/save/{postId}")
 	public ResponseEntity<BaseResponseDto> savePost(@PathVariable Long postId,
 			@RequestHeader("Authorization") String header) {
