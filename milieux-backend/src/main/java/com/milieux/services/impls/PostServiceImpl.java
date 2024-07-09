@@ -12,7 +12,6 @@ import com.milieux.dtos.requests.PostRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.PostListResponseDto;
 import com.milieux.dtos.responses.PostResponseDto;
-import com.milieux.exceptions.PostAlreadySavedException;
 import com.milieux.exceptions.PostNotFoundException;
 import com.milieux.exceptions.UserNotAuthorizedException;
 import com.milieux.exceptions.UserNotFoundException;
@@ -79,13 +78,22 @@ public class PostServiceImpl implements PostService {
 
 		List<Post> posts = user.getPosts();
 
-		List<PostDto> dtos = posts.stream().map(post -> {
+		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
+				.collect(Collectors.toList());
 
-			PostDto postDto = modelMapper.map(post, PostDto.class);
+		return new PostListResponseDto(200, true, "Posts fetched successfully!", dtos);
+	}
 
-			return postDto;
+	@Override
+	public PostListResponseDto getSavedPosts(Long userId) {
 
-		}).collect(Collectors.toList());
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
+
+		List<Post> posts = user.getSavedPosts();
+
+		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
+				.collect(Collectors.toList());
 
 		return new PostListResponseDto(200, true, "Posts fetched successfully!", dtos);
 	}
@@ -99,17 +107,20 @@ public class PostServiceImpl implements PostService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		if (!user.getSavedPosts().contains(post)) {
+		if (user.getSavedPosts().contains(post)) {
 
-			user.getSavedPosts().add(post);
+			user.getSavedPosts().remove(post);
 
 			userRepository.save(user);
 
 			return new BaseResponseDto(200, true, "Post saved successfully!");
 		} else {
-			throw new PostAlreadySavedException("Post is already saved once.");
-		}
+			user.getSavedPosts().add(post);
 
+			userRepository.save(user);
+
+			return new BaseResponseDto(200, true, "Post unsaved successfully!");
+		}
 	}
 
 	@Override
