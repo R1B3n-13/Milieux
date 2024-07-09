@@ -16,24 +16,32 @@ import RemarkLineIcon from "../icons/RemarkLineIcon";
 import BookmarkLineIcon from "../icons/BookmarkLineIcon";
 import { z } from "zod";
 import PostSchema from "@/schemas/postSchema";
-import { likePost } from "@/actions/postActions";
+import { likePost, savePost } from "@/actions/postActions";
 import LoveFilledIcon from "../icons/LoveFilledIcon";
-import { revalidateLike } from "@/actions/revalidationActions";
+import { revalidateLike, revalidateSave } from "@/actions/revalidationActions";
 import AppreciationList from "./AppreciationList";
 import CommentForm from "./RemarkForm";
 import RemarkList from "./RemarkList";
 import RemarkFilledIcon from "../icons/RemarkFilledIcon";
+import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
 
 const PostCard = ({
   post,
   userId,
+  isSaved,
 }: {
   post: z.infer<typeof PostSchema>;
   userId: number;
+  isSaved: boolean;
 }) => {
   const handleLoveIconClick = async () => {
     await likePost(post.id);
     revalidateLike();
+  };
+
+  const handleBookmarkIconClick = async () => {
+    await savePost(post.id);
+    revalidateSave();
   };
 
   return (
@@ -139,8 +147,17 @@ const PostCard = ({
             />
           </div>
 
-          <div className="ml-auto cursor-pointer">
-            <BookmarkLineIcon />
+          <div
+            className="ml-auto cursor-pointer"
+            onClick={handleBookmarkIconClick}
+          >
+            {isSaved ? (
+              <div className="text-cyan-600">
+                <BookmarkFilledIcon />
+              </div>
+            ) : (
+              <BookmarkLineIcon />
+            )}
           </div>
         </CardFooter>
 

@@ -10,6 +10,7 @@ import AvatarIcon from "../icons/AvatarIcon";
 import { z } from "zod";
 import CommentSchema from "@/schemas/commentSchema";
 import Image from "next/image";
+import { ScrollArea } from "../ui/ScrollArea";
 
 const RemarkList = ({
   dialogButton,
@@ -21,7 +22,7 @@ const RemarkList = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{dialogButton}</DialogTrigger>
-      <DialogContent className="w-full min-h-36">
+      <DialogContent className="max-w-fit min-h-36">
         <DialogHeader>
           <div className="flex flex-col gap-2 items-center justify-center">
             <DialogTitle className="text-sm text-gray-500 font-normal">
@@ -29,45 +30,47 @@ const RemarkList = ({
             </DialogTitle>
           </div>
         </DialogHeader>
-        <div className="flex flex-col justify-center max-h-[calc(100vh-10em)] overflow-y-auto no-scrollbar">
-          {comments &&
-            comments.map((comment: z.infer<typeof CommentSchema>) => (
-              <div key={comment.id} className="mb-4">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 cursor-pointer">
-                    <Avatar>
-                      <AvatarImage />
-                      <AvatarFallback className="text-4xl text-gray-500">
-                        <AvatarIcon />
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
+        <ScrollArea className="max-h-[80vh] pr-6">
+          <div className="flex flex-col justify-center">
+            {comments &&
+              comments.map((comment: z.infer<typeof CommentSchema>) => (
+                <div key={comment.id} className="mb-4">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 cursor-pointer">
+                      <Avatar>
+                        <AvatarImage />
+                        <AvatarFallback className="text-4xl text-gray-500">
+                          <AvatarIcon />
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
 
-                  <div className="flex flex-col w-full bg-gray-100 p-3 rounded-lg">
-                    <p className="font-semibold cursor-pointer">
-                      {comment.user?.name}
-                    </p>
-                    {comment.text && (
-                      <p className="text-slate-700 break-words flex-shrink-0">
-                        {comment.text}
+                    <div className="flex flex-col w-[30rem] bg-gray-100 p-3 rounded-lg">
+                      <p className="font-semibold cursor-pointer">
+                        {comment.user?.name}
                       </p>
-                    )}
-                    {comment.imagePath && (
-                      <div className="flex items-center justify-center pt-3">
-                        <Image
-                          src={comment.imagePath}
-                          alt=""
-                          width={500}
-                          height={0}
-                          className="w-full rounded-lg"
-                        />
-                      </div>
-                    )}
+                      {comment.text && (
+                        <p className="text-slate-700 break-words">
+                          {comment.text}
+                        </p>
+                      )}
+                      {comment.imagePath && (
+                        <div className="flex items-center justify-center pt-3">
+                          <Image
+                            src={comment.imagePath}
+                            alt=""
+                            width={500}
+                            height={0}
+                            className="w-full rounded-lg"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-        </div>
+              ))}
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
