@@ -7,22 +7,22 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.milieux.dtos.StoryDto;
-import com.milieux.dtos.requests.StoryRequestDto;
+import com.milieux.dtos.ReelDto;
+import com.milieux.dtos.requests.ReelRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
-import com.milieux.dtos.responses.StoryListResponseDto;
+import com.milieux.dtos.responses.ReelListResponseDto;
 import com.milieux.exceptions.UserNotFoundException;
-import com.milieux.models.Story;
+import com.milieux.models.Reel;
 import com.milieux.models.User;
-import com.milieux.repositories.StoryRepository;
+import com.milieux.repositories.ReelRepository;
 import com.milieux.repositories.UserRepository;
-import com.milieux.services.StoryService;
+import com.milieux.services.ReelService;
 
 @Service
-public class StoryServiceImpl implements StoryService {
+public class ReelServiceImpl implements ReelService {
 
 	@Autowired
-	private StoryRepository storyRepository;
+	private ReelRepository storyRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -31,12 +31,12 @@ public class StoryServiceImpl implements StoryService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public BaseResponseDto createStory(StoryRequestDto requestDto, Long userId) {
+	public BaseResponseDto createReel(ReelRequestDto requestDto, Long userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		Story story = modelMapper.map(requestDto, Story.class);
+		Reel story = modelMapper.map(requestDto, Reel.class);
 
 		story.setUser(user);
 
@@ -46,27 +46,27 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public StoryListResponseDto getAllStories() {
+	public ReelListResponseDto getAllReels() {
 
-		List<Story> stories = storyRepository.findAll();
+		List<Reel> stories = storyRepository.findAll();
 
-		List<StoryDto> dtos = stories.stream().map(story -> modelMapper.map(story, StoryDto.class))
+		List<ReelDto> dtos = stories.stream().map(story -> modelMapper.map(story, ReelDto.class))
 				.collect(Collectors.toList());
 
-		return new StoryListResponseDto(200, true, "Stories fetched successfully!", dtos);
+		return new ReelListResponseDto(200, true, "Stories fetched successfully!", dtos);
 	}
 
 	@Override
-	public StoryListResponseDto getStoriesByUserId(Long userId) {
+	public ReelListResponseDto getReelsByUserId(Long userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		List<Story> stories = user.getStories();
+		List<Reel> stories = user.getStories();
 
-		List<StoryDto> dtos = stories.stream().map(story -> modelMapper.map(story, StoryDto.class))
+		List<ReelDto> dtos = stories.stream().map(story -> modelMapper.map(story, ReelDto.class))
 				.collect(Collectors.toList());
 
-		return new StoryListResponseDto(200, true, "Stories fetched successfully!", dtos);
+		return new ReelListResponseDto(200, true, "Stories fetched successfully!", dtos);
 	}
 }

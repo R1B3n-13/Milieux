@@ -1,6 +1,6 @@
 package com.milieux.dtos.responses;
 
-import com.milieux.dtos.StoryDto;
+import com.milieux.dtos.ReelDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,11 +11,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoryResponseDto extends BaseResponseDto {
+public class ReelResponseDto extends BaseResponseDto {
 
-	private StoryDto story;
+	private ReelDto story;
 
-	public StoryResponseDto(int status, boolean success, String message, StoryDto story) {
+	public ReelResponseDto(int status, boolean success, String message, ReelDto story) {
 		super(status, success, message);
 		this.story = story;
 	}
