@@ -1,4 +1,5 @@
 import NavBar from "@/components/social/NavBar";
+import LeftSideBar from "@/components/social/LeftSideBar";
 import React from "react";
 
 const SocialLayout = ({ children }: { children: React.ReactNode }) => {
@@ -8,7 +9,13 @@ const SocialLayout = ({ children }: { children: React.ReactNode }) => {
         <NavBar />
       </nav>
 
-      <div>{children}</div>
+      <div className="grid grid-cols-11">
+        <div className="col-span-2">
+          <LeftSideBar />
+        </div>
+
+        <div className="col-span-9">{children}</div>
+      </div>
     </>
   );
 };

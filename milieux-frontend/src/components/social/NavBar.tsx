@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/Input";
 import { Avatar, AvatarImage } from "../ui/Avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
@@ -8,13 +8,15 @@ import AvatarIcon from "../icons/AvatarIcon";
 import { usePathname } from "next/navigation";
 import { actionItems, navItems } from "./items/navbarItems";
 import Logo from "../common/Logo";
+import Link from "next/link";
 
 const NavBar = () => {
-  const [activeItem, setActiveItem] = useState(usePathname());
+  const pathname = usePathname();
+  const [activeItem, setActiveItem] = useState(pathname);
 
-  const handleItemClick = (item: string) => {
-    setActiveItem(item);
-  };
+  useEffect(() => {
+    setActiveItem(pathname);
+  }, [pathname]);
 
   return (
     <div className="grid grid-cols-11 font-medium text-slate-700 transition-all shadow-md bg-white px-4">
@@ -33,14 +35,14 @@ const NavBar = () => {
       <div className="col-span-4 content-center">
         <div className="flex h-full items-center justify-center gap-12">
           {navItems.map((item) => (
-            <div
+            <Link
               key={item.name}
+              href={item.path}
               className={`flex h-full px-7 items-center justify-center gap-2 cursor-pointer ${
                 activeItem === item.path
                   ? "border-b-[3px] border-blue-600"
                   : "hover:bg-gray-100"
               }`}
-              onClick={() => handleItemClick(item.path)}
             >
               <div
                 className={`text-2xl ${
@@ -49,7 +51,7 @@ const NavBar = () => {
               >
                 {activeItem === item.path ? item.filledIcon : item.lineIcon}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
