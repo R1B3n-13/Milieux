@@ -20,6 +20,7 @@ import Image from "next/image";
 import uploadToCloudinary from "@/actions/cloudinaryActions";
 import { createPost } from "@/actions/postActions";
 import Loading from "./Loading";
+import VideoPlayer from "./VideoPlayer";
 
 export default function PostSubmissionDialog({
   dialogButton,
@@ -30,78 +31,51 @@ export default function PostSubmissionDialog({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState<string>("");
-  const [selectedImage, setSelectedImage] = useState<
+  const [selectedMedia, setSelectedMedia] = useState<
     string | ArrayBuffer | null
   >(null);
-  const [selectedVideo, setSelectedVideo] = useState<
-    string | ArrayBuffer | null
-  >(null);
+  const [mediaType, setMediaType] = useState<"image" | "video" | null>(null);
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleMediaChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+
+      const fileType = file.type.startsWith("video") ? "video" : "image";
+      setMediaType(fileType);
+
       const fReader = new FileReader();
       fReader.readAsDataURL(file);
 
       fReader.onloadend = function (event) {
         const result = event.target?.result;
         if (result) {
-          setSelectedImage(result);
+          setSelectedMedia(result);
         }
       };
     }
   };
 
-  const clearImage = () => {
-    setSelectedImage(null);
+  const clearMedia = () => {
+    setSelectedMedia(null);
   };
 
-  const handleVideoChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      const fReader = new FileReader();
-      fReader.readAsDataURL(file);
-
-      fReader.onloadend = function (event) {
-        const result = event.target?.result;
-        if (result) {
-          setSelectedVideo(result);
-        }
-      };
-    }
-  };
-
-  const clearVideo = () => {
-    setSelectedVideo(null);
-  };
-
-  const onSubmit = async () => {
+  const handleSubmit = async () => {
     setIsLoading(true);
 
     let imagePath = null;
     let videoPath = null;
 
-    if (selectedImage) {
-      const uploadResult = await uploadToCloudinary(selectedImage as string);
+    if (selectedMedia) {
+      const uploadResult = await uploadToCloudinary(selectedMedia as string);
 
       if (!uploadResult.success) {
         toast.error("Upload failed.");
         setIsLoading(false);
         return;
       } else {
-        imagePath = uploadResult.url;
-      }
-    }
-
-    if (selectedVideo) {
-      const uploadResult = await uploadToCloudinary(selectedVideo as string);
-
-      if (!uploadResult.success) {
-        toast.error("Upload failed.");
-        setIsLoading(false);
-        return;
-      } else {
-        videoPath = uploadResult.url;
+        mediaType === "image"
+          ? (imagePath = uploadResult.url)
+          : (videoPath = uploadResult.url);
       }
     }
 
@@ -122,8 +96,8 @@ export default function PostSubmissionDialog({
     setIsLoading(false);
 
     setText("");
-    setSelectedImage(null);
-    setSelectedVideo(null);
+    setSelectedMedia(null);
+    setMediaType(null);
   };
 
   return (
@@ -148,35 +122,46 @@ export default function PostSubmissionDialog({
             />
           </div>
 
-          {selectedImage && (
-            <div className="flex items-center justify-center">
-              <div className="relative">
+          {selectedMedia && (
+            <div className="relative">
+              {mediaType === "image" ? (
                 <Image
-                  src={selectedImage as string}
+                  src={selectedMedia as string}
                   alt=""
+                  layout="responsive"
                   width={200}
                   height={200}
+                  className="rounded-lg"
                 />
-                <button
-                  className="absolute top-1 right-1 px-1 bg-red-500 text-white text-sm cursor-pointer"
-                  onClick={() => clearImage()}
-                >
-                  ✕
-                </button>
-              </div>
+              ) : (
+                <VideoPlayer
+                  src={selectedMedia as string}
+                  className="rounded-lg"
+                />
+              )}
+
+              <button
+                className="absolute top-1 right-1 px-1 bg-red-500 text-white text-sm cursor-pointer"
+                onClick={() => {
+                  setSelectedMedia(null);
+                  setMediaType(null);
+                }}
+              >
+                ✕
+              </button>
             </div>
           )}
 
           <div className="flex p-0 m-0 items-center justify-center gap-3 text-xl text-slate-700">
             <div className="flex rounded-lg w-full p-2 items-center justify-center cursor-pointer gap-2 hover:bg-muted">
               <Input
-                id="image-input-post"
+                id="image-input"
                 type="file"
                 accept="image/*"
-                onChange={handleImageChange}
+                onChange={handleMediaChange}
                 style={{ display: "none" }}
               />
-              <label htmlFor="image-input-post">
+              <label htmlFor="image-input">
                 <div className="flex items-center justify-center gap-2 cursor-pointer">
                   <div className="text-blue-600">
                     <ImageFilledIcon />
@@ -191,7 +176,7 @@ export default function PostSubmissionDialog({
                 id="video-input"
                 type="file"
                 accept="video/*"
-                onChange={handleVideoChange}
+                onChange={handleMediaChange}
                 style={{ display: "none" }}
               />
               <label htmlFor="video-input">
@@ -207,11 +192,9 @@ export default function PostSubmissionDialog({
 
           <DialogFooter>
             <Button
-              onClick={onSubmit}
+              onClick={handleSubmit}
               className="w-full"
-              disabled={
-                isLoading || (!text && !selectedImage && !selectedVideo)
-              }
+              disabled={isLoading || (!text && !selectedMedia)}
             >
               {isLoading ? <Loading text="Loading..." /> : "Post"}
             </Button>
