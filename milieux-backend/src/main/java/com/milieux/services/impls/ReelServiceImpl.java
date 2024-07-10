@@ -42,7 +42,7 @@ public class ReelServiceImpl implements ReelService {
 
 		storyRepository.save(story);
 
-		return new BaseResponseDto(201, true, "Story created successfully!");
+		return new BaseResponseDto(201, true, "Reel created successfully!");
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class ReelServiceImpl implements ReelService {
 		List<ReelDto> dtos = stories.stream().map(story -> modelMapper.map(story, ReelDto.class))
 				.collect(Collectors.toList());
 
-		return new ReelListResponseDto(200, true, "Stories fetched successfully!", dtos);
+		return new ReelListResponseDto(200, true, "Reels fetched successfully!", dtos);
 	}
 
 	@Override
@@ -67,6 +67,6 @@ public class ReelServiceImpl implements ReelService {
 		List<ReelDto> dtos = stories.stream().map(story -> modelMapper.map(story, ReelDto.class))
 				.collect(Collectors.toList());
 
-		return new ReelListResponseDto(200, true, "Stories fetched successfully!", dtos);
+		return new ReelListResponseDto(200, true, "Reels fetched successfully!", dtos);
 	}
 }
