@@ -1,23 +1,17 @@
 import { z } from "zod";
 import UserSchema from "./userSchema";
 
-const CommentSchema = z
-  .object({
-    id: z.number().optional(),
-    text: z.string().optional(),
-    imagePath: z.string().optional(),
-    user: UserSchema.optional(),
-    likedByUsers: z.array(UserSchema).optional(),
-    createdAt: z.string().datetime().optional(),
-  })
-  .refine(
-    (data) =>
-      (data.text !== undefined && data.text !== "") ||
-      (data.imagePath !== undefined && data.imagePath !== ""),
-    {
-      message: "Empty remark is not allowed",
-      path: ["text"],
-    }
-  );
+const CommentSchema = z.object({
+  id: z.number().nullable().optional(),
+  text: z.string().nullable().optional(),
+  imagePath: z.string().nullable().optional(),
+  user: UserSchema.nullable().optional(),
+  likedByUsers: z.array(UserSchema).nullable().optional(),
+  createdAt: z
+    .string()
+    .transform((str) => new Date(str))
+    .nullable()
+    .optional(),
+});
 
 export default CommentSchema;

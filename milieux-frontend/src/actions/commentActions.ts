@@ -8,7 +8,7 @@ const backendUrl = process.env.BACKEND_URL;
 
 export async function createComment(
   commentData: z.infer<typeof CommentSchema>,
-  postId: number | undefined
+  postId: number | undefined | null
 ) {
   try {
     if (!postId) throw new Error("Invalid post id.");
