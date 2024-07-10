@@ -20,7 +20,7 @@ import { likePost, savePost } from "@/actions/postActions";
 import LoveFilledIcon from "../icons/LoveFilledIcon";
 import { revalidateLike, revalidateSave } from "@/actions/revalidationActions";
 import AppreciationList from "./AppreciationList";
-import CommentForm from "./RemarkForm";
+import RemarkSubmissionField from "./RemarkSubmissionField";
 import RemarkList from "./RemarkList";
 import RemarkFilledIcon from "../icons/RemarkFilledIcon";
 import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
@@ -161,7 +161,7 @@ const PostCard = ({
           </div>
         </CardFooter>
 
-        <CommentForm postId={post.id} />
+        <RemarkSubmissionField postId={post.id || 0} />
       </Card>
     </div>
   );

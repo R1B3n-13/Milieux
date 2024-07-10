@@ -5,14 +5,14 @@ import ImageFilledIcon from "../icons/ImageFilledIcon";
 import VideoFilledIcon2 from "../icons/VideoFilledIcon2";
 import ArticleFilledIcon from "../icons/ArticleFilledIcon";
 import { getUserFromAuthToken } from "@/services/userService";
-import PostCreationDialog from "./PostCreationDialog";
+import PostSubmissionDialog from "./PostSubmissionDialog";
 
 const PostCreationCard = async () => {
   const response = await getUserFromAuthToken();
 
   return (
     <div className="flex transition-all">
-      <Card className="mt-10 mb-5 bg-white shadow-md w-full">
+      <Card className="mt-5 mb-5 bg-white shadow-md w-full">
         <CardHeader className="pb-4 mb-0">
           <div className="flex items-center gap-4">
             <div className="cursor-pointer">
@@ -23,7 +23,7 @@ const PostCreationCard = async () => {
                 </AvatarFallback>
               </Avatar>
             </div>
-            <PostCreationDialog
+            <PostSubmissionDialog
               dialogButton={
                 <div className=" w-full cursor-pointer rounded-full text-gray-500 bg-gray-50 border border-gray-400 hover:border-gray-600">
                   <div className="flex items center py-2 px-4">

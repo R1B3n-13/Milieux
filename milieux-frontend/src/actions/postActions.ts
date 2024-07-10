@@ -39,7 +39,7 @@ export async function createPost(postData: z.infer<typeof PostSchema>) {
   }
 }
 
-export async function likePost(postId: number | undefined) {
+export async function likePost(postId: number | undefined | null) {
   try {
     if (!postId) throw new Error("Invalid post id.");
 
@@ -76,7 +76,7 @@ export async function likePost(postId: number | undefined) {
   }
 }
 
-export async function savePost(postId: number | undefined) {
+export async function savePost(postId: number | undefined | null) {
   try {
     if (!postId) throw new Error("Invalid post id.");
 
