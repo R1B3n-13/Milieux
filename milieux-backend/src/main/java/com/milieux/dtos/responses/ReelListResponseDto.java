@@ -2,7 +2,7 @@ package com.milieux.dtos.responses;
 
 import java.util.List;
 
-import com.milieux.dtos.StoryDto;
+import com.milieux.dtos.ReelDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,11 +13,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoryListResponseDto extends BaseResponseDto {
+public class ReelListResponseDto extends BaseResponseDto {
 
-	private List<StoryDto> stories;
+	private List<ReelDto> stories;
 
-	public StoryListResponseDto(int status, boolean success, String message, List<StoryDto> stories) {
+	public ReelListResponseDto(int status, boolean success, String message, List<ReelDto> stories) {
 		super(status, success, message);
 		this.stories = stories;
 	}

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoryRequestDto {
+public class ReelRequestDto {
 
 	private String title;
 	private String imagePath;

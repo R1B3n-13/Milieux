@@ -11,45 +11,45 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.milieux.dtos.requests.StoryRequestDto;
+import com.milieux.dtos.requests.ReelRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
-import com.milieux.dtos.responses.StoryListResponseDto;
-import com.milieux.services.StoryService;
+import com.milieux.dtos.responses.ReelListResponseDto;
+import com.milieux.services.ReelService;
 import com.milieux.services.UserService;
 
 @RestController
-@RequestMapping("/stories")
-public class StoryController {
+@RequestMapping("/reels")
+public class ReelController {
 
 	@Autowired
-	private StoryService storyService;
+	private ReelService storyService;
 
 	@Autowired
 	private UserService userService;
 
 	@PostMapping("/create")
-	public ResponseEntity<BaseResponseDto> createStory(@RequestBody StoryRequestDto requestDto,
+	public ResponseEntity<BaseResponseDto> createReel(@RequestBody ReelRequestDto requestDto,
 			@RequestHeader("Authorization") String header) {
 
 		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
-		BaseResponseDto responseDto = storyService.createStory(requestDto, userId);
+		BaseResponseDto responseDto = storyService.createReel(requestDto, userId);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 
 	@GetMapping
-	public ResponseEntity<StoryListResponseDto> getAllStories() {
+	public ResponseEntity<ReelListResponseDto> getAllReels() {
 
-		StoryListResponseDto responseDtos = storyService.getAllStories();
+		ReelListResponseDto responseDtos = storyService.getAllReels();
 
 		return ResponseEntity.ok(responseDtos);
 	}
 
 	@GetMapping("/by-user_id/{userId}")
-	public ResponseEntity<StoryListResponseDto> getStoriesByUserId(@PathVariable Long userId) {
+	public ResponseEntity<ReelListResponseDto> getReelsByUserId(@PathVariable Long userId) {
 
-		StoryListResponseDto responseDtos = storyService.getStoriesByUserId(userId);
+		ReelListResponseDto responseDtos = storyService.getReelsByUserId(userId);
 
 		return ResponseEntity.ok(responseDtos);
 	}

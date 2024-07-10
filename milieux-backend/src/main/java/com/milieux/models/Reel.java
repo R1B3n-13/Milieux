@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Story {
+public class Reel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

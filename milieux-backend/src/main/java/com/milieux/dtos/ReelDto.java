@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoryDto {
+public class ReelDto {
 
 	private Long id;
 	private String title;
