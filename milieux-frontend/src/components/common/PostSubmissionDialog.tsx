@@ -2,14 +2,15 @@
 
 import { Button } from "@/components/ui/Button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/Dialog";
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/AlertDialog";
 import { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
 import { Textarea } from "../ui/Textarea";
@@ -21,6 +22,7 @@ import uploadToCloudinary from "@/actions/cloudinaryActions";
 import { createPost } from "@/actions/postActions";
 import Loading from "./Loading";
 import VideoPlayer from "./VideoPlayer";
+import { revalidatePost } from "@/actions/revalidationActions";
 
 export default function PostSubmissionDialog({
   dialogButton,
@@ -34,7 +36,9 @@ export default function PostSubmissionDialog({
   const [selectedMedia, setSelectedMedia] = useState<
     string | ArrayBuffer | null
   >(null);
-  const [mediaType, setMediaType] = useState<"image" | "video" | null>(null);
+  const [mediaType, setMediaType] = useState<"image" | "video" | undefined>(
+    undefined
+  );
 
   const handleMediaChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -57,6 +61,7 @@ export default function PostSubmissionDialog({
 
   const clearMedia = () => {
     setSelectedMedia(null);
+    setMediaType(undefined);
   };
 
   const handleSubmit = async () => {
@@ -66,7 +71,10 @@ export default function PostSubmissionDialog({
     let videoPath = null;
 
     if (selectedMedia) {
-      const uploadResult = await uploadToCloudinary(selectedMedia as string);
+      const uploadResult = await uploadToCloudinary(
+        selectedMedia as string,
+        mediaType
+      );
 
       if (!uploadResult.success) {
         toast.error("Upload failed.");
@@ -88,30 +96,31 @@ export default function PostSubmissionDialog({
     const response = await createPost(data);
 
     if (!response.success) {
-      toast.error(response.message);
+      toast.error("Something went wrong.");
     } else {
-      toast.success(response.message);
+      toast.success("Post created successfully!");
     }
 
     setIsLoading(false);
 
     setText("");
     setSelectedMedia(null);
-    setMediaType(null);
+    setMediaType(undefined);
+    revalidatePost();
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{dialogButton}</DialogTrigger>
-      <DialogContent className="w-full">
-        <DialogHeader>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{dialogButton}</AlertDialogTrigger>
+      <AlertDialogContent className="w-full">
+        <AlertDialogHeader>
           <div className="flex flex-col gap-2 items-center justify-center">
-            <DialogTitle>Create post</DialogTitle>
-            <DialogDescription>
+            <AlertDialogTitle>Create post</AlertDialogTitle>
+            <AlertDialogDescription>
               Post to the stream from here. Click post when you're done.
-            </DialogDescription>
+            </AlertDialogDescription>
           </div>
-        </DialogHeader>
+        </AlertDialogHeader>
         <div className="space-y-6">
           <div className="space-y-4">
             <Textarea
@@ -123,32 +132,39 @@ export default function PostSubmissionDialog({
           </div>
 
           {selectedMedia && (
-            <div className="relative">
+            <div className="flex items-center justify-center relative">
               {mediaType === "image" ? (
-                <Image
-                  src={selectedMedia as string}
-                  alt=""
-                  layout="responsive"
-                  width={200}
-                  height={200}
-                  className="rounded-lg"
-                />
+                <div className="w-fit relative">
+                  <Image
+                    src={selectedMedia as string}
+                    alt=""
+                    width={200}
+                    height={200}
+                    className="rounded-lg"
+                  />
+                  <button
+                    className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                    onClick={clearMedia}
+                  >
+                    ✕
+                  </button>
+                </div>
               ) : (
-                <VideoPlayer
-                  src={selectedMedia as string}
-                  className="rounded-lg"
-                />
+                <div className="w-fit relative">
+                  <VideoPlayer
+                    src={selectedMedia as string}
+                    width={200}
+                    className="rounded-lg"
+                    controls
+                  />
+                  <button
+                    className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                    onClick={clearMedia}
+                  >
+                    ✕
+                  </button>
+                </div>
               )}
-
-              <button
-                className="absolute top-1 right-1 px-1 bg-red-500 text-white text-sm cursor-pointer"
-                onClick={() => {
-                  setSelectedMedia(null);
-                  setMediaType(null);
-                }}
-              >
-                ✕
-              </button>
             </div>
           )}
 
@@ -190,17 +206,20 @@ export default function PostSubmissionDialog({
             </div>
           </div>
 
-          <DialogFooter>
-            <Button
-              onClick={handleSubmit}
-              className="w-full"
-              disabled={isLoading || (!text && !selectedMedia)}
-            >
-              {isLoading ? <Loading text="Loading..." /> : "Post"}
-            </Button>
-          </DialogFooter>
+          <AlertDialogFooter>
+            <div className="flex justify-end gap-4">
+              <AlertDialogCancel onClick={clearMedia}>Cancel</AlertDialogCancel>
+              <Button
+                onClick={handleSubmit}
+                disabled={isLoading || (!text && !selectedMedia)}
+                className="px-6"
+              >
+                {isLoading ? <Loading text="Loading..." /> : "Post"}
+              </Button>
+            </div>
+          </AlertDialogFooter>
         </div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

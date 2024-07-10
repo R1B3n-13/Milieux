@@ -8,7 +8,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import AvatarIcon from "../icons/AvatarIcon";
 import { z } from "zod";
-import CommentSchema from "@/schemas/commentSchema";
+import RemarkSchema from "@/schemas/remarkSchema";
 import Image from "next/image";
 import { ScrollArea } from "../ui/ScrollArea";
 
@@ -17,7 +17,7 @@ const RemarkList = ({
   comments,
 }: {
   dialogButton: JSX.Element;
-  comments: z.infer<typeof CommentSchema>[];
+  comments: z.infer<typeof RemarkSchema>[];
 }) => {
   return (
     <Dialog>
@@ -33,7 +33,7 @@ const RemarkList = ({
         <ScrollArea className="max-h-[80vh] pr-6">
           <div className="flex flex-col justify-center">
             {comments &&
-              comments.map((comment: z.infer<typeof CommentSchema>) => (
+              comments.map((comment: z.infer<typeof RemarkSchema>) => (
                 <div key={comment.id} className="mb-4">
                   <div className="flex items-start gap-3">
                     <div className="flex-shrink-0 cursor-pointer">

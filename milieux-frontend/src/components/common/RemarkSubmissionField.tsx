@@ -9,8 +9,8 @@ import SendFilledIcon from "../icons/SendFilledIcon";
 import Loading from "./Loading";
 import { toast } from "sonner";
 import uploadToCloudinary from "@/actions/cloudinaryActions";
-import { createComment } from "@/actions/commentActions";
-import { revalidateComment } from "@/actions/revalidationActions";
+import { createRemark } from "@/actions/remarkActions";
+import { revalidateRemark } from "@/actions/revalidationActions";
 
 export default function CommentForm({ postId }: { postId: number }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +48,8 @@ export default function CommentForm({ postId }: { postId: number }) {
 
     if (selectedImage[postId]) {
       const uploadResult = await uploadToCloudinary(
-        selectedImage[postId] as string
+        selectedImage[postId] as string,
+        "image"
       );
 
       if (!uploadResult.success) {
@@ -65,7 +66,7 @@ export default function CommentForm({ postId }: { postId: number }) {
       imagePath,
     };
 
-    const response = await createComment(commentData, postId);
+    const response = await createRemark(commentData, postId);
 
     if (!response.success) {
       toast.error("Something went wrong.");
@@ -76,7 +77,7 @@ export default function CommentForm({ postId }: { postId: number }) {
     setIsLoading(false);
     setText((prev) => ({ ...prev, [postId]: "" }));
     setSelectedImage((prev) => ({ ...prev, [postId]: null }));
-    revalidateComment();
+    revalidateRemark();
   };
 
   return (
@@ -128,9 +129,10 @@ export default function CommentForm({ postId }: { postId: number }) {
               alt=""
               width={200}
               height={200}
+              className="rounded-lg"
             />
             <button
-              className="absolute top-1 right-1 px-1 bg-red-500 text-white text-sm cursor-pointer"
+              className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
               onClick={() => clearImage(postId!)}
             >
               ✕

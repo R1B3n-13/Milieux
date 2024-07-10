@@ -2,14 +2,22 @@
 
 import { revalidateTag } from "next/cache";
 
-export async function revalidateLike() {
-  revalidateTag("likePost");
+export async function revalidatePost() {
+  revalidateTag("createPost");
 }
 
-export async function revalidateSave() {
-  revalidateTag("savePost");
+export async function revalidateAppreciation() {
+  revalidateTag("appreciatePost");
 }
 
-export async function revalidateComment() {
-  revalidateTag("createComment");
+export async function revalidateBookmark() {
+  revalidateTag("bookmarkPost");
+}
+
+export async function revalidateRemark() {
+  revalidateTag("createRemark");
+}
+
+export async function revalidateFlash() {
+  revalidateTag("createFlash");
 }

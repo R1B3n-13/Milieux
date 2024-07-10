@@ -26,6 +26,9 @@ export async function createPost(postData: z.infer<typeof PostSchema>) {
       },
       body: JSON.stringify(postData),
       cache: "no-cache",
+      next: {
+        tags: ["createPost"],
+      },
     });
 
     return response.json();
@@ -39,7 +42,7 @@ export async function createPost(postData: z.infer<typeof PostSchema>) {
   }
 }
 
-export async function likePost(postId: number | undefined | null) {
+export async function appreciatePost(postId: number | undefined | null) {
   try {
     if (!postId) throw new Error("Invalid post id.");
 
@@ -61,13 +64,13 @@ export async function likePost(postId: number | undefined | null) {
       },
       cache: "no-cache",
       next: {
-        tags: ["likePost"],
+        tags: ["appreciatePost"],
       },
     });
 
     return response.json();
   } catch (error) {
-    console.error("Liking post resulted in error:", error);
+    console.error("Appreciating post resulted in error:", error);
     return {
       status: 500,
       success: false,
@@ -76,7 +79,7 @@ export async function likePost(postId: number | undefined | null) {
   }
 }
 
-export async function savePost(postId: number | undefined | null) {
+export async function bookmarkPost(postId: number | undefined | null) {
   try {
     if (!postId) throw new Error("Invalid post id.");
 
@@ -98,13 +101,13 @@ export async function savePost(postId: number | undefined | null) {
       },
       cache: "no-cache",
       next: {
-        tags: ["savePost"],
+        tags: ["bookmarkPost"],
       },
     });
 
     return response.json();
   } catch (error) {
-    console.error("Saving post resulted in error:", error);
+    console.error("Bookmarking post resulted in error:", error);
     return {
       status: 500,
       success: false,

@@ -2,7 +2,7 @@ import NavBar from "@/components/social/NavBar";
 import LeftSideBar from "@/components/social/LeftSideBar";
 import React from "react";
 
-const SocialLayout = ({ children }: { children: React.ReactNode }) => {
+const SidebarLeftLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <nav>
@@ -20,4 +20,4 @@ const SocialLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default SocialLayout;
+export default SidebarLeftLayout;

@@ -5,12 +5,20 @@ import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 import VideoPlayer from "@/components/common/VideoPlayer";
 import { useRouter } from "next/navigation";
+import Loading from "../common/Loading";
+import { toast } from "sonner";
+import uploadToCloudinary from "@/actions/cloudinaryActions";
+import { revalidateFlash } from "@/actions/revalidationActions";
+import { createFlash } from "@/actions/flashActions";
 
 const FlashSubmissionField = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<
     string | ArrayBuffer | null
   >(null);
-  const [mediaType, setMediaType] = useState<"image" | "video" | null>(null);
+  const [mediaType, setMediaType] = useState<"image" | "video" | undefined>(
+    undefined
+  );
 
   const router = useRouter();
 
@@ -35,12 +43,54 @@ const FlashSubmissionField = () => {
 
   const handleCancel = () => {
     setSelectedMedia(null);
-    setMediaType(null);
+    setMediaType(undefined);
     router.push("/stream");
   };
 
   const handleSubmit = async () => {
-    console.log("Submitting story");
+    setIsLoading(true);
+
+    let imagePath = null;
+    let videoPath = null;
+
+    if (selectedMedia) {
+      const uploadResult = await uploadToCloudinary(
+        selectedMedia as string,
+        mediaType
+      );
+
+      if (!uploadResult.success) {
+        toast.error("Upload failed.");
+        setIsLoading(false);
+        return;
+      } else {
+        mediaType === "image"
+          ? (imagePath = uploadResult.url)
+          : (videoPath = uploadResult.url);
+      }
+    }
+
+    const data = {
+      imagePath,
+      videoPath,
+    };
+
+    const response = await createFlash(data);
+
+    if (!response.success) {
+      toast.error("Something went wrong.");
+    } else {
+      toast.success("Flash created successfully!");
+      router.push("/stream");
+    }
+
+    console.log(response);
+
+    setIsLoading(false);
+
+    setSelectedMedia(null);
+    setMediaType(undefined);
+    revalidateFlash();
   };
 
   return (
@@ -65,32 +115,45 @@ const FlashSubmissionField = () => {
             </label>
           </div>
         ) : (
-          <div className="relative mb-4">
+          <div className="flex items-center justify-center mb-4">
             {mediaType === "image" ? (
-              <Image
-                src={selectedMedia as string}
-                alt=""
-                layout="responsive"
-                width={700}
-                height={475}
-                className="rounded-lg"
-              />
+              <div className="w-fit relative">
+                <Image
+                  src={selectedMedia as string}
+                  alt=""
+                  width={520}
+                  height={0}
+                  className="rounded-lg"
+                />
+                <button
+                  className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                  onClick={() => {
+                    setSelectedMedia(null);
+                    setMediaType(undefined);
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
             ) : (
-              <VideoPlayer
-                src={selectedMedia as string}
-                className="rounded-lg"
-              />
+              <div className="w-fit relative">
+                <VideoPlayer
+                  src={selectedMedia as string}
+                  className="rounded-lg"
+                  width={350}
+                  controls
+                />
+                <button
+                  className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                  onClick={() => {
+                    setSelectedMedia(null);
+                    setMediaType(undefined);
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
             )}
-
-            <button
-              className="absolute top-1 right-1 px-1 bg-red-500 text-white text-sm cursor-pointer"
-              onClick={() => {
-                setSelectedMedia(null);
-                setMediaType(null);
-              }}
-            >
-              ✕
-            </button>
           </div>
         )}
 
@@ -98,8 +161,8 @@ const FlashSubmissionField = () => {
           <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={!selectedMedia}>
-            Share
+          <Button onClick={handleSubmit} disabled={isLoading || !selectedMedia}>
+            {isLoading ? <Loading text="Loading..." /> : "Share"}
           </Button>
         </div>
       </div>

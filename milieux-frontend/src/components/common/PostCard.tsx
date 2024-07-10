@@ -16,9 +16,12 @@ import RemarkLineIcon from "../icons/RemarkLineIcon";
 import BookmarkLineIcon from "../icons/BookmarkLineIcon";
 import { z } from "zod";
 import PostSchema from "@/schemas/postSchema";
-import { likePost, savePost } from "@/actions/postActions";
+import { appreciatePost, bookmarkPost } from "@/actions/postActions";
 import LoveFilledIcon from "../icons/LoveFilledIcon";
-import { revalidateLike, revalidateSave } from "@/actions/revalidationActions";
+import {
+  revalidateAppreciation,
+  revalidateBookmark,
+} from "@/actions/revalidationActions";
 import AppreciationList from "./AppreciationList";
 import RemarkSubmissionField from "./RemarkSubmissionField";
 import RemarkList from "./RemarkList";
@@ -35,13 +38,13 @@ const PostCard = ({
   isSaved: boolean;
 }) => {
   const handleLoveIconClick = async () => {
-    await likePost(post.id);
-    revalidateLike();
+    await appreciatePost(post.id);
+    revalidateAppreciation();
   };
 
   const handleBookmarkIconClick = async () => {
-    await savePost(post.id);
-    revalidateSave();
+    await bookmarkPost(post.id);
+    revalidateBookmark();
   };
 
   return (
