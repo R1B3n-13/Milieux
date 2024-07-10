@@ -17,6 +17,8 @@ public class ReelDto {
 	private String title;
 	private String imagePath;
 	private String videoPath;
+	
+	private UserDto user;
 
 	private ZonedDateTime createdAt;
 }
