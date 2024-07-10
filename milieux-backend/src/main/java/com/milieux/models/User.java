@@ -78,7 +78,7 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	@JsonIgnore
-	private List<Reel> stories = new ArrayList<>();
+	private List<Reel> reels = new ArrayList<>();
 
 	@ManyToMany
 	@JoinTable(name = "saved_posts", //

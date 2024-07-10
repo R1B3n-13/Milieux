@@ -62,7 +62,7 @@ public class ReelServiceImpl implements ReelService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		List<Reel> stories = user.getStories();
+		List<Reel> stories = user.getReels();
 
 		List<ReelDto> dtos = stories.stream().map(story -> modelMapper.map(story, ReelDto.class))
 				.collect(Collectors.toList());

@@ -11,7 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ReelRequestDto {
 
-	private String title;
 	private String imagePath;
 	private String videoPath;
 }

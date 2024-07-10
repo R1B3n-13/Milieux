@@ -15,10 +15,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ReelListResponseDto extends BaseResponseDto {
 
-	private List<ReelDto> stories;
+	private List<ReelDto> reels;
 
-	public ReelListResponseDto(int status, boolean success, String message, List<ReelDto> stories) {
+	public ReelListResponseDto(int status, boolean success, String message, List<ReelDto> reels) {
 		super(status, success, message);
-		this.stories = stories;
+		this.reels = reels;
 	}
 }

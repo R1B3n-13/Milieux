@@ -14,10 +14,9 @@ import lombok.Setter;
 public class ReelDto {
 
 	private Long id;
-	private String title;
 	private String imagePath;
 	private String videoPath;
-	
+
 	private UserDto user;
 
 	private ZonedDateTime createdAt;
