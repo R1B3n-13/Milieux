@@ -1,13 +1,13 @@
 "use server";
 
-import CommentSchema from "@/schemas/commentSchema";
+import RemarkSchema from "@/schemas/remarkSchema";
 import getAuthToken from "@/actions/authActions";
 import { z } from "zod";
 
 const backendUrl = process.env.BACKEND_URL;
 
-export async function createComment(
-  commentData: z.infer<typeof CommentSchema>,
+export async function createRemark(
+  remarkData: z.infer<typeof RemarkSchema>,
   postId: number | undefined | null
 ) {
   try {
@@ -29,16 +29,16 @@ export async function createComment(
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
       },
-      body: JSON.stringify(commentData),
+      body: JSON.stringify(remarkData),
       cache: "no-cache",
       next: {
-        tags: ["createComment"],
+        tags: ["createRemark"],
       },
     });
 
     return response.json();
   } catch (error) {
-    console.error("Creating comment resulted in error:", error);
+    console.error("Creating remark resulted in error:", error);
     return {
       status: 500,
       success: false,

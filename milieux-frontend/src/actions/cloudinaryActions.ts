@@ -8,14 +8,18 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export default async function uploadToCloudinary(file: string) {
+export default async function uploadToCloudinary(
+  file: string,
+  fileType: "image" | "video" | undefined
+) {
   if (!file) {
     return { success: false, url: null };
   }
 
   try {
     const uploadResult: UploadApiResponse = await cloudinary.uploader.upload(
-      file
+      file,
+      { resource_type: fileType }
     );
 
     return { success: true, url: uploadResult.url };

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.milieux.dtos.requests.ReelRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.ReelListResponseDto;
+import com.milieux.dtos.responses.ReelResponseDto;
 import com.milieux.services.ReelService;
 import com.milieux.services.UserService;
 
@@ -22,7 +23,7 @@ import com.milieux.services.UserService;
 public class ReelController {
 
 	@Autowired
-	private ReelService storyService;
+	private ReelService reelService;
 
 	@Autowired
 	private UserService userService;
@@ -33,7 +34,7 @@ public class ReelController {
 
 		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
-		BaseResponseDto responseDto = storyService.createReel(requestDto, userId);
+		BaseResponseDto responseDto = reelService.createReel(requestDto, userId);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
@@ -41,15 +42,23 @@ public class ReelController {
 	@GetMapping
 	public ResponseEntity<ReelListResponseDto> getAllReels() {
 
-		ReelListResponseDto responseDtos = storyService.getAllReels();
+		ReelListResponseDto responseDtos = reelService.getAllReels();
 
 		return ResponseEntity.ok(responseDtos);
+	}
+
+	@GetMapping("/{reelId}")
+	public ResponseEntity<ReelResponseDto> getReelById(@PathVariable Long reelId) {
+
+		ReelResponseDto responseDto = reelService.getReelById(reelId);
+
+		return ResponseEntity.ok(responseDto);
 	}
 
 	@GetMapping("/by-user_id/{userId}")
 	public ResponseEntity<ReelListResponseDto> getReelsByUserId(@PathVariable Long userId) {
 
-		ReelListResponseDto responseDtos = storyService.getReelsByUserId(userId);
+		ReelListResponseDto responseDtos = reelService.getReelsByUserId(userId);
 
 		return ResponseEntity.ok(responseDtos);
 	}

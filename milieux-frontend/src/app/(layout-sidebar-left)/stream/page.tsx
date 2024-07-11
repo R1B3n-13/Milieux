@@ -1,11 +1,11 @@
 import PostCreationCard from "@/components/common/PostCreationCard";
-import FlashCarousel from "@/components/stream/FlashCarousel";
+import FlashCarouselCaller from "@/components/stream/FlashCarouselCaller";
 import StreamPostList from "@/components/stream/StreamPostList";
 
-const StreamPage = () => {
+const StreamPage = async () => {
   return (
     <div className="flex flex-col px-40 h-screen overflow-y-auto no-scrollbar">
-      <FlashCarousel />
+      <FlashCarouselCaller />
       <PostCreationCard />
       <StreamPostList />
     </div>
