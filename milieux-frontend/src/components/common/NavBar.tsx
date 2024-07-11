@@ -5,18 +5,28 @@ import { Input } from "../ui/Input";
 import { Avatar, AvatarImage } from "../ui/Avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import AvatarIcon from "../icons/AvatarIcon";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { actionItems, navItems } from "./items/navbarItems";
 import Logo from "../common/Logo";
 import Link from "next/link";
+import SearchLineIcon from "../icons/SearchLineIcon";
 
 const NavBar = () => {
   const pathname = usePathname();
   const [activeItem, setActiveItem] = useState(pathname);
+  const [query, setQuery] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     setActiveItem(pathname);
   }, [pathname]);
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      router.push(`/search?query=${encodeURIComponent(query)}`);
+      setQuery("");
+    }
+  };
 
   return (
     <div className="grid grid-cols-11 font-medium text-slate-700 transition-all shadow-md bg-white px-4">
@@ -25,10 +35,19 @@ const NavBar = () => {
           <div className="cursor-pointer">
             <Logo />
           </div>
-          <Input
-            type="search"
-            className="cursor-pointer w-60 border-gray-200 hover:border hover:border-gray-300"
-          />
+          <div className="flex w-full max-w-sm items-center space-x-2 relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+              <SearchLineIcon />
+            </div>
+            <Input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyUp={handleKeyPress}
+              placeholder="Search for users, businesses..."
+              className="pl-10"
+            />
+          </div>
         </div>
       </div>
 

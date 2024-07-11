@@ -150,11 +150,11 @@ export default function PostSubmissionDialog({
                   </button>
                 </div>
               ) : (
-                <div className="w-fit relative">
+                <div className="w-fit max-w-36 relative">
                   <VideoPlayer
                     src={selectedMedia as string}
                     width={200}
-                    className="rounded-lg"
+                    className="w-full h-full rounded-lg"
                     controls
                     autoPlay={false}
                   />

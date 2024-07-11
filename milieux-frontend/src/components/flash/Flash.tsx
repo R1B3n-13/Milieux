@@ -41,7 +41,13 @@ const Flash = async ({ id }: { id: number }) => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-950">
+    <div className="relative flex items-center justify-center h-screen bg-gray-950">
+      <Link href={"/stream"}>
+        <button className="absolute top-2 right-2 px-1 rounded-sm bg-red-600 hover:bg-red-500 text-white text-md cursor-pointer">
+          ✕
+        </button>
+      </Link>
+
       <Card className="relative bg-gray-300 h-[95%] min-w-[32rem] max-w-[32rem]">
         <CardContent className="flex flex-col items-center justify-center h-full py-0 px-0 overflow-hidden rounded-lg">
           {FlashResponse.reel?.imagePath && (
