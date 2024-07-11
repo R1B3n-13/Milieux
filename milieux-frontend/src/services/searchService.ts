@@ -2,9 +2,9 @@ import getAuthToken from "@/actions/authActions";
 
 const backendUrl = process.env.BACKEND_URL;
 
-export async function getUserFromAuthToken() {
+export async function searchUsers(query: string) {
   try {
-    const url = new URL("/users/profile", backendUrl);
+    const url = new URL(`/users/search?query=${query}`, backendUrl);
 
     const authToken = await getAuthToken();
     if (!authToken)
@@ -12,7 +12,6 @@ export async function getUserFromAuthToken() {
         status: 401,
         success: false,
         message: "Jwt auth token is missing",
-        user: null,
       };
 
     const response = await fetch(url, {
@@ -28,12 +27,11 @@ export async function getUserFromAuthToken() {
 
     return responseData;
   } catch (error) {
-    console.error("Loading user failed:", error);
+    console.error("Searching user resulted in error:", error);
     return {
-      status: 401,
+      status: 500,
       success: false,
-      message: "Loading user failed.",
-      user: null,
+      message: "Uh oh! Something went wrong. Please try again.",
     };
   }
 }
