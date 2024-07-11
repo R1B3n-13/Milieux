@@ -1,10 +1,7 @@
-"use client";
-
 import FlashSchema from "@/schemas/flashSchema";
 import { z } from "zod";
 import {
   Carousel,
-  CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
@@ -17,20 +14,16 @@ import Link from "next/link";
 import VideoPlayer from "../common/VideoPlayer";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import AvatarIcon from "../icons/AvatarIcon";
-import { useState, useEffect } from "react";
 
 const FlashCarousel = ({
   flashes,
 }: {
   flashes: z.infer<typeof FlashSchema>[];
 }) => {
-  const [api, setApi] = useState<CarouselApi>();
-
   return (
     <Carousel
       opts={{ loop: true, align: "start" }}
       className="flex items-center justify-center mt-5 w-full max-w-5xl"
-      setApi={setApi}
     >
       <CarouselContent className="-ml-3">
         <CarouselItem className="basis-1/5 md:basis-1/4 pl-3">
@@ -47,7 +40,7 @@ const FlashCarousel = ({
               </div>
 
               <Link
-                href="/flash/create"
+                href="/flashes/create"
                 className="text-blue-600 bg-white translate-y-1 rounded-full border-4 border-white cursor-pointer"
               >
                 <PlusFilledIcon />
@@ -61,48 +54,48 @@ const FlashCarousel = ({
         </CarouselItem>
 
         {flashes.map((flash: z.infer<typeof FlashSchema>, index) => (
-          <CarouselItem
-            key={flash.id}
-            // onClick={() => api?.scrollTo(index + 1, true)}
-            className="basis-1/5 md:basis-1/4 pl-3"
-          >
-            <Card className="relative bg-gray-200">
-              <CardContent className="flex items-center h-56 py-0 px-0 cursor-pointer">
-                {flash.imagePath && (
-                  <Image
-                    src={flash.imagePath}
-                    alt=""
-                    width={1000}
-                    height={0}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                )}
-                {flash.videoPath && (
-                  <div className="w-full h-full rounded-lg overflow-hidden">
-                    <VideoPlayer
-                      src={flash.videoPath}
+          <CarouselItem key={flash.id} className="basis-1/5 md:basis-1/4 pl-3">
+            {" "}
+            <Link href={`/flashes/${flash.id}`}>
+              <Card className="relative bg-gray-200">
+                <CardContent className="flex items-center h-56 py-0 px-0 cursor-pointer">
+                  {flash.imagePath && (
+                    <Image
+                      src={flash.imagePath}
+                      alt=""
                       width={1000}
-                      controls
-                      className="w-full h-full object-cover"
+                      height={0}
+                      className="w-full h-full object-cover rounded-lg"
                     />
-                  </div>
-                )}
-                <div className="absolute top-2 left-2 flex items-center gap-2">
-                  <div className="cursor-pointer">
-                    <Avatar className="w-9 h-9">
-                      <AvatarImage />
-                      <AvatarFallback className="text-4xl text-gray-500">
-                        <AvatarIcon />
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
+                  )}
+                  {flash.videoPath && (
+                    <div className="w-full h-full rounded-lg overflow-hidden">
+                      <VideoPlayer
+                        src={flash.videoPath}
+                        width={1000}
+                        controls={false}
+                        className="w-full h-full object-cover"
+                        autoPlay={false}
+                      />
+                    </div>
+                  )}
+                  <div className="absolute top-2 left-2 flex items-center gap-2">
+                    <div className="cursor-pointer">
+                      <Avatar className="w-9 h-9">
+                        <AvatarImage />
+                        <AvatarFallback className="text-4xl text-gray-500">
+                          <AvatarIcon />
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
 
-                  <p className="cursor-pointer text-white font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-                    {flash.user?.name}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+                    <p className="cursor-pointer text-white font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                      {flash.user?.name}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           </CarouselItem>
         ))}
       </CarouselContent>

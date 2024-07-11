@@ -156,6 +156,7 @@ export default function PostSubmissionDialog({
                     width={200}
                     className="rounded-lg"
                     controls
+                    autoPlay={false}
                   />
                   <button
                     className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"

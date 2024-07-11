@@ -142,6 +142,7 @@ const FlashSubmissionField = () => {
                   className="rounded-lg"
                   width={350}
                   controls
+                  autoPlay={false}
                 />
                 <button
                   className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
