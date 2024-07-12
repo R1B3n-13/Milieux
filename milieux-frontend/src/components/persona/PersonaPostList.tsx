@@ -1,20 +1,27 @@
-import { getAllPosts, getSavedPosts } from "@/services/postService";
-import PostCard from "../common/PostCard";
-import { z } from "zod";
 import PostSchema from "@/schemas/postSchema";
+import { getPostsByUserId, getSavedPosts } from "@/services/postService";
 import { getUserFromAuthToken } from "@/services/userService";
+import { z } from "zod";
+import PostCard from "../common/PostCard";
 
-const StreamPostList = async () => {
-  const postResponsePromise = getAllPosts();
+const PersonaPostList = async ({ id }: { id: number | null }) => {
   const savedPostResponsePromise = getSavedPosts();
   const loggedInUserResponsePromise = getUserFromAuthToken();
 
-  const [postResponse, savedPostResponse, loggedInUserResponse] =
-    await Promise.all([
-      postResponsePromise,
-      savedPostResponsePromise,
-      loggedInUserResponsePromise,
-    ]);
+  const [savedPostResponse, loggedInUserResponse] = await Promise.all([
+    savedPostResponsePromise,
+    loggedInUserResponsePromise,
+  ]);
+
+  let postResponse = [];
+
+  if (loggedInUserResponse.success) {
+    if (!id) {
+      postResponse = await getPostsByUserId(loggedInUserResponse.user.id);
+    } else {
+      postResponse = await getPostsByUserId(id);
+    }
+  }
 
   const savedPostSet = new Set();
 
@@ -26,7 +33,7 @@ const StreamPostList = async () => {
     <div>
       {postResponse.success &&
         postResponse.posts.map((post: z.infer<typeof PostSchema>) => (
-          <div key={post.id} className="mb-4">
+          <div key={post.id} className="w-full mb-4">
             <PostCard
               post={post}
               userId={loggedInUserResponse.user.id}
@@ -38,4 +45,4 @@ const StreamPostList = async () => {
   );
 };
 
-export default StreamPostList;
+export default PersonaPostList;

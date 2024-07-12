@@ -49,7 +49,7 @@ const PostCard = ({
 
   return (
     <div className="flex transition-all">
-      <Card className="mb-5 bg-white shadow-md w-full">
+      <Card className="bg-white shadow-md w-full">
         <CardHeader className="pb-3">
           <div className="flex gap-4">
             <div className="cursor-pointer">

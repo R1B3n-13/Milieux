@@ -4,7 +4,7 @@ import StreamPostList from "@/components/stream/StreamPostList";
 
 const StreamPage = async () => {
   return (
-    <div className="flex flex-col px-40 h-screen overflow-y-auto no-scrollbar">
+    <div className="flex flex-col px-40 h-screen overflow-y-auto gap-4 no-scrollbar">
       <FlashCarouselCaller />
       <PostCreationCard />
       <StreamPostList />
