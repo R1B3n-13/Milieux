@@ -23,10 +23,10 @@ const StreamPostList = async () => {
   });
 
   return (
-    <div>
+    <>
       {postResponse.success &&
         postResponse.posts.map((post: z.infer<typeof PostSchema>) => (
-          <div key={post.id} className="mb-4">
+          <div key={post.id}>
             <PostCard
               post={post}
               userId={loggedInUserResponse.user.id}
@@ -34,7 +34,7 @@ const StreamPostList = async () => {
             />
           </div>
         ))}
-    </div>
+    </>
   );
 };
 

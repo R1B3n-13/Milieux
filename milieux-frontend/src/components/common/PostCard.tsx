@@ -27,6 +27,7 @@ import RemarkSubmissionField from "./RemarkSubmissionField";
 import RemarkList from "./RemarkList";
 import RemarkFilledIcon from "../icons/RemarkFilledIcon";
 import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
+import months from "@/utils/months";
 
 const PostCard = ({
   post,
@@ -47,6 +48,11 @@ const PostCard = ({
     revalidateBookmark();
   };
 
+  let date = null;
+  if (post.createdAt) {
+    date = new Date(post.createdAt);
+  }
+
   return (
     <div className="flex transition-all">
       <Card className="bg-white shadow-md w-full">
@@ -65,7 +71,11 @@ const PostCard = ({
                 {post.user?.name}
               </CardTitle>
               <CardDescription className="mt-1 cursor-default">
-                {new Date(post.createdAt || "").toLocaleString()}
+                {date?.getDate()} {months[date?.getMonth() || 0]}
+                {", "}
+                {date?.getFullYear()} {"at"} {date?.getHours()}
+                {":"}
+                {date?.getMinutes()}
               </CardDescription>
             </div>
           </div>

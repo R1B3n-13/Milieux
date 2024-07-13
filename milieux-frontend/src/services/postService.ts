@@ -34,8 +34,10 @@ export async function getAllPosts() {
   }
 }
 
-export async function getPostsByUserId(userId: number) {
+export async function getPostsByUserId(userId: number | null) {
   try {
+    if (!userId) throw Error("Invalid user id.");
+
     const url = new URL(`/posts/by-user_id/${userId}`, backendUrl);
 
     const authToken = await getAuthToken();

@@ -27,6 +27,8 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
     }
   }
 
+  const photos = posts.filter((post) => post.imagePath);
+
   const savedPostSet = new Set();
 
   savedPostResponse.posts?.forEach((post: z.infer<typeof PostSchema>) => {
@@ -34,8 +36,8 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
   });
 
   return (
-    <>
-      {posts.map((post: z.infer<typeof PostSchema>) => (
+    <div>
+      {photos.map((post: z.infer<typeof PostSchema>) => (
         <div key={post.id} className="w-full">
           <PostCard
             post={post}
@@ -44,7 +46,7 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
           />
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

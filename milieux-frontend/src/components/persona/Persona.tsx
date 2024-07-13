@@ -4,42 +4,83 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs";
 import PersonaPostList from "./PersonaPostList";
 import AboutCard from "./AboutCard";
 import PostCreationCard from "../common/PostCreationCard";
+import PersonaPhotos from "./PersonaPhotos";
+import PersonaVideos from "./PersonaVideos";
+import BookmarkedPostList from "../bookmarks/BookmarkedPostList";
+import EditPersonaDialog from "./EditPersonaDialog";
+import UserSchema from "@/schemas/userSchema";
+import { getUserFromAuthToken, getUserById } from "@/services/userService";
+import { z } from "zod";
 
-const Persona = async () => {
+const Persona = async ({ id }: { id: number | null }) => {
+  let user: z.infer<typeof UserSchema> = {};
+
+  if (!id) {
+    const loggedInUserResponse = await getUserFromAuthToken();
+    if (loggedInUserResponse.success) {
+      user = loggedInUserResponse.user;
+    }
+  } else {
+    const userResponse = await getUserById(id);
+    user = userResponse.user;
+  }
+
   return (
     <div className="flex flex-col mt-5 w-[68%] min-h-screen">
       <div className="relative h-[27rem] z-30">
-        <Image
-          src="https://r4.wallpaperflare.com/wallpaper/955/962/485/guitar-wallpaper-b394dd6d8c38d1af01c5d786248c78e2.jpg"
-          alt=""
-          layout="fill"
-          className="object-cover rounded-t-xl"
-        />
+        {user.banner ? (
+          <Image
+            src={user.banner}
+            alt=""
+            layout="fill"
+            className="object-cover rounded-t-xl"
+          />
+        ) : (
+          <Image
+            src="/banner_placeholder.png"
+            alt=""
+            layout="fill"
+            className="object-cover rounded-t-xl"
+          />
+        )}
       </div>
 
       <div className="relative w-full flex flex-col items-start justify-center -mt-24 bg-zinc-100 pb-3">
         <div className="flex flex-col items-center justify-center ml-12">
           <div className="relative w-[12rem] h-[12rem] z-40">
-            <Image
-              src="https://r4.wallpaperflare.com/wallpaper/365/244/884/uchiha-itachi-naruto-shippuuden-anbu-silhouette-wallpaper-798098ed01dacd1ba697c8bfe011d61d.jpg"
-              alt=""
-              layout="fill"
-              className="object-cover rounded-full border-[6px] border-zinc-100"
-            />
+            {user.dp ? (
+              <Image
+                src={user.dp}
+                alt=""
+                layout="fill"
+                className="object-cover rounded-full border-[6px] border-zinc-100"
+              />
+            ) : (
+              <Image
+                src="/user_placeholder.svg"
+                alt=""
+                layout="fill"
+                className="object-cover rounded-full border-[6px] bg-zinc-500 border-zinc-100"
+              />
+            )}
           </div>
           <p className="relative flex items-start justify-start mt-4 text-xl font-semibold">
-            User Name
+            {user.name ? user.name : "User Name"}
           </p>
         </div>
       </div>
 
       <div className="flex items-end justify-end -mt-[8.3rem] mr-12">
-        <Button
-          variant="outline"
-          className="w-32 rounded-full border border-gray-400 text-slate-600 text-md font-medium hover:bg-gray-100 cursor-pointer z-50"
-        >
-          Edit persona
-        </Button>
+        <EditPersonaDialog
+          dialogButton={
+            <Button
+              variant="outline"
+              className="w-32 rounded-full border border-gray-400 text-slate-600 text-md font-medium hover:bg-gray-100 cursor-pointer z-50"
+            >
+              Edit persona
+            </Button>
+          }
+        />
       </div>
 
       <Tabs defaultValue="posts" className="w-full mt-20 z-40">
@@ -75,7 +116,7 @@ const Persona = async () => {
         <TabsContent value="posts">
           <div className="grid grid-cols-5">
             <div className="col-span-2 mt-2">
-              <AboutCard />
+              <AboutCard id={null} />
             </div>
             <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
               <PostCreationCard />
@@ -84,7 +125,38 @@ const Persona = async () => {
           </div>
         </TabsContent>
 
-        {/* <TabsContent value="photos"></TabsContent> */}
+        <TabsContent value="photos">
+          <div className="grid grid-cols-5">
+            <div className="col-span-2 mt-2">
+              <AboutCard id={null} />
+            </div>
+            <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
+              <PersonaPhotos id={null} />
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="videos">
+          <div className="grid grid-cols-5">
+            <div className="col-span-2 mt-2">
+              <AboutCard id={null} />
+            </div>
+            <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
+              <PersonaVideos id={null} />
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="bookmarks">
+          <div className="grid grid-cols-5">
+            <div className="col-span-2 mt-2">
+              <AboutCard id={null} />
+            </div>
+            <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
+              <BookmarkedPostList />
+            </div>
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );

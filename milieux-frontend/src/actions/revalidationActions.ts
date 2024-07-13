@@ -2,6 +2,10 @@
 
 import { revalidateTag } from "next/cache";
 
+export async function revalidateUser() {
+  revalidateTag("updateUser");
+}
+
 export async function revalidatePost() {
   revalidateTag("createPost");
 }

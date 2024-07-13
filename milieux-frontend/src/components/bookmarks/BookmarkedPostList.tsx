@@ -20,17 +20,18 @@ const BookmarkedPostList = async () => {
   });
 
   return (
-    <div className="mt-5">
+    <>
       {savedPostResponse.success &&
         savedPostResponse.posts.map((post: z.infer<typeof PostSchema>) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            userId={loggedInUserResponse.user.id}
-            isSaved={true}
-          />
+          <div key={post.id} className="min-w-full">
+            <PostCard
+              post={post}
+              userId={loggedInUserResponse.user.id}
+              isSaved={true}
+            />
+          </div>
         ))}
-    </div>
+    </>
   );
 };
 
