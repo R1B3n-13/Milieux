@@ -22,6 +22,13 @@ public class UserDto {
 	private String name;
 	private String email;
 	
+	private String dp;
+	private String banner;
+	
+	private String status;
+	private String intro;
+	private String address;
+	
 	private Map<String, Object> userType;
 
 	private List<Long> followers;

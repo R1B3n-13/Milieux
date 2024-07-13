@@ -47,6 +47,13 @@ public class User {
 	private String email;
 	private String password;
 	
+	private String dp;
+	private String banner;
+	
+	private String status;
+	private String intro;
+	private String address;
+	
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> userType;
 

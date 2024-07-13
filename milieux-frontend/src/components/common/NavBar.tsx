@@ -29,14 +29,14 @@ const NavBar = () => {
   };
 
   return (
-    <div className="grid grid-cols-11 font-medium text-slate-700 transition-all shadow-md bg-white px-4">
+    <div className="grid grid-cols-11 font-medium text-slate-700 transition-all shadow-md bg-[#FAFAFA] px-4">
       <div className="col-span-3">
         <div className="flex py-2 items-center justify-start gap-7">
           <div className="cursor-pointer">
             <Logo />
           </div>
           <div className="flex w-full max-w-sm items-center space-x-2 relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+            <div className="absolute inset-y-0 left-1 flex items-center pl-4 pointer-events-none">
               <SearchLineIcon />
             </div>
             <Input
@@ -45,7 +45,7 @@ const NavBar = () => {
               onChange={(e) => setQuery(e.target.value)}
               onKeyUp={handleKeyPress}
               placeholder="Search for users, businesses..."
-              className="pl-10"
+              className="pl-11 rounded-full bg-gray-200 focus-visible:ring-0"
             />
           </div>
         </div>

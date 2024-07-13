@@ -6,13 +6,21 @@ import VideoFilledIcon2 from "../icons/VideoFilledIcon2";
 import ArticleFilledIcon from "../icons/ArticleFilledIcon";
 import { getUserFromAuthToken } from "@/services/userService";
 import PostSubmissionDialog from "./PostSubmissionDialog";
+import { z } from "zod";
+import UserSchema from "@/schemas/userSchema";
 
 const PostCreationCard = async () => {
   const response = await getUserFromAuthToken();
 
+  let user: z.infer<typeof UserSchema> = {};
+
+  if (response.success) {
+    user = response.user;
+  }
+
   return (
-    <div className="flex transition-all">
-      <Card className="mt-5 mb-5 bg-white shadow-md w-full">
+    <div className="flex transition-all w-full">
+      <Card className="bg-white shadow-md w-full">
         <CardHeader className="pb-4 mb-0">
           <div className="flex items-center gap-4">
             <div className="cursor-pointer">
@@ -28,11 +36,11 @@ const PostCreationCard = async () => {
                 <div className=" w-full cursor-pointer rounded-full text-gray-500 bg-gray-50 border border-gray-400 hover:border-gray-600">
                   <div className="flex items center py-2 px-4">
                     <p className="mr-1">What’s brewing,</p>
-                    <p>{response.user.name}?</p>
+                    <p>{user.name}?</p>
                   </div>
                 </div>
               }
-              username={response.user.name}
+              username={user.name || ""}
             />
           </div>
         </CardHeader>

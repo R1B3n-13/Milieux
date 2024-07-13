@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import leftSidebarItems from "../stream/items/leftSideBarItems";
+import leftSidebarItems from "./items/leftSideBarItems";
 import Link from "next/link";
 
 const LeftSidebar = () => {

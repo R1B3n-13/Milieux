@@ -27,7 +27,7 @@ const FlashCarousel = ({
     >
       <CarouselContent className="-ml-3">
         <CarouselItem className="basis-1/5 md:basis-1/4 pl-3">
-          <Card className="relative overflow-hidden bg-gray-50">
+          <Card className="relative overflow-hidden bg-[#FEFEFE]">
             <CardContent className="flex flex-col h-56 items-center justify-center px-0">
               <div className="w-full">
                 <Image

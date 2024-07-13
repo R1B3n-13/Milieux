@@ -18,8 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main className="bg-muted">{children}</main>
-        <Toaster richColors/>
+        <main className="bg-[#f8f8f8]">{children}</main>
+        <Toaster richColors />
       </body>
     </html>
   );

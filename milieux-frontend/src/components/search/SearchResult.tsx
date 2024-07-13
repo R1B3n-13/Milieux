@@ -23,18 +23,20 @@ const SearchResult = async ({ query }: { query: string }) => {
 
   return (
     <Tabs defaultValue="casual" className="w-full py-5 px-96">
-      <TabsList className="flex items-center justify-center gap-5 w-full grid-cols-2">
-        <TabsTrigger value="casual" className="w-24">
-          People
-        </TabsTrigger>
-        <TabsTrigger value="business" className="w-24">
-          Businesses
-        </TabsTrigger>
-      </TabsList>
+      <div className="flex items-center justify-center">
+        <TabsList className="gap-5 w-fit grid-cols-2 bg-gray-200">
+          <TabsTrigger value="casual" className="w-24">
+            People
+          </TabsTrigger>
+          <TabsTrigger value="business" className="w-24">
+            Businesses
+          </TabsTrigger>
+        </TabsList>
+      </div>
 
       <TabsContent value="casual">
         {casualUsers.map((user) => (
-          <Card key={user.id} className="mb-4">
+          <Card key={user.id} className="mb-4 bg-[#FEFEFE]">
             <CardHeader className="flex items-center justify-center gap-1 pt-2 pb-1">
               <Avatar className="w-16 h-16 cursor-pointer">
                 <AvatarImage />
@@ -77,7 +79,7 @@ const SearchResult = async ({ query }: { query: string }) => {
 
       <TabsContent value="business">
         {businessUsers.map((user) => (
-          <Card key={user.id} className="mb-4">
+          <Card key={user.id} className="mb-4 bg-[#FEFEFE]">
             <CardHeader className="flex items-center justify-center gap-1 pt-2 pb-1">
               <Avatar className="w-16 h-16 cursor-pointer">
                 <AvatarImage />

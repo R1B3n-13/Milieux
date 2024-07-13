@@ -23,17 +23,18 @@ const StreamPostList = async () => {
   });
 
   return (
-    <div>
+    <>
       {postResponse.success &&
         postResponse.posts.map((post: z.infer<typeof PostSchema>) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            userId={loggedInUserResponse.user.id}
-            isSaved={savedPostSet.has(post.id)}
-          />
+          <div key={post.id}>
+            <PostCard
+              post={post}
+              userId={loggedInUserResponse.user.id}
+              isSaved={savedPostSet.has(post.id)}
+            />
+          </div>
         ))}
-    </div>
+    </>
   );
 };
 
