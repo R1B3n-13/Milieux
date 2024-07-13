@@ -22,6 +22,7 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
     }
   } else {
     const postResponse = await getPostsByUserId(id);
+
     if (postResponse.success) {
       posts = postResponse.posts;
     }

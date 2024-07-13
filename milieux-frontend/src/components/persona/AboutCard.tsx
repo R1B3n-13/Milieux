@@ -21,7 +21,9 @@ const AboutCard = async ({ id }: { id: number | null }) => {
     }
   } else {
     const userResponse = await getUserById(id);
-    user = userResponse.user;
+    if (userResponse.success) {
+      user = userResponse.user;
+    }
   }
 
   let date = null;
