@@ -90,40 +90,31 @@ public class UserServiceImpl implements UserService {
 		User existingUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		if (requestDto.getName() != null) {
-
+		if (requestDto.getName() != null && !requestDto.getName().isEmpty()) {
 			existingUser.setName(requestDto.getName());
 		}
-		if (requestDto.getEmail() != null) {
-
+		if (requestDto.getEmail() != null && !requestDto.getEmail().isEmpty()) {
 			existingUser.setEmail(requestDto.getEmail());
 		}
-		if (requestDto.getDp() != null) {
-
+		if (requestDto.getDp() != null && !requestDto.getDp().isEmpty()) {
 			existingUser.setDp(requestDto.getDp());
 		}
-		if (requestDto.getBanner() != null) {
-
+		if (requestDto.getBanner() != null && !requestDto.getBanner().isEmpty()) {
 			existingUser.setBanner(requestDto.getBanner());
 		}
-		if (requestDto.getStatus() != null) {
-
+		if (requestDto.getStatus() != null && !requestDto.getStatus().isEmpty()) {
 			existingUser.setStatus(requestDto.getStatus());
 		}
-		if (requestDto.getIntro() != null) {
-
+		if (requestDto.getIntro() != null && !requestDto.getIntro().isEmpty()) {
 			existingUser.setIntro(requestDto.getIntro());
 		}
-		if (requestDto.getAddress() != null) {
-
+		if (requestDto.getAddress() != null && !requestDto.getAddress().isEmpty()) {
 			existingUser.setAddress(requestDto.getAddress());
 		}
-		if (requestDto.getUserType() != null) {
-
+		if (requestDto.getUserType() != null && !requestDto.getUserType().isEmpty()) {
 			existingUser.setUserType(requestDto.getUserType());
 		}
-		if (requestDto.getPassword() != null) {
-
+		if (requestDto.getPassword() != null && !requestDto.getPassword().isEmpty()) {
 			existingUser.setPassword(requestDto.getPassword());
 		}
 
