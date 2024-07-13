@@ -98,6 +98,26 @@ public class UserServiceImpl implements UserService {
 
 			existingUser.setEmail(requestDto.getEmail());
 		}
+		if (requestDto.getDp() != null) {
+
+			existingUser.setDp(requestDto.getDp());
+		}
+		if (requestDto.getBanner() != null) {
+
+			existingUser.setBanner(requestDto.getBanner());
+		}
+		if (requestDto.getStatus() != null) {
+
+			existingUser.setStatus(requestDto.getStatus());
+		}
+		if (requestDto.getIntro() != null) {
+
+			existingUser.setIntro(requestDto.getIntro());
+		}
+		if (requestDto.getAddress() != null) {
+
+			existingUser.setAddress(requestDto.getAddress());
+		}
 		if (requestDto.getUserType() != null) {
 
 			existingUser.setUserType(requestDto.getUserType());

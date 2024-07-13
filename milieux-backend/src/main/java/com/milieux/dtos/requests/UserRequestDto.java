@@ -19,5 +19,12 @@ public class UserRequestDto {
 	private String email;
 	private String password;
 	
+	private String dp;
+	private String banner;
+	
+	private String status;
+	private String intro;
+	private String address;
+	
 	private Map<String, Object> userType;
 }
