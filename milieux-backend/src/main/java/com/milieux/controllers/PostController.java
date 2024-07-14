@@ -31,12 +31,12 @@ public class PostController {
 	private UserService userService;
 
 	@PostMapping("/create")
-	public ResponseEntity<BaseResponseDto> createPost(@RequestBody PostRequestDto requestDto,
+	public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto,
 			@RequestHeader("Authorization") String header) {
 
 		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
-		BaseResponseDto responseDto = postService.createPost(requestDto, userId);
+		PostResponseDto responseDto = postService.createPost(requestDto, userId);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
@@ -73,6 +73,17 @@ public class PostController {
 		PostListResponseDto responseDtos = postService.getSavedPosts(userId);
 
 		return ResponseEntity.ok(responseDtos);
+	}
+
+	@PutMapping("/update/{postId}")
+	public ResponseEntity<BaseResponseDto> updatePost(@RequestBody PostRequestDto requestDto, @PathVariable Long postId,
+			@RequestHeader("Authorization") String header) {
+
+		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
+
+		BaseResponseDto responseDto = postService.updatePost(requestDto, postId, userId);
+
+		return ResponseEntity.ok(responseDto);
 	}
 
 	@PutMapping("/save/{postId}")

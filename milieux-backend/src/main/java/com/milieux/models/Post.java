@@ -44,6 +44,10 @@ public class Post {
 	private String text;
 	private String imagePath;
 	private String videoPath;
+	
+	@Column(length = 4000)
+	private String tidbits;
+	private Boolean isSafe;
 
 	@ManyToMany
 	@JoinTable(name = "post_likes", //
