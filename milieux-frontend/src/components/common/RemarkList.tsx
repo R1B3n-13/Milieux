@@ -25,7 +25,7 @@ const RemarkList = ({
       <DialogContent className="min-w-fit min-h-36">
         <DialogHeader>
           <div className="flex flex-col gap-2 items-center justify-center">
-            <DialogTitle className="text-sm text-gray-500 font-normal pt-2">
+            <DialogTitle className="text-sm text-gray-500 font-normal">
               See the remarks of the post
             </DialogTitle>
           </div>

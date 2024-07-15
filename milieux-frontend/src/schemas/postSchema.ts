@@ -7,6 +7,8 @@ const PostSchema = z.object({
   text: z.string().nullable().optional(),
   imagePath: z.string().url().nullable().optional(),
   videoPath: z.string().url().nullable().optional(),
+  tidbits: z.string().nullable().optional(),
+  isSafe: z.boolean().optional().nullable(),
   user: UserSchema.nullable().optional(),
   likedByUsers: z.array(UserSchema).nullable().optional(),
   comments: z.array(RemarkSchema).nullable().optional(),

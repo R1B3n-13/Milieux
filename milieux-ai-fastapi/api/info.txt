@@ -1,0 +1,25 @@
+FinishReason defines the reason why the model stopped generating tokens.
+    Values:
+        FINISH_REASON_UNSPECIFIED (0):
+            Default value. This value is unused.
+        STOP (1):
+            Natural stop point of the model or provided
+            stop sequence.
+        MAX_TOKENS (2):
+            The maximum number of tokens as specified in
+            the request was reached.
+        SAFETY (3):
+            The candidate content was flagged for safety
+            reasons.
+        RECITATION (4):
+            The candidate content was flagged for
+            recitation reasons.
+        OTHER (5):
+            Unknown reason.
+
+HarmCategory defines various kinds of harms.
+    categories:
+        HARM_CATEGORY_HARASSMENT 	
+        HARM_CATEGORY_HATE_SPEECH 	
+        HARM_CATEGORY_SEXUALLY_EXPLICIT
+        HARM_CATEGORY_DANGEROUS_CONTENT 	

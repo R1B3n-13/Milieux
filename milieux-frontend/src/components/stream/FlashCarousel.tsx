@@ -55,7 +55,6 @@ const FlashCarousel = ({
 
         {flashes.map((flash: z.infer<typeof FlashSchema>, index) => (
           <CarouselItem key={flash.id} className="basis-1/5 md:basis-1/4 pl-3">
-            {" "}
             <Link href={`/flashes/${flash.id}`}>
               <Card className="relative bg-gray-200">
                 <CardContent className="flex items-center h-56 py-0 px-0 cursor-pointer">
@@ -79,20 +78,19 @@ const FlashCarousel = ({
                       />
                     </div>
                   )}
-                  <div className="absolute top-2 left-2 flex items-center gap-2">
-                    <div className="cursor-pointer">
-                      <Avatar className="w-9 h-9">
-                        <AvatarImage />
-                        <AvatarFallback className="text-4xl text-gray-500">
-                          <AvatarIcon />
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
 
-                    <p className="cursor-pointer text-white font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-                      {flash.user?.name}
-                    </p>
+                  <div className="absolute top-2 left-2 cursor-pointer">
+                    <Avatar className="w-9 h-9">
+                      <AvatarImage />
+                      <AvatarFallback className="text-4xl text-gray-500">
+                        <AvatarIcon />
+                      </AvatarFallback>
+                    </Avatar>
                   </div>
+
+                  <p className="absolute w-full flex justify-center bottom-1 justify-self-center cursor-pointer text-sm font-semibold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                    {flash.user?.name}
+                  </p>
                 </CardContent>
               </Card>
             </Link>
