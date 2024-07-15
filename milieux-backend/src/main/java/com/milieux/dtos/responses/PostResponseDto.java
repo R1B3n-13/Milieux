@@ -13,10 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostResponseDto extends BaseResponseDto {
 
-	private PostDto postDto;
+	private PostDto post;
 
-	public PostResponseDto(int status, boolean success, String message, PostDto postDto) {
+	public PostResponseDto(int status, boolean success, String message, PostDto post) {
 		super(status, success, message);
-		this.postDto = postDto;
+		this.post = post;
 	}
 }

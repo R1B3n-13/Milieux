@@ -28,6 +28,9 @@ import RemarkList from "./RemarkList";
 import RemarkFilledIcon from "../icons/RemarkFilledIcon";
 import BookmarkFilledIcon from "../icons/BookmarkFilledIcon";
 import months from "@/utils/months";
+import DiamondQuestionIcon from "../icons/DiamondQuestionIcon";
+import TidbitsDialog from "./TidbitsDialog";
+import { useState } from "react";
 
 const PostCard = ({
   post,
@@ -38,6 +41,8 @@ const PostCard = ({
   userId: number;
   isSaved: boolean;
 }) => {
+  const [isSafe, setIsSafe] = useState<boolean>(false);
+
   const handleLoveIconClick = async () => {
     await appreciatePost(post.id);
     revalidateAppreciation();
@@ -46,6 +51,10 @@ const PostCard = ({
   const handleBookmarkIconClick = async () => {
     await bookmarkPost(post.id);
     revalidateBookmark();
+  };
+
+  const toggleIsSafe = () => {
+    setIsSafe(!isSafe);
   };
 
   let date = null;
@@ -78,36 +87,60 @@ const PostCard = ({
                 {date?.getMinutes()}
               </CardDescription>
             </div>
+            {post.tidbits && (
+              <TidbitsDialog
+                dialogButton={
+                  <div className="w-fit h-fit text-xl p-2 text-emerald-600 ml-auto cursor-pointer rounded-full hover:bg-muted">
+                    <DiamondQuestionIcon />
+                  </div>
+                }
+                tidbits={post.tidbits}
+              />
+            )}
           </div>
         </CardHeader>
 
         <CardContent className="px-0">
-          <div className="flex flex-col">
-            {post.text && (
-              <p className="pb-3 px-6 text-slate-700 font-medium">
-                {post.text}
-              </p>
-            )}
-            {post.imagePath && (
-              <div className="flex items-center justify-center">
-                <Image
-                  src={post.imagePath}
-                  alt="post image"
-                  width={1000}
-                  height={0}
-                  className="w-full"
-                />
-              </div>
-            )}
-            {post.videoPath && (
-              <div className="flex items-center justify-center">
-                <video controls width="614">
-                  <source src={post.videoPath} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            )}
-          </div>
+          {(post.isSafe !== false || isSafe === true) && (
+            <div className="flex flex-col">
+              {post.text && (
+                <p className="pb-3 px-6 text-slate-700 font-medium">
+                  {post.text}
+                </p>
+              )}
+
+              {post.imagePath && (
+                <div className="flex items-center justify-center">
+                  <Image
+                    src={post.imagePath}
+                    alt="post image"
+                    width={1000}
+                    height={0}
+                    className="w-full"
+                  />
+                </div>
+              )}
+
+              {post.videoPath && (
+                <div className="flex items-center justify-center">
+                  <video controls width="614">
+                    <source src={post.videoPath} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              )}
+            </div>
+          )}
+          {post.isSafe === false && (
+            <p
+              className="flex w-full h-full items-center justify-center cursor-pointer text-slate-600 hover:underline"
+              onClick={toggleIsSafe}
+            >
+              {isSafe === false
+                ? "Sensitive Content. Click to show..."
+                : "Click to hide..."}
+            </p>
+          )}
         </CardContent>
 
         <CardFooter className="flex items-center text-2xl text-slate-700">

@@ -14,4 +14,7 @@ public class PostRequestDto {
 	private String text;
 	private String imagePath;
 	private String videoPath;
+	
+	private String tidbits;
+	private Boolean isSafe;
 }

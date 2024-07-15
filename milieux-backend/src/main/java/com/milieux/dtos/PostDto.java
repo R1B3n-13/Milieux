@@ -19,6 +19,9 @@ public class PostDto {
 	private String text;
 	private String imagePath;
 	private String videoPath;
+	
+	private String tidbits;
+	private Boolean isSafe;
 
 	private UserDto user;
 

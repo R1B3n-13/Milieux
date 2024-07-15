@@ -34,7 +34,7 @@ public class PostServiceImpl implements PostService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public BaseResponseDto createPost(PostRequestDto requestDto, Long userId) {
+	public PostResponseDto createPost(PostRequestDto requestDto, Long userId) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -45,7 +45,9 @@ public class PostServiceImpl implements PostService {
 
 		postRepository.save(post);
 
-		return new BaseResponseDto(201, true, "Post created successfully!");
+		PostDto dto = modelMapper.map(post, PostDto.class);
+
+		return new PostResponseDto(201, true, "Post created successfully!", dto);
 	}
 
 	@Override
@@ -96,6 +98,37 @@ public class PostServiceImpl implements PostService {
 				.collect(Collectors.toList());
 
 		return new PostListResponseDto(200, true, "Posts fetched successfully!", dtos);
+	}
+
+	@Override
+	public BaseResponseDto updatePost(PostRequestDto requestDto, Long postId, Long userId) {
+
+		Post existingPost = postRepository.findById(postId)
+				.orElseThrow(() -> new PostNotFoundException("No post found with id: " + postId));
+
+		if (existingPost.getUser().getId() != userId) {
+			throw new UserNotAuthorizedException("User not authorized for this action.");
+		}
+
+		if (requestDto.getText() != null && !requestDto.getText().isEmpty()) {
+			existingPost.setText(requestDto.getText());
+		}
+		if (requestDto.getImagePath() != null && !requestDto.getImagePath().isEmpty()) {
+			existingPost.setImagePath(requestDto.getImagePath());
+		}
+		if (requestDto.getVideoPath() != null && !requestDto.getVideoPath().isEmpty()) {
+			existingPost.setVideoPath(requestDto.getVideoPath());
+		}
+		if (requestDto.getTidbits() != null && !requestDto.getTidbits().isEmpty()) {
+			existingPost.setTidbits(requestDto.getTidbits());
+		}
+		if (requestDto.getIsSafe() != null) {
+			existingPost.setIsSafe(requestDto.getIsSafe());
+		}
+
+		postRepository.save(existingPost);
+
+		return new BaseResponseDto(200, true, "Post updated successfully!");
 	}
 
 	@Override

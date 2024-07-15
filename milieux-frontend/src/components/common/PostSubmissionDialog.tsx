@@ -19,10 +19,14 @@ import VideoFilledIcon2 from "../icons/VideoFilledIcon2";
 import { Input } from "../ui/Input";
 import Image from "next/image";
 import uploadToCloudinary from "@/actions/cloudinaryActions";
-import { createPost } from "@/actions/postActions";
+import { createPost, updatePost } from "@/actions/postActions";
 import Loading from "./Loading";
 import VideoPlayer from "./VideoPlayer";
-import { revalidatePost } from "@/actions/revalidationActions";
+import {
+  revalidatePost,
+  revalidatePostUpdate,
+} from "@/actions/revalidationActions";
+import { getTidbits } from "@/actions/aiActions";
 
 export default function PostSubmissionDialog({
   dialogButton,
@@ -69,6 +73,7 @@ export default function PostSubmissionDialog({
 
     let imagePath = null;
     let videoPath = null;
+    let media_url = null;
 
     if (selectedMedia) {
       const uploadResult = await uploadToCloudinary(
@@ -81,6 +86,7 @@ export default function PostSubmissionDialog({
         setIsLoading(false);
         return;
       } else {
+        media_url = uploadResult.url;
         mediaType === "image"
           ? (imagePath = uploadResult.url)
           : (videoPath = uploadResult.url);
@@ -91,6 +97,7 @@ export default function PostSubmissionDialog({
       text,
       imagePath,
       videoPath,
+      isSafe: true,
     };
 
     const response = await createPost(data);
@@ -107,6 +114,23 @@ export default function PostSubmissionDialog({
     setSelectedMedia(null);
     setMediaType(undefined);
     revalidatePost();
+
+    if (response.success) {
+      const aiResponse = await getTidbits({
+        text,
+        media_url: imagePath,
+      });
+
+      if (aiResponse.success) {
+        if (aiResponse.finish_reason == 1) {
+          await updatePost({ tidbits: aiResponse.text }, response.post.id);
+          revalidatePostUpdate();
+        } else if (aiResponse.finish_reason == 3) {
+          await updatePost({ isSafe: false }, response.post.id);
+          revalidatePostUpdate();
+        }
+      }
+    }
   };
 
   return (
