@@ -62,6 +62,17 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	public PostListResponseDto getPostsByIds(List<Long> postIds) {
+
+		List<Post> posts = postRepository.findAllById(postIds);
+
+		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
+				.collect(Collectors.toList());
+
+		return new PostListResponseDto(200, true, "Posts fetched successfully!", dtos);
+	}
+
+	@Override
 	public PostResponseDto getPostById(Long postId) {
 
 		Post post = postRepository.findById(postId)

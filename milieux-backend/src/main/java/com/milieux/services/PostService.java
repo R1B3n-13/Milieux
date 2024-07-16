@@ -1,5 +1,7 @@
 package com.milieux.services;
 
+import java.util.List;
+
 import com.milieux.dtos.requests.PostRequestDto;
 import com.milieux.dtos.responses.BaseResponseDto;
 import com.milieux.dtos.responses.PostListResponseDto;
@@ -10,6 +12,8 @@ public interface PostService {
 	public PostResponseDto createPost(PostRequestDto requestDto, Long userId);
 
 	public PostListResponseDto getAllPosts();
+
+	public PostListResponseDto getPostsByIds(List<Long> postIds);
 
 	public PostResponseDto getPostById(Long postId);
 
