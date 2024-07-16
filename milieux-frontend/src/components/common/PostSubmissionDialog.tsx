@@ -26,7 +26,7 @@ import {
   revalidatePost,
   revalidatePostUpdate,
 } from "@/actions/revalidationActions";
-import { getTidbits } from "@/actions/aiActions";
+import { addPostToCorpus, getTidbits } from "@/actions/aiActions";
 
 export default function PostSubmissionDialog({
   dialogButton,
@@ -130,6 +130,12 @@ export default function PostSubmissionDialog({
           revalidatePostUpdate();
         }
       }
+
+      await addPostToCorpus({
+        text,
+        media_url: imagePath,
+        postId: response.post.id,
+      });
     }
   };
 

@@ -1,5 +1,7 @@
 package com.milieux.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,14 @@ public class PostController {
 		PostResponseDto responseDto = postService.createPost(requestDto, userId);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+	}
+
+	@PostMapping("/by-ids")
+	public ResponseEntity<PostListResponseDto> getPostsByIds(@RequestBody List<Long> requestDtos) {
+
+		PostListResponseDto responseDtos = postService.getPostsByIds(requestDtos);
+
+		return ResponseEntity.ok(responseDtos);
 	}
 
 	@GetMapping
