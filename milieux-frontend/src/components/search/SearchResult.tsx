@@ -63,14 +63,14 @@ const SearchResult = async ({ query }: { query: string }) => {
                 <div className="text-lg text-teal-600">
                   <FollowersFilledIcon />
                 </div>
-                <p>{user.followers.length}</p>
+                <p>{user.followers?.length || 0}</p>
               </div>
 
               <div className="flex items-center gap-2">
                 <div className="text-lg text-sky-600">
                   <FollowingsFilledIcon />
                 </div>
-                <p>{user.followings.length}</p>
+                <p>{user.followings?.length || 0}</p>
               </div>
             </CardContent>
           </Card>
@@ -106,14 +106,14 @@ const SearchResult = async ({ query }: { query: string }) => {
                 <div className="text-lg text-teal-600">
                   <FollowersFilledIcon />
                 </div>
-                <p>{user.followers.length}</p>
+                <p>{user.followers?.length || 0}</p>
               </div>
 
               <div className="flex items-center gap-2">
                 <div className="text-lg text-sky-600">
                   <FollowingsFilledIcon />
                 </div>
-                <p>{user.followings.length}</p>
+                <p>{user.followings?.length || 0}</p>
               </div>
             </CardContent>
           </Card>
