@@ -42,7 +42,7 @@ async def generate_response(media_path: str, text: str):
     if(media_path):
         file = genai.upload_file(path=media_path)
         response = model.generate_content([file, text])
-        genai.delete_file(path=media_path)
+        genai.delete_file(file)
     else:
         response = model.generate_content(text)
 
