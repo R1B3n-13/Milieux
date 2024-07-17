@@ -10,10 +10,13 @@ import { actionItems, navItems } from "./items/navbarItems";
 import Logo from "../common/Logo";
 import Link from "next/link";
 import SearchLineIcon from "../icons/SearchLineIcon";
+import AiLineIcon from "../icons/AiLineIcon";
+import AiFilledIcon from "../icons/AiFilledIcon";
 
 const NavBar = () => {
   const pathname = usePathname();
   const [activeItem, setActiveItem] = useState(pathname);
+  const [isAiActive, setIsAiActive] = useState(false);
   const [query, setQuery] = useState("");
   const router = useRouter();
 
@@ -23,7 +26,9 @@ const NavBar = () => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      router.push(`/search?query=${encodeURIComponent(query)}`);
+      router.push(
+        `/search?query=${encodeURIComponent(query)}&forAi=${isAiActive}`
+      );
       setQuery("");
     }
   };
@@ -44,9 +49,25 @@ const NavBar = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyUp={handleKeyPress}
-              placeholder="Search for users, businesses..."
+              placeholder={
+                isAiActive
+                  ? "Search for posts..."
+                  : `Search for users, businesses...`
+              }
               className="pl-11 rounded-full bg-gray-200 focus-visible:ring-0"
             />
+            <div
+              className="text-xl cursor-pointer rounded-full p-2 hover:bg-gray-200"
+              onClick={() => setIsAiActive(!isAiActive)}
+            >
+              {isAiActive ? (
+                <div className="text-rose-600">
+                  <AiFilledIcon />
+                </div>
+              ) : (
+                <AiLineIcon />
+              )}
+            </div>
           </div>
         </div>
       </div>

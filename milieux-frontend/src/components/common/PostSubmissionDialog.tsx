@@ -105,6 +105,7 @@ export default function PostSubmissionDialog({
     if (!response.success) {
       toast.error("Something went wrong.");
     } else {
+      revalidatePost();
       toast.success("Post created successfully!");
     }
 
@@ -113,12 +114,11 @@ export default function PostSubmissionDialog({
     setText("");
     setSelectedMedia(null);
     setMediaType(undefined);
-    revalidatePost();
 
     if (response.success) {
       const aiResponse = await getTidbits({
         text,
-        media_url: imagePath,
+        media_url,
       });
 
       if (aiResponse.success) {
@@ -133,7 +133,7 @@ export default function PostSubmissionDialog({
 
       await addPostToCorpus({
         text,
-        media_url: imagePath,
+        media_url,
         postId: response.post.id,
       });
     }
