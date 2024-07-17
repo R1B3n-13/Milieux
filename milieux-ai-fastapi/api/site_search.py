@@ -52,7 +52,7 @@ media_analysis_model = genai.GenerativeModel(
         HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
         HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,      
     },
-  system_instruction="Analyze the provided media content (photo or video) and generate a comprehensive description of what the media contains. Ensure that the description includes all relevant details such as objects, activities, locations, and any other notable features present in the media. The response should be concise and structured to facilitate feeding into a vector database. Do not include any introductory or concluding remarks. If no relevant details can be extracted, return \"null\".\nExamples:\nInput: Photo of a beach with palm trees and people swimming.\nOutput: Beach, palm trees, people swimming, blue sky, ocean, sand\nInput: Video of a city street with cars, bicycles, and pedestrians.\nOutput: City street, cars, bicycles, pedestrians, buildings, traffic lights, sidewalk\nInput: Photo of a mountain landscape with a river and forest.\nOutput: Mountain, river, forest, trees, sky, rocky terrain\nInput: Video of a soccer game in a stadium with cheering fans.\nOutput: Soccer game, stadium, players, ball, goalposts, fans, cheering, grass field, lights\nInput: Blurry photo with no discernible features.\nOutput: null\nInput: Video of a sunset over a lake with birds flying.\nOutput: Sunset, lake, birds flying, water reflection, sky, clouds",
+system_instruction="As a content analyst, analyze the provided media content (photo or video) and generate a description that focuses on the main features of the media. Include only the most relevant details such as prominent objects, significant activities, key locations and any relevant contextual information (e.g., well-known characters, cultural references etc.). Avoid mentioning common elements that are not central to the media's content. The response should be concise and structured to facilitate feeding into a vector database. Do not include any introductory or concluding remarks. If no relevant details can be extracted, return \"null\".\nExamples:\nInput: Photo of a beach with palm trees and people swimming.\nOutput: Beach, palm trees, people swimming, ocean, sand\nInput: Video of a city street with cars, bicycles, and pedestrians.\nOutput: City street, cars, bicycles, pedestrians, buildings\nInput: Photo of a mountain landscape with a river and forest.\nOutput: Mountain, river, forest, trees, rocky terrain\nInput: Video of a soccer game in a stadium with cheering fans.\nOutput: Soccer game, stadium, players, ball, goalposts, fans, grass field\nInput: Blurry photo with no discernible features.\nOutput: null\nInput: Video of a sunset over a lake with birds flying.\nOutput: Sunset, lake, birds flying, water reflection\nInput: Photo of Luffy from One Piece anime.\nOutput: Monkey D. Luffy, anime character, one piece anime",
 )
 
 chunk_analysis_model = genai.GenerativeModel(
@@ -87,7 +87,7 @@ async def generate_media_analysis_response(media_path: str):
     if(media_path):
         file = genai.upload_file(path=media_path)
         response = media_analysis_model.generate_content(file)
-        genai.delete_file(path=media_path)
+        genai.delete_file(file)
         if response.candidates[0].finish_reason == 1:
             return response.text
         else:
@@ -122,8 +122,9 @@ async def add_post_to_corpus(request: AddPostRequest):
         create_document_response = retriever_service_client.create_document(create_document_request)
         document_resource_name = create_document_response.name
 
-        create_chunk_response = await create_chunk(request.text, document_resource_name, request.postId )
-        print(create_chunk_response)
+        if(request.text):
+            create_chunk_response = await create_chunk(request.text, document_resource_name, request.postId )
+            print(create_chunk_response)
 
         if(media_analysis_text):
             create_chunk_response = await create_chunk(media_analysis_text, document_resource_name, request.postId )
