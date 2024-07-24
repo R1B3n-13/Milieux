@@ -8,6 +8,7 @@ import { getUserFromAuthToken } from "@/services/userService";
 import PostSubmissionDialog from "./PostSubmissionDialog";
 import { z } from "zod";
 import UserSchema from "@/schemas/userSchema";
+import Link from "next/link";
 
 const PostCreationCard = async () => {
   const response = await getUserFromAuthToken();
@@ -24,12 +25,14 @@ const PostCreationCard = async () => {
         <CardHeader className="pb-4 mb-0">
           <div className="flex items-center gap-4">
             <div className="cursor-pointer">
-              <Avatar>
-                <AvatarImage />
-                <AvatarFallback className="text-5xl text-gray-500">
-                  <AvatarIcon />
-                </AvatarFallback>
-              </Avatar>
+              <Link href="/persona">
+                <Avatar>
+                  <AvatarImage src={user.dp as string} />
+                  <AvatarFallback className="text-5xl text-gray-500">
+                    <AvatarIcon />
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
             </div>
             <PostSubmissionDialog
               dialogButton={

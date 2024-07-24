@@ -11,8 +11,8 @@ const UserSchema = z.object({
   intro: z.string().nullable().optional(),
   address: z.string().nullable().optional(),
   userType: z.any().nullable().optional(),
-  followers: z.array(z.unknown()).nullable().optional(),
-  followings: z.array(z.unknown()).nullable().optional(),
+  followers: z.array(z.any()).nullable().optional(),
+  followings: z.array(z.any()).nullable().optional(),
   createdAt: z
     .string()
     .transform((str) => new Date(str))

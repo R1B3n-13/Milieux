@@ -31,6 +31,7 @@ import months from "@/utils/months";
 import DiamondQuestionIcon from "../icons/DiamondQuestionIcon";
 import TidbitsDialog from "./TidbitsDialog";
 import { useState } from "react";
+import Link from "next/link";
 
 const PostCard = ({
   post,
@@ -68,17 +69,35 @@ const PostCard = ({
         <CardHeader className="pb-3">
           <div className="flex gap-4">
             <div className="cursor-pointer">
-              <Avatar>
-                <AvatarImage />
-                <AvatarFallback className="text-5xl text-gray-500">
-                  <AvatarIcon />
-                </AvatarFallback>
-              </Avatar>
+              <Link
+                href={
+                  post.user?.id === userId
+                    ? "/persona"
+                    : `/persona/${post.user?.id}`
+                }
+              >
+                <Avatar>
+                  <AvatarImage src={post.user?.dp as string} />
+                  <AvatarFallback className="text-5xl text-gray-500">
+                    <AvatarIcon />
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
             </div>
+
             <div>
-              <CardTitle className="mt-1 font-semibold text-slate-700 cursor-pointer">
-                {post.user?.name}
-              </CardTitle>
+              <Link
+                href={
+                  post.user?.id === userId
+                    ? "/persona"
+                    : `/persona/${post.user?.id}`
+                }
+              >
+                <CardTitle className="mt-1 font-semibold text-slate-700 cursor-pointer">
+                  {post.user?.name}
+                </CardTitle>
+              </Link>
+
               <CardDescription className="mt-1 cursor-default">
                 {date?.getDate()} {months[date?.getMonth() || 0]}
                 {", "}
@@ -133,7 +152,7 @@ const PostCard = ({
           )}
           {post.isSafe === false && (
             <p
-              className="flex w-full h-full items-center justify-center cursor-pointer text-slate-600 hover:underline"
+              className="flex w-full h-full items-center justify-center cursor-pointer text-amber-600 hover:underline"
               onClick={toggleIsSafe}
             >
               {isSafe === false

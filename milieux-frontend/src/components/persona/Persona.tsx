@@ -11,11 +11,13 @@ import EditPersonaDialog from "./EditPersonaDialog";
 import UserSchema from "@/schemas/userSchema";
 import { getUserFromAuthToken, getUserById } from "@/services/userService";
 import { z } from "zod";
+import FollowButton from "./FollowButton";
 
 const Persona = async ({ id }: { id: number | null }) => {
   let user: z.infer<typeof UserSchema> = {};
 
   const loggedInUserResponse = await getUserFromAuthToken();
+  const loggedInUser: z.infer<typeof UserSchema> = loggedInUserResponse.user;
 
   if (!id && loggedInUserResponse.success) {
     user = loggedInUserResponse.user;
@@ -74,18 +76,20 @@ const Persona = async ({ id }: { id: number | null }) => {
           </div>
 
           <div className="flex items-end justify-end -mt-[8.3rem] mr-12">
-            <EditPersonaDialog
-              dialogButton={
-                <Button
-                  variant="outline"
-                  className={`w-32 rounded-full border border-gray-400 text-slate-600 text-md font-medium hover:bg-gray-100 cursor-pointer z-50 ${
-                    user.id !== loggedInUserResponse.user.id ? "invisible" : ""
-                  }`}
-                >
-                  Edit persona
-                </Button>
-              }
-            />
+            {user.id === loggedInUser.id ? (
+              <EditPersonaDialog
+                dialogButton={
+                  <Button
+                    variant="outline"
+                    className="w-32 rounded-full border border-gray-400 text-slate-600 text-md font-medium hover:bg-gray-100 cursor-pointer z-50 "
+                  >
+                    Edit persona
+                  </Button>
+                }
+              />
+            ) : (
+              <FollowButton user={user} loggedInUser={loggedInUser} />
+            )}
           </div>
 
           <Tabs defaultValue="posts" className="w-full mt-20 z-40">
@@ -109,7 +113,7 @@ const Persona = async ({ id }: { id: number | null }) => {
                 >
                   Videos
                 </TabsTrigger>
-                {user.id === loggedInUserResponse.user.id && (
+                {user.id === loggedInUser.id && (
                   <TabsTrigger
                     value="bookmarks"
                     className="w-24 py-2 font-semibold bg-transparent rounded-none focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-[3px] data-[state=active]:border-b-blue-600"
@@ -126,9 +130,7 @@ const Persona = async ({ id }: { id: number | null }) => {
                   <AboutCard id={id} />
                 </div>
                 <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
-                  {user.id === loggedInUserResponse.user.id && (
-                    <PostCreationCard />
-                  )}
+                  {user.id === loggedInUser.id && <PostCreationCard />}
                   <PersonaPostList id={id} />
                 </div>
               </div>

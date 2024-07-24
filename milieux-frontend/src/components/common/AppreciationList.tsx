@@ -41,7 +41,7 @@ const AppreciationList = ({
                       </AvatarFallback>
                     </Avatar>
                   </div>
-                  <p className="cursor-pointer">{user.name}</p>
+                  <p className="cursor-pointer font-semibold text-slate-700">{user.name}</p>
                 </div>
               </div>
             ))}
