@@ -8,7 +8,7 @@ import com.milieux.models.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-	List<Post> findAllByOrderByCreatedAtDesc();
+	public List<Post> findAllByOrderByCreatedAtDesc();
 
-	List<Post> findAllById(Iterable<Long> ids);
+	public List<Post> findAllById(Iterable<Long> ids);
 }

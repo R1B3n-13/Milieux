@@ -1,11 +1,14 @@
 package com.milieux.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -25,6 +28,14 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@PostMapping("/by-ids")
+	public ResponseEntity<UserListResponseDto> getPostsByIds(@RequestBody List<Long> requestDtos) {
+
+		UserListResponseDto responseDtos = userService.getUsersByIds(requestDtos);
+
+		return ResponseEntity.ok(responseDtos);
+	}
 
 	@GetMapping
 	public ResponseEntity<UserListResponseDto> getAllUsers() {
@@ -48,6 +59,14 @@ public class UserController {
 		UserResponseDto responseDto = userService.getUserByEmail(email);
 
 		return ResponseEntity.ok(responseDto);
+	}
+
+	@GetMapping("/by-is_business")
+	public ResponseEntity<UserListResponseDto> getUsersByIsBusiness() {
+
+		UserListResponseDto responseDtos = userService.getUsersByIsBusiness(true);
+
+		return ResponseEntity.ok(responseDtos);
 	}
 
 	@GetMapping("/profile")

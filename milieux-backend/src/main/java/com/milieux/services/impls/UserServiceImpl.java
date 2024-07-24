@@ -42,6 +42,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserListResponseDto getUsersByIds(List<Long> userIds) {
+
+		List<User> users = userRepository.findAllById(userIds);
+
+		List<UserDto> dtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
+				.collect(Collectors.toList());
+
+		return new UserListResponseDto(200, true, "Users fetched successfully!", dtos);
+	}
+
+	@Override
 	public UserResponseDto getUserById(Long userId) {
 
 		User user = userRepository.findById(userId)
@@ -61,6 +72,17 @@ public class UserServiceImpl implements UserService {
 		UserDto dto = modelMapper.map(user, UserDto.class);
 
 		return new UserResponseDto(200, true, "User fetched successfully!", dto);
+	}
+
+	@Override
+	public UserListResponseDto getUsersByIsBusiness(Boolean isBusiness) {
+
+		List<User> users = userRepository.findAllByIsBusiness(isBusiness);
+
+		List<UserDto> dtos = users.stream().map(user -> modelMapper.map(user, UserDto.class))
+				.collect(Collectors.toList());
+
+		return new UserListResponseDto(200, true, "Users fetched successfully!", dtos);
 	}
 
 	@Override

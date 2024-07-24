@@ -13,6 +13,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	public Optional<User> findByEmail(String email);
 
+	public List<User> findAllByIsBusiness(Boolean isBusiness);
+
+	public List<User> findAllById(Iterable<Long> ids);
+
 	@Query("SELECT u FROM User u " + //
 			"WHERE LOWER(u.name) LIKE LOWER(:query) " + //
 			"OR LOWER(u.name) LIKE LOWER(:query) || '%' " + //
