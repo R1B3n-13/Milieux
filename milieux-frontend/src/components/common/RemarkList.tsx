@@ -11,6 +11,7 @@ import { z } from "zod";
 import RemarkSchema from "@/schemas/remarkSchema";
 import Image from "next/image";
 import { ScrollArea } from "../ui/ScrollArea";
+import months from "@/utils/months";
 
 const RemarkList = ({
   dialogButton,
@@ -46,9 +47,27 @@ const RemarkList = ({
                     </div>
 
                     <div className="flex flex-col w-[30rem] bg-gray-100 p-3 rounded-lg">
-                      <p className="font-semibold cursor-pointer">
-                        {comment.user?.name}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold cursor-pointer text-slate-700">
+                          {comment.user?.name}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {new Date(comment.createdAt || "")?.getDate()}{" "}
+                          {
+                            months[
+                              new Date(comment.createdAt || "")?.getMonth() || 0
+                            ]
+                          }
+                          {", "}
+                          {new Date(
+                            comment.createdAt || ""
+                          )?.getFullYear()}{" "}
+                          {"at"} {new Date(comment.createdAt || "")?.getHours()}
+                          {":"}
+                          {new Date(comment.createdAt || "")?.getMinutes()}
+                        </p>
+                      </div>
+
                       {comment.text && (
                         <p className="text-slate-700 break-words">
                           {comment.text}

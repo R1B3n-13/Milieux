@@ -14,11 +14,14 @@ import Link from "next/link";
 import VideoPlayer from "../common/VideoPlayer";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import AvatarIcon from "../icons/AvatarIcon";
+import UserSchema from "@/schemas/userSchema";
 
 const FlashCarousel = ({
   flashes,
+  user,
 }: {
   flashes: z.infer<typeof FlashSchema>[];
+  user: z.infer<typeof UserSchema>;
 }) => {
   return (
     <Carousel
@@ -29,24 +32,33 @@ const FlashCarousel = ({
         <CarouselItem className="basis-1/5 md:basis-1/4 pl-3">
           <Card className="relative overflow-hidden bg-[#FEFEFE]">
             <CardContent className="flex flex-col h-56 items-center justify-center px-0">
-              <div className="w-full">
-                <Image
-                  src="/user_placeholder.svg"
-                  alt=""
-                  width={500}
-                  height={500}
-                  className="translate-y-6"
-                />
+              <div className="w-full h-full">
+                {user.dp ? (
+                  <Image
+                    src={user.dp}
+                    alt=""
+                    width={500}
+                    height={500}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src="/user_placeholder.svg"
+                    alt=""
+                    width={500}
+                    height={500}
+                  />
+                )}
               </div>
 
               <Link
                 href="/flashes/create"
-                className="text-blue-600 bg-white translate-y-1 rounded-full border-4 border-white cursor-pointer"
+                className="text-blue-600 bg-white -translate-y-5 rounded-full border-4 border-white cursor-pointer"
               >
                 <PlusFilledIcon />
               </Link>
 
-              <p className="font-semibold translate-y-2 text-sm cursor-default">
+              <p className="font-semibold -translate-y-1 text-sm cursor-default">
                 Create a flash
               </p>
             </CardContent>
@@ -80,17 +92,34 @@ const FlashCarousel = ({
                   )}
 
                   <div className="absolute top-2 left-2 cursor-pointer">
-                    <Avatar className="w-9 h-9">
-                      <AvatarImage />
-                      <AvatarFallback className="text-4xl text-gray-500">
-                        <AvatarIcon />
-                      </AvatarFallback>
-                    </Avatar>
+                    <Link
+                      href={
+                        flash.user?.id === user.id
+                          ? "/persona"
+                          : `/persona/${flash.user?.id}`
+                      }
+                    >
+                      <Avatar className="w-9 h-9">
+                        <AvatarImage src={flash.user?.dp as string} />
+                        <AvatarFallback className="text-4xl text-gray-500">
+                          <AvatarIcon />
+                        </AvatarFallback>
+                      </Avatar>
+                    </Link>
                   </div>
 
-                  <p className="absolute w-full flex justify-center bottom-1 justify-self-center cursor-pointer text-sm font-semibold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-                    {flash.user?.name}
-                  </p>
+                  <Link
+                    href={
+                      flash.user?.id === user.id
+                        ? "/persona"
+                        : `/persona/${flash.user?.id}`
+                    }
+                    className="absolute w-full flex justify-center bottom-1 justify-self-center cursor-pointer"
+                  >
+                    <p className=" text-sm font-semibold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                      {flash.user?.name}
+                    </p>
+                  </Link>
                 </CardContent>
               </Card>
             </Link>

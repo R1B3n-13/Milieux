@@ -30,7 +30,7 @@ const TidbitsDialog = ({
             {tidbits && (
               <div className="flex items-start gap-3">
                 <div className="flex flex-col w-[30rem] bg-muted p-3 rounded-lg">
-                  <p className="cursor-pointer">{tidbits}</p>
+                  <p>{tidbits}</p>
                 </div>
               </div>
             )}

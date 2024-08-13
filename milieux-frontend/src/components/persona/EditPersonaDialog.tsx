@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
 import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
+import { TextArea } from "@/components/ui/TextArea";
 import Image from "next/image";
 import uploadToCloudinary from "@/actions/cloudinaryActions";
 import { ScrollArea } from "../ui/ScrollArea";
@@ -136,37 +136,18 @@ const EditPersonaDialog = ({ dialogButton }: { dialogButton: JSX.Element }) => {
         <AlertDialogHeader className="flex items-center justify-center">
           <AlertDialogTitle>Edit Your Persona</AlertDialogTitle>
           <AlertDialogDescription>
-            Update the fields below and click save when you're done.
+            Update the fields below and click save changes when you're done.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <ScrollArea className="max-h-[80vh] p-3">
-          <div className="space-y-4">
+          <div className="space-y-4 p-1">
             <div>
               <Input
                 name="name"
                 value={editData.name}
                 onChange={handleChange}
                 placeholder="Name"
-              />
-            </div>
-
-            <div>
-              <Textarea
-                name="status"
-                value={editData.status}
-                onChange={handleChange}
-                placeholder="Status"
-                className="h-24"
-              />
-            </div>
-
-            <div>
-              <Textarea
-                name="intro"
-                value={editData.intro}
-                onChange={handleChange}
-                placeholder="Intro"
-                className="h-24"
+                className="focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400"
               />
             </div>
 
@@ -176,47 +157,32 @@ const EditPersonaDialog = ({ dialogButton }: { dialogButton: JSX.Element }) => {
                 value={editData.address}
                 onChange={handleChange}
                 placeholder="Address"
+                className="focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400"
+              />
+            </div>
+
+            <div>
+              <TextArea
+                name="intro"
+                value={editData.intro}
+                onChange={handleChange}
+                placeholder="Intro"
+                className="h-16 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400"
+              />
+            </div>
+
+            <div>
+              <TextArea
+                name="status"
+                value={editData.status}
+                onChange={handleChange}
+                placeholder="Status"
+                className="h-16 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400"
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Input
-              id="dp-input"
-              type="file"
-              accept="image/*"
-              onChange={(event) => handleImageChange(event, "dp")}
-              style={{ display: "none" }}
-            />
-            <label
-              htmlFor="dp-input"
-              className="flex items-center justify-center cursor-pointer gap-2 hover:bg-muted"
-            >
-              <div className="text-blue-600">
-                {selectedDp ? (
-                  <Image
-                    src={selectedDp as string}
-                    alt=""
-                    width={200}
-                    height={200}
-                    className="rounded-lg"
-                  />
-                ) : (
-                  <span>Select Display Picture</span>
-                )}
-              </div>
-            </label>
-            {selectedDp && (
-              <button
-                className="px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
-                onClick={() => clearImage("dp")}
-              >
-                ✕
-              </button>
-            )}
-          </div>
-
-          <div className="space-y-2">
+          <div className="flex items-center justify-center space-y-4">
             <Input
               id="banner-input"
               type="file"
@@ -226,30 +192,80 @@ const EditPersonaDialog = ({ dialogButton }: { dialogButton: JSX.Element }) => {
             />
             <label
               htmlFor="banner-input"
-              className="flex items-center justify-center cursor-pointer gap-2 hover:bg-muted"
+              className={`flex items-center justify-center w-fit px-4 py-1 ${
+                selectedBanner
+                  ? ""
+                  : "border border-dashed border-gray-400 hover:bg-muted"
+              } rounded-md cursor-pointer gap-2`}
             >
-              <div className="text-blue-600">
+              <div className="text-blue-600 w-fit relative">
                 {selectedBanner ? (
-                  <Image
-                    src={selectedBanner as string}
-                    alt=""
-                    width={200}
-                    height={200}
-                    className="rounded-lg"
-                  />
+                  <>
+                    <Image
+                      src={selectedBanner as string}
+                      alt=""
+                      width={200}
+                      height={200}
+                      className="rounded-lg"
+                    />
+                    <button
+                      className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        clearImage("banner");
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </>
                 ) : (
                   <span>Select Banner</span>
                 )}
               </div>
             </label>
-            {selectedBanner && (
-              <button
-                className="px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
-                onClick={() => clearImage("banner")}
-              >
-                ✕
-              </button>
-            )}
+          </div>
+
+          <div className="flex items-center justify-center space-y-4">
+            <Input
+              id="dp-input"
+              type="file"
+              accept="image/*"
+              onChange={(event) => handleImageChange(event, "dp")}
+              style={{ display: "none" }}
+            />
+            <label
+              htmlFor="dp-input"
+              className={`flex items-center justify-center w-fit px-4 py-1 ${
+                selectedDp
+                  ? ""
+                  : "border border-dashed border-gray-400 hover:bg-muted"
+              } rounded-md cursor-pointer gap-2`}
+            >
+              <div className="text-blue-600 w-fit relative">
+                {selectedDp ? (
+                  <>
+                    <Image
+                      src={selectedDp as string}
+                      alt=""
+                      width={200}
+                      height={200}
+                      className="rounded-lg"
+                    />
+                    <button
+                      className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        clearImage("dp");
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </>
+                ) : (
+                  <span>Select Display Picture</span>
+                )}
+              </div>
+            </label>
           </div>
         </ScrollArea>
         <AlertDialogFooter>

@@ -13,10 +13,10 @@ generative_service_client = glm.GenerativeServiceClient(credentials=scoped_crede
 retriever_service_client = glm.RetrieverServiceClient(credentials=scoped_credentials)
 permission_service_client = glm.PermissionServiceClient(credentials=scoped_credentials)
 
-async def create_chunk(content: str, document_resource_name: str, id: int):
+async def create_chunk(content: str, document_resource_name: str, key: str, id: int):
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=20,
+        chunk_size=1500,
+        chunk_overlap=200,
         is_separator_regex=False,
     )
     texts = text_splitter.split_text(content)
@@ -24,7 +24,7 @@ async def create_chunk(content: str, document_resource_name: str, id: int):
     chunks = []
     for text in texts:
         chunk = glm.Chunk(data={'string_value': text})
-        chunk.custom_metadata.append(glm.CustomMetadata(key = "postId", numeric_value = id))
+        chunk.custom_metadata.append(glm.CustomMetadata(key = key, numeric_value = id))
         chunks.append(chunk)
     
     create_chunk_requests = []

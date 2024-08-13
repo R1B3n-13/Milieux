@@ -1,19 +1,10 @@
-"use server";
-
-import RemarkSchema from "@/schemas/remarkSchema";
 import getAuthToken from "@/actions/authActions";
-import { z } from "zod";
 
 const backendUrl = process.env.BACKEND_URL;
 
-export async function createRemark(
-  remarkData: z.infer<typeof RemarkSchema>,
-  postId: number | undefined | null
-) {
+export async function getBusinessUsers() {
   try {
-    if (!postId) throw new Error("Invalid post id.");
-
-    const url = new URL(`/comments/create/post/${postId}`, backendUrl);
+    const url = new URL("/users/by-is_business", backendUrl);
 
     const authToken = await getAuthToken();
     if (!authToken)
@@ -24,21 +15,19 @@ export async function createRemark(
       };
 
     const response = await fetch(url, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
       },
-      body: JSON.stringify(remarkData),
       cache: "no-cache",
-      next: {
-        tags: ["createRemark"],
-      },
     });
 
-    return response.json();
+    const responseData = await response.json();
+
+    return responseData;
   } catch (error) {
-    console.error("Creating remark resulted in error:", error);
+    console.error("Fetching users resulted in error:", error);
     return {
       status: 500,
       success: false,

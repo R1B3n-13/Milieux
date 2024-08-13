@@ -6,6 +6,10 @@ export async function revalidateUser() {
   revalidateTag("updateUser");
 }
 
+export async function revalidateFollow() {
+  revalidateTag("followUser");
+}
+
 export async function revalidatePostUpdate() {
   revalidateTag("updatePost");
 }

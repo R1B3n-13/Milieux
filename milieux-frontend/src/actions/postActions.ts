@@ -19,7 +19,7 @@ export async function createPost(postData: z.infer<typeof PostSchema>) {
       };
 
     const response = await fetch(url, {
-      method: "Post",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
@@ -60,7 +60,7 @@ export async function updatePost(
       };
 
     const response = await fetch(url, {
-      method: "Put",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
@@ -98,7 +98,7 @@ export async function appreciatePost(postId: number | undefined | null) {
       };
 
     const response = await fetch(url, {
-      method: "Put",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
@@ -135,7 +135,7 @@ export async function bookmarkPost(postId: number | undefined | null) {
       };
 
     const response = await fetch(url, {
-      method: "Put",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
