@@ -2,7 +2,7 @@
 
 import { useState, ChangeEvent } from "react";
 import { Button } from "@/components/ui/Button";
-import { Textarea } from "@/components/ui/Textarea";
+import { TextArea } from "@/components/ui/TextArea";
 import ImageFilledIcon from "../icons/ImageFilledIcon";
 import Image from "next/image";
 import SendFilledIcon from "../icons/SendFilledIcon";
@@ -12,7 +12,7 @@ import uploadToCloudinary from "@/actions/cloudinaryActions";
 import { createRemark } from "@/actions/remarkActions";
 import { revalidateRemark } from "@/actions/revalidationActions";
 
-export default function CommentForm({ postId }: { postId: number }) {
+export default function RemarkSubmissionField({ postId }: { postId: number }) {
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState<{ [key: number]: string }>({});
   const [selectedImage, setSelectedImage] = useState<{
@@ -84,7 +84,7 @@ export default function CommentForm({ postId }: { postId: number }) {
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
         <div className="flex-1">
-          <Textarea
+          <TextArea
             value={text[postId] || ""}
             onChange={(e) =>
               setText((prev) => ({ ...prev, [postId]: e.target.value }))

@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
 import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
+import { TextArea } from "@/components/ui/TextArea";
 import Image from "next/image";
 import uploadToCloudinary from "@/actions/cloudinaryActions";
 import { ScrollArea } from "../ui/ScrollArea";
@@ -162,7 +162,7 @@ const EditPersonaDialog = ({ dialogButton }: { dialogButton: JSX.Element }) => {
             </div>
 
             <div>
-              <Textarea
+              <TextArea
                 name="intro"
                 value={editData.intro}
                 onChange={handleChange}
@@ -172,7 +172,7 @@ const EditPersonaDialog = ({ dialogButton }: { dialogButton: JSX.Element }) => {
             </div>
 
             <div>
-              <Textarea
+              <TextArea
                 name="status"
                 value={editData.status}
                 onChange={handleChange}

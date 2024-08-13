@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/AlertDialog";
 import { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
-import { Textarea } from "../ui/Textarea";
+import { TextArea } from "../ui/TextArea";
 import ImageFilledIcon from "../icons/ImageFilledIcon";
 import VideoFilledIcon2 from "../icons/VideoFilledIcon2";
 import { Input } from "../ui/Input";
@@ -153,7 +153,7 @@ export default function PostSubmissionDialog({
         </AlertDialogHeader>
         <div className="space-y-6">
           <div className="space-y-4">
-            <Textarea
+            <TextArea
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder={`What's brewing, ${username}?`}

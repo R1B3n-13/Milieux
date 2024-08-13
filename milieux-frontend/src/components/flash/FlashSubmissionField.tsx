@@ -84,8 +84,6 @@ const FlashSubmissionField = () => {
       router.push("/stream");
     }
 
-    console.log(response);
-
     setIsLoading(false);
 
     setSelectedMedia(null);

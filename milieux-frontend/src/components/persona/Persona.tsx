@@ -6,12 +6,13 @@ import AboutCard from "./AboutCard";
 import PostCreationCard from "../common/PostCreationCard";
 import PersonaPhotos from "./PersonaPhotos";
 import PersonaVideos from "./PersonaVideos";
-import BookmarkedPostList from "../bookmarks/BookmarkedPostList";
 import EditPersonaDialog from "./EditPersonaDialog";
 import UserSchema from "@/schemas/userSchema";
 import { getUserFromAuthToken, getUserById } from "@/services/userService";
 import { z } from "zod";
 import FollowButton from "./FollowButton";
+import PdfSubmissionField from "./PdfSubmissionField";
+import ChatBot from "./ChatBot";
 
 const Persona = async ({ id }: { id: number | null }) => {
   let user: z.infer<typeof UserSchema> = {};
@@ -113,12 +114,13 @@ const Persona = async ({ id }: { id: number | null }) => {
                 >
                   Videos
                 </TabsTrigger>
-                {user.id === loggedInUser.id && (
+
+                {user.id === loggedInUser.id && user.isBusiness && (
                   <TabsTrigger
-                    value="bookmarks"
+                    value="chatbot"
                     className="w-24 py-2 font-semibold bg-transparent rounded-none focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-[3px] data-[state=active]:border-b-blue-600"
                   >
-                    Bookmarks
+                    Chappy
                   </TabsTrigger>
                 )}
               </TabsList>
@@ -158,14 +160,14 @@ const Persona = async ({ id }: { id: number | null }) => {
               </div>
             </TabsContent>
 
-            <TabsContent value="bookmarks">
-              <div className="grid grid-cols-5">
-                <div className="col-span-2 mt-2">
-                  <AboutCard id={id} />
+            <TabsContent value="chatbot">
+              <div className="flex flex-col gap-4 mt-4">
+                <div className="grid grid-cols-2">
+                  <div className="col-span-1">
+                    <PdfSubmissionField userId={user.id} />
+                  </div>
                 </div>
-                <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
-                  <BookmarkedPostList />
-                </div>
+                <ChatBot userId={user.id} />
               </div>
             </TabsContent>
           </Tabs>

@@ -32,14 +32,14 @@ const FlashCarousel = ({
         <CarouselItem className="basis-1/5 md:basis-1/4 pl-3">
           <Card className="relative overflow-hidden bg-[#FEFEFE]">
             <CardContent className="flex flex-col h-56 items-center justify-center px-0">
-              <div className="w-full">
+              <div className="w-full h-full">
                 {user.dp ? (
                   <Image
                     src={user.dp}
                     alt=""
                     width={500}
                     height={500}
-                    className="translate-y-6"
+                    className="w-full h-full object-cover"
                   />
                 ) : (
                   <Image
@@ -47,19 +47,18 @@ const FlashCarousel = ({
                     alt=""
                     width={500}
                     height={500}
-                    className="translate-y-6"
                   />
                 )}
               </div>
 
               <Link
                 href="/flashes/create"
-                className="text-blue-600 bg-white translate-y-1 rounded-full border-4 border-white cursor-pointer"
+                className="text-blue-600 bg-white -translate-y-5 rounded-full border-4 border-white cursor-pointer"
               >
                 <PlusFilledIcon />
               </Link>
 
-              <p className="font-semibold translate-y-2 text-sm cursor-default">
+              <p className="font-semibold -translate-y-1 text-sm cursor-default">
                 Create a flash
               </p>
             </CardContent>

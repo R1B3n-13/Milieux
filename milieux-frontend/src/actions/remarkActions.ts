@@ -24,7 +24,7 @@ export async function createRemark(
       };
 
     const response = await fetch(url, {
-      method: "Post",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,

@@ -19,7 +19,7 @@ export async function createFlash(flashData: z.infer<typeof FlashSchema>) {
       };
 
     const response = await fetch(url, {
-      method: "Post",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,

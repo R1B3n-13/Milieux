@@ -19,7 +19,7 @@ export async function updateUser(userData: z.infer<typeof UserSchema>) {
       };
 
     const response = await fetch(url, {
-      method: "Put",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
@@ -57,7 +57,7 @@ export async function followUser(userId: number | null | undefined) {
       };
 
     const response = await fetch(url, {
-      method: "Put",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,

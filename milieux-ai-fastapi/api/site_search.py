@@ -112,7 +112,7 @@ async def add_post_to_corpus(request: AddPostRequest):
             os.remove(media_path)
 
         post_document = glm.Document(name="corpora/" + os.environ['SITE_SEARCH_CORPUS'] + "/documents/post-id-" + 
-                                     str(request.postId), display_name="Social media post no." + str(request.postId))
+                                     str(request.postId), display_name="Social media post no. " + str(request.postId))
 
         document_metadata = [
         glm.CustomMetadata(key="document_type", string_value="social_media_post_no_" + str(request.postId))]
@@ -123,11 +123,11 @@ async def add_post_to_corpus(request: AddPostRequest):
         document_resource_name = create_document_response.name
 
         if(request.text):
-            create_chunk_response = await create_chunk(request.text, document_resource_name, request.postId )
+            create_chunk_response = await create_chunk(request.text, document_resource_name, "postId", request.postId )
             print(create_chunk_response)
 
         if(media_analysis_text):
-            create_chunk_response = await create_chunk(media_analysis_text, document_resource_name, request.postId )
+            create_chunk_response = await create_chunk(media_analysis_text, document_resource_name, "postId", request.postId )
             print(create_chunk_response)
 
         return {"success": True, "status": 201, "message": "Post added to corpus successfully!",}
