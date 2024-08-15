@@ -1,5 +1,7 @@
 "use server";
 
+import { createStreamableValue } from "ai/rsc";
+
 const backendUrl = process.env.AI_BACKEND_URL;
 
 export async function getTidbits(data: {
@@ -112,16 +114,60 @@ export async function askCustomChatbot(data: {
 
     const url = new URL("/ask", backendUrl);
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      cache: "no-cache",
-    });
+    const stream = createStreamableValue("");
 
-    return response.json();
+    (async () => {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        cache: "no-cache",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch the response from the server.");
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let decodedResult = "";
+
+      while (true) {
+        const { value, done } = await reader?.read()!;
+
+        if (done) break;
+
+        decodedResult += decoder.decode(value, { stream: true });
+        const parts = decodedResult.split("|||");
+
+        for (const jsonString of parts) {
+          if (
+            jsonString.trim().startsWith("{") &&
+            jsonString.trim().endsWith("}")
+          ) {
+            try {
+              const { result } = JSON.parse(jsonString.trim());
+              stream.update(result);
+            } catch (error) {
+              console.error("Error parsing JSON:", error);
+            }
+          }
+        }
+
+        decodedResult = parts[parts.length - 1];
+      }
+
+      stream.done();
+    })();
+
+    return {
+      status: 200,
+      success: true,
+      message: "Streaming finished.",
+      result: stream.value,
+    };
   } catch (error) {
     console.error("Getting query response resulted in error:", error);
     return {

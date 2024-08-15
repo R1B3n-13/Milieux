@@ -3,6 +3,7 @@ import os
 import traceback
 from typing import Annotated
 from fastapi import FastAPI, Form, UploadFile
+from fastapi.responses import StreamingResponse
 from google.oauth2 import service_account
 import google.ai.generativelanguage as glm
 import google.generativeai as genai
@@ -11,6 +12,7 @@ from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from create_chunk import create_chunk
+from stream_generator import stream_generator
 
 load_dotenv()
 
@@ -109,7 +111,7 @@ async def add_pdf_to_corpus(userId: Annotated[str, Form()], pdf: UploadFile):
         return {"success": False, "status": 500, "message": "Internal server error",}
 
 @app.post("/ask")
-async def ask_custom_knowledge_base(request: QueryRequest):
+async def ask_custom_knowledge_base(request: QueryRequest) -> StreamingResponse:
     try:
         user_query = request.query
         chat_history = request.history
@@ -142,9 +144,10 @@ async def ask_custom_knowledge_base(request: QueryRequest):
 
         chat = chunk_analysis_model.start_chat(history=[{"role": item.role, "parts": item.parts} for item in chat_history])
 
-        chunk_analysis_response = chat.send_message(json.dumps(data))
+        chunk_analysis_response = chat.send_message(json.dumps(data), stream=True)
 
-        return {"success": True, "status": 200, "message": "Query successful!", "result": chunk_analysis_response.text}
+        return StreamingResponse(stream_generator(chunk_analysis_response),
+                               media_type='text/event-stream')
     
     except Exception as e:
         print(f"An error occurred: {e}")
