@@ -38,14 +38,14 @@ const Persona = async ({ id }: { id: number | null }) => {
               <Image
                 src={user.banner}
                 alt=""
-                layout="fill"
+                fill
                 className="object-cover rounded-t-xl"
               />
             ) : (
               <Image
                 src="/banner_placeholder.png"
                 alt=""
-                layout="fill"
+                fill
                 className="object-cover rounded-t-xl"
               />
             )}
@@ -58,14 +58,14 @@ const Persona = async ({ id }: { id: number | null }) => {
                   <Image
                     src={user.dp}
                     alt=""
-                    layout="fill"
+                    fill
                     className="object-cover rounded-full border-[6px] border-zinc-100"
                   />
                 ) : (
                   <Image
                     src="/user_placeholder.svg"
                     alt=""
-                    layout="fill"
+                    fill
                     className="object-cover rounded-full border-[6px] bg-zinc-500 border-zinc-100"
                   />
                 )}

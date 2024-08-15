@@ -81,7 +81,7 @@ async def add_pdf_to_corpus(userId: Annotated[str, Form()], pdf: UploadFile):
             print("Creating document for the first time...")
 
         pdf_document = glm.Document(name="corpora/" + os.environ['CUSTOM_CHATBOT_CORPUS'] + "/documents/pdf-id-" + 
-                                     userId, display_name="User knowledge-base no. " + userId)
+                                        userId, display_name="User knowledge-base no. " + userId)
 
         document_metadata = [
         glm.CustomMetadata(key="document_type", string_value="user_knowledge_base_no_" + userId)]
@@ -118,9 +118,9 @@ async def ask_custom_knowledge_base(request: QueryRequest) -> StreamingResponse:
         results_count = 20
 
         chunk_metadata_filter = glm.MetadataFilter(key='chunk.custom_metadata.pdfId',
-                                           conditions=[glm.Condition(
-                                              numeric_value=request.userId,
-                                              operation=glm.Condition.Operator.EQUAL)])
+                                            conditions=[glm.Condition(
+                                                numeric_value=request.userId,
+                                                operation=glm.Condition.Operator.EQUAL)])
 
         query_corpus_request = glm.QueryCorpusRequest(name=corpus_resource_name,
                                                     query=user_query,
@@ -146,8 +146,7 @@ async def ask_custom_knowledge_base(request: QueryRequest) -> StreamingResponse:
 
         chunk_analysis_response = chat.send_message(json.dumps(data), stream=True)
 
-        return StreamingResponse(stream_generator(chunk_analysis_response),
-                               media_type='text/event-stream')
+        return StreamingResponse(stream_generator(chunk_analysis_response), media_type='text/event-stream')
     
     except Exception as e:
         print(f"An error occurred: {e}")

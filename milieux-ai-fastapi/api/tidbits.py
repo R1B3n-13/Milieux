@@ -47,9 +47,17 @@ async def generate_response(media_path: str, text: str):
         response = model.generate_content(text)
 
     if response.candidates[0].finish_reason == 1:
-        return {"success": True, "status": 200, "message": "Tidbits generated successfully", "finish_reason": response.candidates[0].finish_reason, "text": response.text}
+        return {"success": True,
+                "status": 200,
+                "message": "Tidbits generated successfully",
+                "finish_reason": response.candidates[0].finish_reason,
+                "text": response.text}
     else:
-        return {"success": True, "status": 200, "message": "Tidbits generation failed", "finish_reason": response.candidates[0].finish_reason, "text": ""}
+        return {"success": True,
+                "status": 200,
+                "message": "Tidbits generation failed",
+                "finish_reason": response.candidates[0].finish_reason,
+                "text": ""}
 
 @app.post("/tidbits")
 async def get_tidbits(request: Request):

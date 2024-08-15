@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { TextArea } from "../ui/TextArea";
 import ImageFilledIcon from "../icons/ImageFilledIcon";
@@ -26,7 +26,14 @@ import {
   revalidatePost,
   revalidatePostUpdate,
 } from "@/actions/revalidationActions";
-import { addPostToCorpus, getTidbits } from "@/actions/aiActions";
+import {
+  addPostToCorpus,
+  checkAndCorrectText,
+  getTidbits,
+} from "@/actions/aiActions";
+import ProofReadingLineIcon from "../icons/ProofReadingLineIcon";
+import ProofReadingFilledIcon from "../icons/ProofReadingFilledIcon";
+import { readStreamableValue } from "ai/rsc";
 
 export default function PostSubmissionDialog({
   dialogButton,
@@ -37,12 +44,38 @@ export default function PostSubmissionDialog({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState<string>("");
+  const [isProofOn, setIsProofOn] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<
     string | ArrayBuffer | null
   >(null);
   const [mediaType, setMediaType] = useState<"image" | "video" | undefined>(
     undefined
   );
+  const [correctedText, setCorrectedText] = useState("");
+  const scrollAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleProofReading = async () => {
+    if (text.trim() === "") return;
+
+    const data = {
+      text,
+    };
+
+    const { result } = await checkAndCorrectText(data);
+
+    let textStream = "";
+
+    for await (const delta of readStreamableValue(result)) {
+      textStream += delta;
+      setCorrectedText(textStream);
+    }
+  };
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    }
+  }, [correctedText]);
 
   const handleMediaChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -142,7 +175,7 @@ export default function PostSubmissionDialog({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{dialogButton}</AlertDialogTrigger>
-      <AlertDialogContent className="w-full">
+      <AlertDialogContent className="max-w-[65rem] w-fit">
         <AlertDialogHeader>
           <div className="flex flex-col gap-2 items-center justify-center">
             <AlertDialogTitle>Create post</AlertDialogTitle>
@@ -152,13 +185,44 @@ export default function PostSubmissionDialog({
           </div>
         </AlertDialogHeader>
         <div className="space-y-6">
-          <div className="space-y-4">
-            <TextArea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder={`What's brewing, ${username}?`}
-              className="h-40 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400"
-            />
+          <div className="space-y-4 flex items-center justify-center gap-4">
+            <div className="relative">
+              <TextArea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder={`What's brewing, ${username}?`}
+                className="h-40 w-[30rem] focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400"
+              />
+              <div
+                className={`absolute right-1 top-0 -translate-y-3 translate-x-3 rounded-full p-1 text-xl cursor-pointer ${
+                  isProofOn ? "text-emerald-600" : "text-rose-600"
+                } bg-amber-200`}
+                onClick={() => {
+                  if (!isProofOn) {
+                    setIsProofOn(true);
+                    handleProofReading();
+                  } else {
+                    setIsProofOn(false);
+                    setCorrectedText("");
+                  }
+                }}
+              >
+                {isProofOn ? (
+                  <ProofReadingFilledIcon />
+                ) : (
+                  <ProofReadingLineIcon />
+                )}
+              </div>
+            </div>
+
+            {isProofOn && (
+              <TextArea
+                ref={scrollAreaRef}
+                value={correctedText ? correctedText : "Thinking..."}
+                onChange={(e) => setCorrectedText(e.target.value)}
+                className="h-40 w-[30rem] focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400 -translate-y-2 resize-none"
+              />
+            )}
           </div>
 
           {selectedMedia && (
