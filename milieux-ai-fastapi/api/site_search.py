@@ -86,8 +86,16 @@ corpus_resource_name = get_corpus_response.name
 async def generate_media_analysis_response(media_path: str):
     if(media_path):
         file = genai.upload_file(path=media_path)
+
+        while file.state.name == "PROCESSING":
+            continue
+
+        if file.state.name == "FAILED":
+            raise ValueError(file.state.name)
+
         response = media_analysis_model.generate_content(file)
         genai.delete_file(file)
+        
         if response.candidates[0].finish_reason == 1:
             return response.text
         else:

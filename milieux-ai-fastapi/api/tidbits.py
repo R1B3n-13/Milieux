@@ -41,6 +41,13 @@ model = genai.GenerativeModel(
 async def generate_response(media_path: str, text: str):
     if(media_path):
         file = genai.upload_file(path=media_path)
+
+        while file.state.name == "PROCESSING":
+            continue
+
+        if file.state.name == "FAILED":
+            raise ValueError(file.state.name)
+
         response = model.generate_content([file, text])
         genai.delete_file(file)
     else:

@@ -29,11 +29,15 @@ import {
 import {
   addPostToCorpus,
   checkAndCorrectText,
+  generateCaption,
   getTidbits,
 } from "@/actions/aiActions";
-import ProofReadingLineIcon from "../icons/ProofReadingLineIcon";
-import ProofReadingFilledIcon from "../icons/ProofReadingFilledIcon";
+import BulbLineIcon from "../icons/BulbLineIcon";
+import BulbFilledIcon from "../icons/BulbFilledIcon";
 import { readStreamableValue } from "ai/rsc";
+import ImageCaptionFilledIcon from "../icons/ImageCaptionFilledIcon";
+import ImageCaptionLineIcon from "../icons/ImageCaptionLineIcon";
+import RedoIcon from "../icons/RedoIcon";
 
 export default function PostSubmissionDialog({
   dialogButton,
@@ -44,30 +48,49 @@ export default function PostSubmissionDialog({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState<string>("");
-  const [isProofOn, setIsProofOn] = useState(false);
+  const [isBulbOn, setIsBulbOn] = useState(false);
+  const [isCaptionOn, setIsCaptionOn] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<
     string | ArrayBuffer | null
   >(null);
+  const [media, setMedia] = useState<File | null>(null);
   const [mediaType, setMediaType] = useState<"image" | "video" | undefined>(
     undefined
   );
-  const [correctedText, setCorrectedText] = useState("");
+  const [aiText, setAiText] = useState("");
   const scrollAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleProofReading = async () => {
-    if (text.trim() === "") return;
+  const handleAiCall = async () => {
+    if (isCaptionOn) {
+      if (!media) return;
 
-    const data = {
-      text,
-    };
+      const formData = new FormData();
+      formData.append("text", text ? String(text) : "Generate a caption.");
+      formData.append("media", media);
 
-    const { result } = await checkAndCorrectText(data);
+      const { result } = await generateCaption(formData);
 
-    let textStream = "";
+      let textStream = "";
 
-    for await (const delta of readStreamableValue(result)) {
-      textStream += delta;
-      setCorrectedText(textStream);
+      for await (const delta of readStreamableValue(result)) {
+        textStream += delta;
+        setAiText(textStream);
+      }
+    } else {
+      if (text.trim() === "") return;
+
+      const data = {
+        text,
+      };
+
+      const { result } = await checkAndCorrectText(data);
+
+      let textStream = "";
+
+      for await (const delta of readStreamableValue(result)) {
+        textStream += delta;
+        setAiText(textStream);
+      }
     }
   };
 
@@ -75,7 +98,7 @@ export default function PostSubmissionDialog({
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
-  }, [correctedText]);
+  }, [aiText]);
 
   const handleMediaChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -83,6 +106,7 @@ export default function PostSubmissionDialog({
 
       const fileType = file.type.startsWith("video") ? "video" : "image";
       setMediaType(fileType);
+      setMedia(file);
 
       const fReader = new FileReader();
       fReader.readAsDataURL(file);
@@ -99,6 +123,11 @@ export default function PostSubmissionDialog({
   const clearMedia = () => {
     setSelectedMedia(null);
     setMediaType(undefined);
+    setText("");
+    setAiText("");
+    setMedia(null);
+    setIsBulbOn(false);
+    setIsCaptionOn(false);
   };
 
   const handleSubmit = async () => {
@@ -190,74 +219,112 @@ export default function PostSubmissionDialog({
               <TextArea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder={`What's brewing, ${username}?`}
+                placeholder={
+                  isCaptionOn
+                    ? "Request for a caption..."
+                    : `What's brewing, ${username}?`
+                }
                 className="h-40 w-[30rem] focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400"
               />
               <div
                 className={`absolute right-1 top-0 -translate-y-3 translate-x-3 rounded-full p-1 text-xl cursor-pointer ${
-                  isProofOn ? "text-emerald-600" : "text-rose-600"
+                  isBulbOn ? "text-emerald-600" : "text-rose-600"
                 } bg-amber-200`}
                 onClick={() => {
-                  if (!isProofOn) {
-                    setIsProofOn(true);
-                    handleProofReading();
+                  if (!isBulbOn) {
+                    setIsBulbOn(true);
+                    handleAiCall();
                   } else {
-                    setIsProofOn(false);
-                    setCorrectedText("");
+                    setIsBulbOn(false);
+                    setAiText("");
                   }
                 }}
               >
-                {isProofOn ? (
-                  <ProofReadingFilledIcon />
-                ) : (
-                  <ProofReadingLineIcon />
-                )}
+                {isBulbOn ? <BulbFilledIcon /> : <BulbLineIcon />}
               </div>
             </div>
 
-            {isProofOn && (
-              <TextArea
-                ref={scrollAreaRef}
-                value={correctedText ? correctedText : "Thinking..."}
-                onChange={(e) => setCorrectedText(e.target.value)}
-                className="h-40 w-[30rem] focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400 -translate-y-2 resize-none"
-              />
+            {isBulbOn && (
+              <div className="relative">
+                <TextArea
+                  ref={scrollAreaRef}
+                  value={aiText ? aiText : "Thinking..."}
+                  onChange={(e) => setAiText(e.target.value)}
+                  className="h-40 w-[30rem] focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400 -translate-y-2 resize-none"
+                />
+                <div
+                  className="absolute right-1 top-0 -translate-y-5 translate-x-3 rounded-full p-1 text-xl cursor-pointer text-indigo-500 bg-amber-200"
+                  onClick={handleAiCall}
+                >
+                  <RedoIcon />
+                </div>
+              </div>
             )}
           </div>
 
           {selectedMedia && (
             <div className="flex items-center justify-center relative">
               {mediaType === "image" ? (
-                <div className="w-fit relative">
-                  <Image
-                    src={selectedMedia as string}
-                    alt=""
-                    width={200}
-                    height={200}
-                    className="rounded-lg"
-                  />
-                  <button
-                    className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
-                    onClick={clearMedia}
+                <div className="w-fit flex items-center justify-center gap-4">
+                  <div className="relative">
+                    <Image
+                      src={selectedMedia as string}
+                      alt=""
+                      width={220}
+                      height={220}
+                      className="rounded-lg"
+                    />
+                    <button
+                      className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                      onClick={clearMedia}
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <div
+                    className={`text-3xl ${
+                      isCaptionOn ? "text-emerald-600" : "text-rose-600"
+                    }  cursor-pointer p-2 rounded-full hover:bg-gray-100`}
+                    onClick={() => setIsCaptionOn(!isCaptionOn)}
                   >
-                    ✕
-                  </button>
+                    {isCaptionOn ? (
+                      <ImageCaptionFilledIcon />
+                    ) : (
+                      <ImageCaptionLineIcon />
+                    )}
+                  </div>
                 </div>
               ) : (
-                <div className="w-fit max-w-36 relative">
-                  <VideoPlayer
-                    src={selectedMedia as string}
-                    width={200}
-                    className="w-full h-full rounded-lg"
-                    controls
-                    autoPlay={false}
-                  />
-                  <button
-                    className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
-                    onClick={clearMedia}
+                <div className="w-fit max-w-72 flex items-center justify-center gap-4">
+                  <div className="relative">
+                    <VideoPlayer
+                      src={selectedMedia as string}
+                      width={200}
+                      className="w-full h-full rounded-lg"
+                      controls={false}
+                      autoPlay={false}
+                    />
+                    <button
+                      className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                      onClick={clearMedia}
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <div
+                    className={`text-3xl ${
+                      isCaptionOn ? "text-emerald-600" : "text-rose-600"
+                    }  cursor-pointer p-2 rounded-full hover:bg-gray-100`}
+                    onClick={() => setIsCaptionOn(!isCaptionOn)}
                   >
-                    ✕
-                  </button>
+                    {isCaptionOn ? (
+                      <ImageCaptionFilledIcon />
+                    ) : (
+                      <ImageCaptionLineIcon />
+                    )}
+                  </div>
                 </div>
               )}
             </div>
