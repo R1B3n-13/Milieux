@@ -30,9 +30,9 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/by-ids")
-	public ResponseEntity<UserListResponseDto> getPostsByIds(@RequestBody List<Long> requestDtos) {
+	public ResponseEntity<UserListResponseDto> getUsersByIds(@RequestBody List<Long> userIds) {
 
-		UserListResponseDto responseDtos = userService.getUsersByIds(requestDtos);
+		UserListResponseDto responseDtos = userService.getUsersByIds(userIds);
 
 		return ResponseEntity.ok(responseDtos);
 	}
@@ -78,7 +78,7 @@ public class UserController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<UserListResponseDto> searchUsers(@RequestParam("query") String query) {
+	public ResponseEntity<UserListResponseDto> searchUsers(@RequestParam String query) {
 
 		UserListResponseDto responseDtos = userService.searchUsers(query);
 

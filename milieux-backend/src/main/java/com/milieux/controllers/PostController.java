@@ -44,9 +44,9 @@ public class PostController {
 	}
 
 	@PostMapping("/by-ids")
-	public ResponseEntity<PostListResponseDto> getPostsByIds(@RequestBody List<Long> requestDtos) {
+	public ResponseEntity<PostListResponseDto> getPostsByIds(@RequestBody List<Long> postIds) {
 
-		PostListResponseDto responseDtos = postService.getPostsByIds(requestDtos);
+		PostListResponseDto responseDtos = postService.getPostsByIds(postIds);
 
 		return ResponseEntity.ok(responseDtos);
 	}
