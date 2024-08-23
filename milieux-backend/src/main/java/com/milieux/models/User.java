@@ -97,6 +97,10 @@ public class User {
 	@ManyToMany(mappedBy = "users")
 	@JsonIgnore
 	private List<Chat> chats = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<ChatMessage> chatMessages = new ArrayList<>();
 
 	private ZonedDateTime createdAt;
 

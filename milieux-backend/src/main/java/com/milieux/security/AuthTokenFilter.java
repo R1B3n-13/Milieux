@@ -68,9 +68,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				throw new AuthTokenNotFoundException("Jwt auth token is missing");
 			}
 		} catch (Exception e) {
+			if (e instanceof IllegalArgumentException) {
+
+				e = new IllegalArgumentException("JWT claims string is empty", e);
+			}
 
 			exceptionResolver.resolveException(request, response, null, e);
-
 			return;
 		}
 

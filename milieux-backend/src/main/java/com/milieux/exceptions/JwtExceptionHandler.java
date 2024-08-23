@@ -44,7 +44,6 @@ public class JwtExceptionHandler {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<BaseResponseDto> handleIllegalArgumentException(IllegalArgumentException ex) {
 
-		return new ResponseEntity<>(new BaseResponseDto(400, false, "JWT claims string is empty"),
-				HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new BaseResponseDto(400, false, ex.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 }
