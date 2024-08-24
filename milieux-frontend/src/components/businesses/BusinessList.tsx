@@ -1,12 +1,9 @@
-import { searchUsers } from "@/services/searchService";
 import { z } from "zod";
 import UserSchema from "@/schemas/userSchema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import AvatarIcon from "../icons/AvatarIcon";
-import FollowersFilledIcon from "../icons/FollowersFilledIcon";
 import MailFilledIcon from "../icons/MailFilledIcon";
-import FollowingsFilledIcon from "../icons/FollowingsFilledIcon";
 import { getBusinessUsers } from "@/services/businessService";
 import AddressIcon from "../icons/AddressIcon";
 import StatusIcon from "../icons/StatusIcon";

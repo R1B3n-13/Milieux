@@ -41,7 +41,7 @@ const NavBar = () => {
             <Logo />
           </div>
           <div className="flex w-full max-w-sm items-center space-x-2 relative">
-            <div className="absolute inset-y-0 left-1 flex items-center pl-4 pointer-events-none">
+            <div className="absolute text-xl inset-y-0 left-1 flex items-center pl-4 pointer-events-none">
               <SearchLineIcon />
             </div>
             <Input
@@ -54,7 +54,7 @@ const NavBar = () => {
                   ? "Search for posts..."
                   : `Search for users, businesses...`
               }
-              className="pl-11 rounded-full bg-gray-200 focus-visible:ring-0"
+              className="pl-10 rounded-full bg-gray-200 focus-visible:ring-0"
             />
             <div
               className="text-xl cursor-pointer rounded-full p-2 hover:bg-gray-200"
@@ -99,12 +99,13 @@ const NavBar = () => {
       <div className="col-span-4 content-center">
         <div className="flex items-center justify-end gap-5">
           {actionItems.map((item) => (
-            <div
+            <Link
               key={item.name}
+              href={item.path}
               className={`flex rounded-full bg-gray-200 p-2 text-xl items-center justify-center cursor-pointer ${item.iconColor}`}
             >
               {item.icon}
-            </div>
+            </Link>
           ))}
 
           <div>
