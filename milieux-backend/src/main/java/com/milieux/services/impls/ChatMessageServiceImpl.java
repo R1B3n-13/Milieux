@@ -50,6 +50,15 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 		newChatMessage.setUser(user);
 		newChatMessage.setChat(chat);
 
+		if (requestDto.getText() != null && !requestDto.getText().isEmpty()) {
+
+			chat.setLastText(requestDto.getText());
+
+		} else if (requestDto.getImagePath() != null && !requestDto.getImagePath().isEmpty()) {
+
+			chat.setLastText(user.getName() + " sent a photo");
+		}
+
 		ChatMessage chatMessage = chatMessageRepository.save(newChatMessage);
 
 		ChatMessageDto dto = modelMapper.map(chatMessage, ChatMessageDto.class);

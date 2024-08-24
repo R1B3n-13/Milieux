@@ -43,6 +43,8 @@ public class Chat {
 	@OneToMany(mappedBy = "chat")
 	@JsonIgnore
 	private List<ChatMessage> chatMessages = new ArrayList<>();
+	
+	private String lastText;
 
 	private ZonedDateTime createdAt;
 

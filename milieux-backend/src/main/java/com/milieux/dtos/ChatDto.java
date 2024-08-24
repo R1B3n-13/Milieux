@@ -17,5 +17,6 @@ public class ChatDto {
 
 	private Long id;
 	private List<UserDto> users = new ArrayList<>();
+	private String lastText;
 	private ZonedDateTime createdAt;
 }
