@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS product (
     descr TEXT,
     img_url VARCHAR(255),   -- Changed from imgUrl to img_url
     store_id INTEGER NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 
@@ -17,8 +17,13 @@ CREATE TABLE IF NOT EXISTS store (
     ui_font VARCHAR(100),
     ui_font_special VARCHAR(100),
     ui_accent_color VARCHAR(7), -- This assumes storing color as HEX
+    ui_base_color VARCHAR(7), -- This assumes storing color as HEX
+    ui_secondary_color VARCHAR(7), -- This assumes storing color as HEX
     banner TEXT,
-    ui_images TEXT[] -- Storing list of images as an array of text
+    banner_subtext TEXT,
+    logo_url VARCHAR(255),
+    ui_images TEXT[], -- Storing list of images as an array of text
+    top_items INTEGER[] -- Storing list of top items as an array of integers
 );
 
 CREATE TABLE IF NOT EXISTS review (

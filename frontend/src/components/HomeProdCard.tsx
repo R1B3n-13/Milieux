@@ -6,11 +6,13 @@ interface CardProps {
   };
   changeImage: (url: string) => void;
   bigImage: string;
+  accentColor: string;
 }
 
-const HomeProdCard: React.FC<CardProps> = ({ imgURL, changeImage, bigImage }) => {
+const HomeProdCard: React.FC<CardProps> = ({ imgURL, changeImage, bigImage, accentColor }) => {
 
-  console.log(imgURL);
+  const borderColor = 'border-['+accentColor+']';
+  console.log(borderColor);
   console.log(bigImage);
   
   
@@ -22,7 +24,7 @@ const HomeProdCard: React.FC<CardProps> = ({ imgURL, changeImage, bigImage }) =>
 
   return (
     <div 
-      className={`border-2 rounded-xl ${bigImage === imgURL ? 'border-coral-red' : 'border-transparent'} cursor-pointer max-sm:flex-1`} 
+      className={`border-2 rounded-xl ${bigImage === imgURL ? borderColor : 'border-transparent'} cursor-pointer max-sm:flex-1`} 
       onClick={handleClick}
     >
       <div className='flex justify-center items-center bg-card bg-center bg-cover sm:w-40 sm:h-40 rounded-xl max-sm:p-4'>

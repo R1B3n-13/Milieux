@@ -14,11 +14,11 @@ export const shoes = [
     },
     {
         thumbnail: thumbnailShoe2,
-        bigShoe: bigShoe2,
+        bigShoe: '../assets/images/big-shoe2.png',
     },
     {
         thumbnail: thumbnailShoe3,
-        bigShoe: bigShoe3,
+        bigShoe: '../assets/images/big-shoe3.png',
     },
 ];
 
@@ -27,6 +27,8 @@ export const statistics = [
     { value: '500+', label: 'Shops' },
     { value: '250k+', label: 'Customers' },
 ];
+
+// export const logo = '../assets/images/header-logo.svg';
 
 export const catergories = [
     "Premium", "Regular"

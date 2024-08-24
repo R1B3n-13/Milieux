@@ -1,10 +1,10 @@
 package com.milieux.ecomm.product;
 
-
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/product")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
 
     private final JdbcClientProductRepository repository;
@@ -44,7 +45,7 @@ public class ProductController {
         return repository.findByName(name);
     }
     
-    @GetMapping("/find/store/{store_id}")
+    @GetMapping("/store/{store_id}")
     List<Product> findByStoreId(@PathVariable Integer store_id) {
         return repository.findByStoreId(store_id);
     }

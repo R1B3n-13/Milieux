@@ -9,7 +9,12 @@ public record Store(
     String ui_font,
     String ui_font_special,
     String ui_accent_color,
+    String ui_base_color,
+    String ui_secondary_color,
     String banner,
-    List <String> ui_images
+    String banner_subtext,
+    String logo_url,
+    List <String> ui_images,
+    List <Integer> top_items
 ) {
 }

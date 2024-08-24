@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { CustomerReviews, Footer, Hero, PopularProducts } from '@/sections';
+import { CustomerReviews, Hero, PopularProducts } from '@/sections';
 
 export default function Home() {
   const [storeInfo, setStoreInfo] = useState(null);
@@ -31,7 +31,10 @@ export default function Home() {
   if (loading) {
     return <div>Loading...</div>; // Show loading indicator
   }
-
+  else {
+    console.log(storeInfo.top_items);
+    
+  }
   return (
     <div>
       <section className="xl:padding-l px-[15rem] wide:padding-r padding-b">
@@ -39,10 +42,10 @@ export default function Home() {
       </section>
 
       <section className="padding px-[15rem]">
-        <PopularProducts />
+        <PopularProducts storeInfo={storeInfo} />
       </section>
 
-      <section className="padding px-[15rem]">
+      <section className="padding px-[15rem] pb-[1rem]">
         <CustomerReviews />
       </section>
     </div>

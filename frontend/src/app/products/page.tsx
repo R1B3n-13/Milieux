@@ -44,7 +44,7 @@ const Page: React.FC = () => {
 
   return (
     <div>
-      <div className='container grid grid-cols-4 gap-6 pt-4 pb-16 items-start'>
+      <div className='container grid grid-cols-4 gap-6 pt-10 pb-16 items-start'>
         <div className='col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hidden'>
           <div className='divide-y divide-gray-200 space-y-5'>
             <h3 className='text-xl text-gray-800 mb-3 uppercase font-medium'>Categories</h3>
