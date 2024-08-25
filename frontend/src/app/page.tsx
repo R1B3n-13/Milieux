@@ -1,48 +1,28 @@
-"use client"
-import { useEffect, useState } from 'react';
+"use client";
+
+import { StoreProvider, useStoreContext } from '@/contexts/StoreContext';
 import { CustomerReviews, Hero, PopularProducts } from '@/sections';
+import ShoppingCart from '@/components/ShoppingCart';
 
 export default function Home() {
-  const [storeInfo, setStoreInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const id = 1;
-
-  useEffect(() => {
-    const fetchStoreInfo = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/api/store/find/1`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log('API Response Data:', data);
-          setStoreInfo(data);
-        } else {
-          console.error('Failed to fetch store info:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error fetching store info:', error);
-      } finally {
-        setLoading(false); // Set loading to false after fetching
-      }
-    };
-
-    fetchStoreInfo();
-  }, [id]);
+  const { storeInfo, loading } = useStoreContext();
 
   if (loading) {
-    return <div>Loading...</div>; // Show loading indicator
+    return <div>Loading...</div>;
   }
-  else {
-    console.log(storeInfo.top_items);
-    
+
+  if (!storeInfo) {
+    return <div>Error loading store information</div>;
   }
+
   return (
     <div>
       <section className="xl:padding-l px-[15rem] wide:padding-r padding-b">
-        <Hero storeInfo={storeInfo} />
+        <Hero />
       </section>
 
       <section className="padding px-[15rem]">
-        <PopularProducts storeInfo={storeInfo} />
+        <PopularProducts />
       </section>
 
       <section className="padding px-[15rem] pb-[1rem]">

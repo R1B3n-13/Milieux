@@ -1,6 +1,7 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import ProductCard from "@/components/ProductCard";
+import { useStoreContext } from '@/contexts/StoreContext'; // Import the context hook
 
 interface Product {
     id: number;
@@ -12,19 +13,17 @@ interface Product {
     store_id: number;
 }
 
-interface StoreInfo {
-    ui_accent_color: string;
-    top_items: number[];
-}
+const PopularProducts: React.FC = () => {
+    const { storeInfo } = useStoreContext(); // Access storeInfo from context
 
-interface PopularProductsProps {
-    storeInfo: StoreInfo;
-}
+    // Ensure storeInfo is available
+    if (!storeInfo) {
+        return <p>Loading store info...</p>;
+    }
 
-const PopularProducts: React.FC<PopularProductsProps> = ({ storeInfo }) => {
     const accentColor = storeInfo.ui_accent_color;
     console.log('Top Products:', storeInfo.top_items);
-    
+
     const [topProducts, setTopProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);  // Loading state
 
@@ -34,7 +33,7 @@ const PopularProducts: React.FC<PopularProductsProps> = ({ storeInfo }) => {
             const fetchedProducts: Product[] = [];
             for (const productId of storeInfo.top_items) {
                 const response = await fetch(`http://localhost:8080/api/product/find/${productId}`);
-    
+
                 if (response.ok) {
                     const data: Product = await response.json();
                     fetchedProducts.push(data);
@@ -52,7 +51,9 @@ const PopularProducts: React.FC<PopularProductsProps> = ({ storeInfo }) => {
 
     // Fetch top products when component mounts or when storeInfo changes
     useEffect(() => {
-        fetchTopProducts();
+        if (storeInfo && storeInfo.top_items) {
+            fetchTopProducts();
+        }
     }, [storeInfo]);
 
     // Handling the three possible states: loading, products available, or no products
