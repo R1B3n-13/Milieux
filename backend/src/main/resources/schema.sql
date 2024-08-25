@@ -34,6 +34,18 @@ CREATE TABLE IF NOT EXISTS review (
     review TEXT
 );
 
+CREATE TABLE IF NOT EXISTS orders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    store_id INTEGER NOT NULL,
+    product_ids INTEGER[],
+    product_quantities INTEGER[],
+    address VARCHAR(255) NOT NULL,
+    timestamp TIMESTAMP NOT NULL,
+    status INTEGER NOT NULL
+);
+
+
 -- CREATE TABLE IF NOT EXISTS store (
 --     id SERIAL PRIMARY KEY,
 --     name VARCHAR(255) NOT NULL,

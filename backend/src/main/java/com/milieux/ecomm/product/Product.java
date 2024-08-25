@@ -1,7 +1,5 @@
 package com.milieux.ecomm.product;
 
-import java.time.LocalDateTime;
-
 public record Product(
     Integer id,
     String name,
