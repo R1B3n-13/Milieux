@@ -8,14 +8,14 @@ import { z } from "zod";
 import UserSchema from "@/schemas/userSchema";
 import AvatarIcon from "../icons/AvatarIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
+import { useChatContext } from "./ChatContextProvider";
+import { createChat } from "@/actions/chatActions";
+import { revalidateChat } from "@/actions/revalidationActions";
 
-interface SearchBarProps {
-  onUserUpdate: (user: z.infer<typeof UserSchema>) => void;
-}
-
-export const SearchBar: React.FC<SearchBarProps> = ({ onUserUpdate }) => {
+export const ChatSearchBar = () => {
   const [users, setUsers] = useState<z.infer<typeof UserSchema>[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const { setSelectedChat } = useChatContext();
 
   const handleSearchChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -36,8 +36,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onUserUpdate }) => {
     }
   };
 
-  const handleUserSelect = (user: z.infer<typeof UserSchema>) => {
-    onUserUpdate(user);
+  const handleChatSelect = async (user: z.infer<typeof UserSchema>) => {
+    const response = await createChat(user.id);
+
+    if (response.success) {
+      setSelectedChat(response.chat);
+      revalidateChat();
+    }
+
     setShowDropdown(false);
   };
 
@@ -58,11 +64,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onUserUpdate }) => {
       </div>
 
       {showDropdown && users.length > 0 && (
-        <div className="absolute mt-11 w-[93%] p-2 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto z-10">
+        <div className="absolute mt-11 w-[90%] p-2 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto z-10">
           {users.map((user) => (
             <div
               key={user.id}
-              onClick={() => handleUserSelect(user)}
+              onClick={() => handleChatSelect(user)}
               className="cursor-pointer p-2 hover:bg-slate-100 flex items-center space-x-3"
             >
               <Avatar className="rounded-full p-1 items-center justify-center cursor-pointer">

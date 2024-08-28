@@ -5,6 +5,7 @@ import { MessageInput } from "./MessageInput";
 import { getChats } from "@/services/chatService";
 import ChatSchema from "@/schemas/chatSchema";
 import { z } from "zod";
+import { ChatContextProvider } from "./ChatContextProvider";
 
 const ChatComponent = async () => {
   let chatList: z.infer<typeof ChatSchema>[] = [];
@@ -23,14 +24,16 @@ const ChatComponent = async () => {
 
   return (
     <div className="flex h-screen">
-      <ChatSidebar
-        chatList={chatList}
-        loggedInUser={loggedInUserResponse.user}
-      />
-      <div className="flex flex-col flex-grow">
-        <MessageBox />
-        <MessageInput />
-      </div>
+      <ChatContextProvider>
+        <ChatSidebar
+          chatList={chatList}
+          loggedInUser={loggedInUserResponse.user}
+        />
+        <div className="flex flex-col flex-grow">
+          <MessageBox loggedInUser={loggedInUserResponse.user} />
+          <MessageInput />
+        </div>
+      </ChatContextProvider>
     </div>
   );
 };

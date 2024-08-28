@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.milieux.dtos.ChatMessageDto;
-import com.milieux.dtos.requests.MessageRequestDto;
+import com.milieux.dtos.requests.ChatMessageRequestDto;
 import com.milieux.dtos.responses.ChatMessageListResponseDto;
 import com.milieux.dtos.responses.ChatMessageResponseDto;
 import com.milieux.exceptions.ChatNotFoundException;
@@ -37,7 +37,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public ChatMessageResponseDto createChatMessage(Long userId, Long chatId, MessageRequestDto requestDto) {
+	public ChatMessageResponseDto createChatMessage(Long userId, Long chatId, ChatMessageRequestDto requestDto) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
@@ -72,7 +72,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 		Chat chat = chatRepository.findById(chatId)
 				.orElseThrow(() -> new ChatNotFoundException("No chat present with id: " + chatId));
 
-		List<ChatMessage> chatMessages = chat.getChatMessages();
+		List<ChatMessage> chatMessages = chatMessageRepository.findByChatOrderByTimestampDesc(chat);
 
 		List<ChatMessageDto> dtos = chatMessages.stream()
 				.map(chatMessage -> modelMapper.map(chatMessage, ChatMessageDto.class)).collect(Collectors.toList());

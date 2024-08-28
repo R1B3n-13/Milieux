@@ -1,6 +1,6 @@
 "use server";
 
-import FlashSchema from "@/schemas/remarkSchema";
+import FlashSchema from "@/schemas/flashSchema";
 import getAuthToken from "@/actions/authActions";
 import { z } from "zod";
 

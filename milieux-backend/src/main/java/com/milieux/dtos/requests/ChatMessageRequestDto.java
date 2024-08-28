@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageRequestDto {
+public class ChatMessageRequestDto {
 
 	private String text;
 	private String imagePath;

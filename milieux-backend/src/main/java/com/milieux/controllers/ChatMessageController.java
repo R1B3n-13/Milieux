@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.milieux.dtos.requests.MessageRequestDto;
+import com.milieux.dtos.requests.ChatMessageRequestDto;
 import com.milieux.dtos.responses.ChatMessageListResponseDto;
 import com.milieux.dtos.responses.ChatMessageResponseDto;
 import com.milieux.services.ChatMessageService;
@@ -29,7 +29,7 @@ public class ChatMessageController {
 
 	@PostMapping("create/{chatId}")
 	public ResponseEntity<ChatMessageResponseDto> createChatMessage(@PathVariable Long chatId,
-			@RequestBody MessageRequestDto requestDto, @RequestHeader("Authorization") String header) {
+			@RequestBody ChatMessageRequestDto requestDto, @RequestHeader("Authorization") String header) {
 
 		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
