@@ -9,6 +9,8 @@ import SendFilledIcon from "../icons/SendFilledIcon";
 import Loading from "../common/Loading";
 import BotLineIcon from "../icons/BotLineIcon";
 import PersonLineIcon from "../icons/PersonLineIcon";
+import { readStreamableValue } from "ai/rsc";
+import Markdown from "markdown-to-jsx";
 
 const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [query, setQuery] = useState("");
@@ -29,18 +31,29 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       history: chatHistory,
     };
 
-    const queryResponse = await askCustomChatbot(data);
+    setChatHistory([
+      ...chatHistory,
+      { role: "user", parts: query },
+      { role: "model", parts: "" },
+    ]);
+
+    setQuery("");
+
+    const { result } = await askCustomChatbot(data);
+
+    let textStream = "";
+
+    for await (const delta of readStreamableValue(result)) {
+      textStream += delta;
+
+      setChatHistory((prevChatHistory) => {
+        const newChatHistory = [...prevChatHistory];
+        newChatHistory[newChatHistory.length - 1].parts = textStream;
+        return newChatHistory;
+      });
+    }
 
     setIsLoading(false);
-
-    if (queryResponse.success) {
-      setChatHistory([
-        ...chatHistory,
-        { role: "user", parts: query },
-        { role: "model", parts: queryResponse.result },
-      ]);
-    }
-    setQuery("");
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -60,13 +73,13 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     <div className="bg-white h-full p-3 w-full flex flex-col rounded-lg shadow-md">
       <ScrollArea
         ref={scrollAreaRef}
-        className="bg-white py-7 px-20 w-full max-h-[500px] overflow-y-auto z-10"
+        className="bg-white py-7 px-20 w-full max-h-[700px] overflow-y-auto z-10"
       >
         {chatHistory.map((chat, index) => (
           <div key={index} className="mb-4">
             <div className="flex justify-end">
               {chat.role === "user" && (
-                <div className="flex items-center gap-2 text-sm text-slate-700 bg-indigo-50 p-2 rounded-lg w-fit max-w-[40rem] break-words">
+                <div className="flex items-center gap-3 text-sm text-slate-700 bg-indigo-50 p-2 rounded-lg w-fit max-w-[40rem] break-words">
                   <div className="text-2xl text-slate-800 bg-indigo-200 p-1 rounded-full">
                     <PersonLineIcon />
                   </div>
@@ -75,11 +88,11 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
               )}
             </div>
             {chat.role === "model" && (
-              <div className="flex items-center gap-2 text-slate-700 text-sm p-2 rounded-lg w-fit mt-1">
+              <div className="flex items-center gap-3 text-slate-700 text-sm p-2 rounded-lg w-fit mt-1">
                 <div className="text-2xl text-black bg-gray-200 p-1 rounded-full">
                   <BotLineIcon />
                 </div>
-                {chat.parts}
+                {chat.parts ? <Markdown>{chat.parts}</Markdown> : "Thinking..."}
               </div>
             )}
           </div>

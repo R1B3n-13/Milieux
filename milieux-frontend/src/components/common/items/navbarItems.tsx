@@ -31,8 +31,14 @@ export const navItems = [
 export const actionItems = [
   {
     name: "Notification",
+    path: "",
     icon: <NotificationLineIcon />,
     iconColor: "text-rose-600",
   },
-  { name: "Chat", icon: <ChatLineIcon />, iconColor: "text-blue-600" },
+  {
+    name: "Chat",
+    path: "/chat",
+    icon: <ChatLineIcon />,
+    iconColor: "text-blue-600",
+  },
 ];

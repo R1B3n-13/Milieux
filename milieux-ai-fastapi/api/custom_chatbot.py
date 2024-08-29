@@ -3,6 +3,7 @@ import os
 import traceback
 from typing import Annotated
 from fastapi import FastAPI, Form, UploadFile
+from fastapi.responses import StreamingResponse
 from google.oauth2 import service_account
 import google.ai.generativelanguage as glm
 import google.generativeai as genai
@@ -11,6 +12,7 @@ from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from create_chunk import create_chunk
+from stream_generator import stream_generator
 
 load_dotenv()
 
@@ -79,7 +81,7 @@ async def add_pdf_to_corpus(userId: Annotated[str, Form()], pdf: UploadFile):
             print("Creating document for the first time...")
 
         pdf_document = glm.Document(name="corpora/" + os.environ['CUSTOM_CHATBOT_CORPUS'] + "/documents/pdf-id-" + 
-                                     userId, display_name="User knowledge-base no. " + userId)
+                                        userId, display_name="User knowledge-base no. " + userId)
 
         document_metadata = [
         glm.CustomMetadata(key="document_type", string_value="user_knowledge_base_no_" + userId)]
@@ -109,16 +111,16 @@ async def add_pdf_to_corpus(userId: Annotated[str, Form()], pdf: UploadFile):
         return {"success": False, "status": 500, "message": "Internal server error",}
 
 @app.post("/ask")
-async def ask_custom_knowledge_base(request: QueryRequest):
+async def ask_custom_knowledge_base(request: QueryRequest) -> StreamingResponse:
     try:
         user_query = request.query
         chat_history = request.history
         results_count = 20
 
         chunk_metadata_filter = glm.MetadataFilter(key='chunk.custom_metadata.pdfId',
-                                           conditions=[glm.Condition(
-                                              numeric_value=request.userId,
-                                              operation=glm.Condition.Operator.EQUAL)])
+                                            conditions=[glm.Condition(
+                                                numeric_value=request.userId,
+                                                operation=glm.Condition.Operator.EQUAL)])
 
         query_corpus_request = glm.QueryCorpusRequest(name=corpus_resource_name,
                                                     query=user_query,
@@ -142,9 +144,9 @@ async def ask_custom_knowledge_base(request: QueryRequest):
 
         chat = chunk_analysis_model.start_chat(history=[{"role": item.role, "parts": item.parts} for item in chat_history])
 
-        chunk_analysis_response = chat.send_message(json.dumps(data))
+        chunk_analysis_response = chat.send_message(json.dumps(data), stream=True)
 
-        return {"success": True, "status": 200, "message": "Query successful!", "result": chunk_analysis_response.text}
+        return StreamingResponse(stream_generator(chunk_analysis_response), media_type='text/event-stream')
     
     except Exception as e:
         print(f"An error occurred: {e}")

@@ -40,22 +40,22 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private Boolean isBusiness;
 
 	private String name;
 	private String email;
 	private String password;
-	
+
 	private String dp;
 	private String banner;
-	
+
 	private String status;
 	private String intro;
 	private String address;
-	
-    @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> userType;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	private Map<String, Object> userType;
 
 	@ElementCollection
 	@CollectionTable(name = "user_followers")
@@ -93,6 +93,14 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "post_id"))
 	@JsonIgnore
 	private List<Post> savedPosts = new ArrayList<>();
+
+	@ManyToMany(mappedBy = "users")
+	@JsonIgnore
+	private List<Chat> chats = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<ChatMessage> chatMessages = new ArrayList<>();
 
 	private ZonedDateTime createdAt;
 

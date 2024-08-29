@@ -41,15 +41,30 @@ model = genai.GenerativeModel(
 async def generate_response(media_path: str, text: str):
     if(media_path):
         file = genai.upload_file(path=media_path)
+
+        while file.state.name == "PROCESSING":
+            continue
+
+        if file.state.name == "FAILED":
+            raise ValueError(file.state.name)
+
         response = model.generate_content([file, text])
         genai.delete_file(file)
     else:
         response = model.generate_content(text)
 
     if response.candidates[0].finish_reason == 1:
-        return {"success": True, "status": 200, "message": "Tidbits generated successfully", "finish_reason": response.candidates[0].finish_reason, "text": response.text}
+        return {"success": True,
+                "status": 200,
+                "message": "Tidbits generated successfully",
+                "finish_reason": response.candidates[0].finish_reason,
+                "text": response.text}
     else:
-        return {"success": True, "status": 200, "message": "Tidbits generation failed", "finish_reason": response.candidates[0].finish_reason, "text": ""}
+        return {"success": True,
+                "status": 200,
+                "message": "Tidbits generation failed",
+                "finish_reason": response.candidates[0].finish_reason,
+                "text": ""}
 
 @app.post("/tidbits")
 async def get_tidbits(request: Request):

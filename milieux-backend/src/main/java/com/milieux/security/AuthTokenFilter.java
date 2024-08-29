@@ -36,7 +36,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		if (request.getRequestURI().startsWith("/auth")) {
+		if (request.getRequestURI().startsWith("/auth") || request.getRequestURI().startsWith("/ws")) {
 
 			filterChain.doFilter(request, response);
 
@@ -68,9 +68,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				throw new AuthTokenNotFoundException("Jwt auth token is missing");
 			}
 		} catch (Exception e) {
+			if (e instanceof IllegalArgumentException) {
+
+				e = new IllegalArgumentException("JWT claims string is empty", e);
+			}
 
 			exceptionResolver.resolveException(request, response, null, e);
-
 			return;
 		}
 

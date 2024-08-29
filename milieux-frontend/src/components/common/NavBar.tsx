@@ -7,11 +7,11 @@ import { AvatarFallback } from "@radix-ui/react-avatar";
 import AvatarIcon from "../icons/AvatarIcon";
 import { usePathname, useRouter } from "next/navigation";
 import { actionItems, navItems } from "./items/navbarItems";
-import Logo from "../common/Logo";
 import Link from "next/link";
+import Image from "next/image";
 import SearchLineIcon from "../icons/SearchLineIcon";
-import AiLineIcon from "../icons/AiLineIcon";
-import AiFilledIcon from "../icons/AiFilledIcon";
+import AiSearchLineIcon from "../icons/AiSearchLineIcon";
+import AiSearchFilledIcon from "../icons/AiSearchFilledIcon";
 
 const NavBar = () => {
   const pathname = usePathname();
@@ -36,12 +36,16 @@ const NavBar = () => {
   return (
     <div className="grid grid-cols-11 font-medium text-slate-700 transition-all shadow-md bg-[#FAFAFA] px-4">
       <div className="col-span-3">
-        <div className="flex py-2 items-center justify-start gap-7">
-          <div className="cursor-pointer">
-            <Logo />
-          </div>
+        <div className="flex py-2 items-center justify-start gap-5">
+          <Link
+            className="flex items-center cursor-pointer"
+            href={"/stream"}
+          >
+            <Image src="/logo.png" width={38} height={38} alt="" />
+          </Link>
+
           <div className="flex w-full max-w-sm items-center space-x-2 relative">
-            <div className="absolute inset-y-0 left-1 flex items-center pl-4 pointer-events-none">
+            <div className="absolute text-xl inset-y-0 left-1 flex items-center pl-4 pointer-events-none">
               <SearchLineIcon />
             </div>
             <Input
@@ -54,19 +58,21 @@ const NavBar = () => {
                   ? "Search for posts..."
                   : `Search for users, businesses...`
               }
-              className="pl-11 rounded-full bg-gray-200 focus-visible:ring-0"
+              className="pl-10 rounded-full bg-gray-200 focus-visible:ring-0"
             />
             <div
               className="text-xl cursor-pointer rounded-full p-2 hover:bg-gray-200"
               onClick={() => setIsAiActive(!isAiActive)}
             >
-              {isAiActive ? (
-                <div className="text-rose-600">
-                  <AiFilledIcon />
-                </div>
-              ) : (
-                <AiLineIcon />
-              )}
+              <div className="text-[1.4rem]">
+                {isAiActive ? (
+                  <div className="text-emerald-600">
+                    <AiSearchFilledIcon />
+                  </div>
+                ) : (
+                  <AiSearchLineIcon />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -99,12 +105,13 @@ const NavBar = () => {
       <div className="col-span-4 content-center">
         <div className="flex items-center justify-end gap-5">
           {actionItems.map((item) => (
-            <div
+            <Link
               key={item.name}
+              href={item.path}
               className={`flex rounded-full bg-gray-200 p-2 text-xl items-center justify-center cursor-pointer ${item.iconColor}`}
             >
               {item.icon}
-            </div>
+            </Link>
           ))}
 
           <div>

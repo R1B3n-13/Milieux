@@ -41,9 +41,15 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
 	}
-	
+
 	@ExceptionHandler(ReelNotFoundException.class)
 	public ResponseEntity<BaseResponseDto> handleReelNotFoundException(ReelNotFoundException ex) {
+
+		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(ChatNotFoundException.class)
+	public ResponseEntity<BaseResponseDto> handleChatNotFoundException(ChatNotFoundException ex) {
 
 		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
 	}

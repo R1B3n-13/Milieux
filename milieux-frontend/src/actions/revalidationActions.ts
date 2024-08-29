@@ -33,3 +33,11 @@ export async function revalidateRemark() {
 export async function revalidateFlash() {
   revalidateTag("createFlash");
 }
+
+export async function revalidateChat() {
+  revalidateTag("createChat");
+}
+
+export async function revalidateMessage() {
+  revalidateTag("message");
+}
