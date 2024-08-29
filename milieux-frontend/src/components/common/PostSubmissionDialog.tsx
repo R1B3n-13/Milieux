@@ -49,6 +49,8 @@ import {
   SelectValue,
 } from "../ui/Select";
 import { aiModelItems } from "./items/aiModelItems";
+import convertToBase64 from "@/utils/convertToBase64";
+import base64ToFile from "@/utils/base64ToFile";
 
 export default function PostSubmissionDialog({
   dialogButton,
@@ -128,7 +130,26 @@ export default function PostSubmissionDialog({
         model: selectedModel,
       };
 
-      await generateImage(data);
+      const response = await generateImage(data);
+
+      let imageFile: File | null;
+
+      if (response.success) {
+        convertToBase64(response.image_url)
+          .then((base64Image) => {
+            imageFile = base64ToFile(
+              base64Image as string,
+              "image.jpg",
+              "image/jpeg"
+            );
+            setSelectedMedia(base64Image as string);
+            setMediaType("image");
+          })
+          .then(() => setMedia(imageFile))
+          .catch(() => toast.error("Unknown error occurred."));
+      } else {
+        toast.error("Image generation failed.");
+      }
 
       setIsLoading2(false);
     }
@@ -260,6 +281,7 @@ export default function PostSubmissionDialog({
           <div className="flex items-center justify-center gap-4">
             <div className="relative">
               <TextArea
+                ref={scrollAreaRef}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder={
