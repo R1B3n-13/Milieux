@@ -30,6 +30,7 @@ import {
   addPostToCorpus,
   checkAndCorrectText,
   generateCaption,
+  generateImage,
   getTidbits,
 } from "@/actions/aiActions";
 import BulbLineIcon from "../icons/BulbLineIcon";
@@ -38,6 +39,16 @@ import { readStreamableValue } from "ai/rsc";
 import ImageCaptionFilledIcon from "../icons/ImageCaptionFilledIcon";
 import ImageCaptionLineIcon from "../icons/ImageCaptionLineIcon";
 import RedoIcon from "../icons/RedoIcon";
+import AiPicFilledIcon from "../icons/AiPicFilledIcon";
+import SendFilledIcon from "../icons/SendFilledIcon";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/Select";
+import { aiModelItems } from "./items/aiModelItems";
 
 export default function PostSubmissionDialog({
   dialogButton,
@@ -47,9 +58,15 @@ export default function PostSubmissionDialog({
   username: string;
 }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
   const [text, setText] = useState<string>("");
   const [isBulbOn, setIsBulbOn] = useState(false);
   const [isCaptionOn, setIsCaptionOn] = useState(false);
+  const [isAiPicOn, setIsAiPicOn] = useState(false);
+  const [promptForPicGen, setPromptForPicGen] = useState("");
+  const [selectedModel, setSelectedModel] = useState<string | undefined>(
+    undefined
+  );
   const [selectedMedia, setSelectedMedia] = useState<
     string | ArrayBuffer | null
   >(null);
@@ -94,6 +111,29 @@ export default function PostSubmissionDialog({
     }
   };
 
+  const handleImageGen = async () => {
+    if (isAiPicOn) {
+      if (
+        promptForPicGen.trim() === "" ||
+        selectedModel?.trim() === "" ||
+        !selectedModel
+      ) {
+        return;
+      }
+
+      setIsLoading2(true);
+
+      const data = {
+        text: promptForPicGen,
+        model: selectedModel,
+      };
+
+      await generateImage(data);
+
+      setIsLoading2(false);
+    }
+  };
+
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
@@ -128,6 +168,9 @@ export default function PostSubmissionDialog({
     setMedia(null);
     setIsBulbOn(false);
     setIsCaptionOn(false);
+    setIsAiPicOn(false);
+    setPromptForPicGen("");
+    setSelectedModel(undefined);
   };
 
   const handleSubmit = async () => {
@@ -214,7 +257,7 @@ export default function PostSubmissionDialog({
           </div>
         </AlertDialogHeader>
         <div className="space-y-6">
-          <div className="space-y-4 flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-4">
             <div className="relative">
               <TextArea
                 value={text}
@@ -250,7 +293,7 @@ export default function PostSubmissionDialog({
                   ref={scrollAreaRef}
                   value={aiText ? aiText : "Thinking..."}
                   onChange={(e) => setAiText(e.target.value)}
-                  className="h-40 w-[30rem] focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400 -translate-y-2 resize-none"
+                  className="h-40 w-[30rem] focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400 resize-none"
                 />
                 <div
                   className="absolute right-1 top-0 -translate-y-5 translate-x-3 rounded-full p-1 text-xl cursor-pointer text-indigo-500 bg-amber-200"
@@ -261,6 +304,44 @@ export default function PostSubmissionDialog({
               </div>
             )}
           </div>
+
+          {isAiPicOn && (
+            <>
+              <div className="flex justify-center items-center">
+                <TextArea
+                  value={promptForPicGen}
+                  onChange={(e) => setPromptForPicGen(e.target.value)}
+                  placeholder="Write your prompt..."
+                  className="min-h-10 h-10 pr-10 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400 rounded-full resize-none no-scrollbar"
+                />
+                <Button
+                  disabled={!promptForPicGen || !selectedModel}
+                  className="p-2 -ml-11 text-slate-800 bg-inherit border-none shadow-none hover:bg-inherit"
+                  onClick={handleImageGen}
+                >
+                  {isLoading2 ? <Loading text="" /> : <SendFilledIcon />}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-center">
+                <Select
+                  onValueChange={(str) => setSelectedModel(str)}
+                  value={selectedModel}
+                >
+                  <SelectTrigger className="w-48 rounded-full">
+                    <SelectValue placeholder="Select a model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {aiModelItems.map((model) => (
+                      <SelectItem key={model.value} value={model.value}>
+                        {model.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
+          )}
 
           {selectedMedia && (
             <div className="flex items-center justify-center relative">
@@ -284,7 +365,7 @@ export default function PostSubmissionDialog({
 
                   <div
                     className={`text-3xl ${
-                      isCaptionOn ? "text-emerald-600" : "text-rose-600"
+                      isCaptionOn ? "text-emerald-600" : "text-gray-800"
                     }  cursor-pointer p-2 rounded-full hover:bg-gray-100`}
                     onClick={() => setIsCaptionOn(!isCaptionOn)}
                   >
@@ -315,7 +396,7 @@ export default function PostSubmissionDialog({
 
                   <div
                     className={`text-3xl ${
-                      isCaptionOn ? "text-emerald-600" : "text-rose-600"
+                      isCaptionOn ? "text-emerald-600" : "text-gray-800"
                     }  cursor-pointer p-2 rounded-full hover:bg-gray-100`}
                     onClick={() => setIsCaptionOn(!isCaptionOn)}
                   >
@@ -365,6 +446,16 @@ export default function PostSubmissionDialog({
                   <p className="text-base font-semibold">Video</p>
                 </div>
               </label>
+            </div>
+
+            <div
+              className="flex rounded-lg w-full p-2 items-center justify-center cursor-pointer gap-2 hover:bg-muted text-2xl text-emerald-600"
+              onClick={() => setIsAiPicOn(!isAiPicOn)}
+            >
+              <AiPicFilledIcon />
+              <p className="text-base font-semibold text-slate-700">
+                AI Pic/Ad
+              </p>
             </div>
           </div>
 

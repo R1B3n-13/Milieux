@@ -83,6 +83,30 @@ export async function getQueryResponse(data: { query: string }) {
   }
 }
 
+export async function generateImage(data: { text: string; model: string }) {
+  try {
+    const url = new URL("/generate-image", backendUrl);
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      cache: "no-cache",
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error("Generating image resulted in error:", error);
+    return {
+      status: 500,
+      success: false,
+      message: "Uh oh! Something went wrong. Please try again.",
+    };
+  }
+}
+
 export async function addPdfToCorpus(data: FormData) {
   try {
     const url = new URL("/add-pdf", backendUrl);
