@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { z } from "zod";
 import ChatSchema from "@/schemas/chatSchema";
+import { Client } from "@stomp/stompjs";
 
 const ChatContext = createContext<{
   selectedChat: z.infer<typeof ChatSchema> | null;
@@ -11,6 +12,8 @@ const ChatContext = createContext<{
   >;
   triggerRefresh: boolean;
   setTriggerRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  stompClient: Client | undefined;
+  setStompClient: React.Dispatch<React.SetStateAction<Client | undefined>>;
 } | null>(null);
 
 export function ChatContextProvider({ children }: { children: ReactNode }) {
@@ -18,6 +21,7 @@ export function ChatContextProvider({ children }: { children: ReactNode }) {
     typeof ChatSchema
   > | null>(null);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
+  const [stompClient, setStompClient] = useState<Client | undefined>(undefined);
 
   return (
     <ChatContext.Provider
@@ -26,6 +30,8 @@ export function ChatContextProvider({ children }: { children: ReactNode }) {
         setSelectedChat,
         triggerRefresh,
         setTriggerRefresh,
+        stompClient,
+        setStompClient,
       }}
     >
       {children}

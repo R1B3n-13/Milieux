@@ -4,13 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import AvatarIcon from "../icons/AvatarIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import { useChatContext } from "./ChatContextProvider";
-import { getChatMessages } from "@/actions/chatActions";
+import { getChatMessages } from "@/services/chatService";
 import { z } from "zod";
 import MessageSchema from "@/schemas/messageSchema";
 import UserSchema from "@/schemas/userSchema";
 import { ScrollArea } from "../ui/ScrollArea";
 import Image from "next/image";
-import { disconnectWebSocket, listenOnSocket } from "@/actions/wsActions";
+import { getBackendUrl } from "@/actions/getEnvVarActions";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
+import { toast } from "sonner";
+import { revalidateMessage } from "@/actions/revalidationActions";
 
 export const MessageBox = ({
   loggedInUser,
@@ -18,8 +22,67 @@ export const MessageBox = ({
   loggedInUser: z.infer<typeof UserSchema>;
 }) => {
   const [messages, setMessages] = useState<z.infer<typeof MessageSchema>[]>([]);
-  const { selectedChat, triggerRefresh, setTriggerRefresh } = useChatContext();
+  const { selectedChat, triggerRefresh, setTriggerRefresh, setStompClient } =
+    useChatContext();
+  const stompClientRef = useRef<Client | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  const subscribeToChat = (client: Client) => {
+    if (selectedChat?.id) {
+      client.subscribe(`/topic/chat/${selectedChat.id}`, (message) => {
+        if (message.body === selectedChat.id?.toString()) {
+          setTriggerRefresh(!triggerRefresh);
+          revalidateMessage();
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    const initConnection = async () => {
+      try {
+        const backendUrl = await getBackendUrl();
+        const socket = new SockJS(`${backendUrl}/ws`);
+        const client = new Client({
+          webSocketFactory: () => socket,
+          reconnectDelay: 5000,
+
+          onConnect: () => {
+            console.log("STOMP client connected...");
+            subscribeToChat(client);
+          },
+
+          onStompError: (error) => {
+            console.error("STOMP error:", error);
+            toast.error(
+              "Lost connection to the chat server. Please refresh the page."
+            );
+          },
+        });
+
+        client.activate();
+        stompClientRef.current = client;
+        setStompClient(client);
+      } catch (error) {
+        console.error("Failed to connect to WebSocket:", error);
+        toast.error("Something went wrong. Please refresh the page.");
+      }
+    };
+
+    initConnection();
+
+    return () => {
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (stompClientRef.current && stompClientRef.current.connected) {
+      subscribeToChat(stompClientRef.current);
+    }
+  }, [selectedChat]);
 
   useEffect(() => {
     const fetchChatMessages = async () => {
@@ -34,18 +97,6 @@ export const MessageBox = ({
   }, [selectedChat, triggerRefresh]);
 
   useEffect(() => {
-    if (selectedChat?.id) {
-      listenOnSocket(selectedChat.id, () => {
-        setTriggerRefresh(!triggerRefresh);
-      });
-    }
-
-    return () => {
-      disconnectWebSocket();
-    };
-  }, [selectedChat]);
-
-  useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
@@ -53,24 +104,31 @@ export const MessageBox = ({
 
   return (
     <>
-      <div className="flex items-center justify-start gap-3 p-4 border-b border-indigo-200 bg-indigo-100">
-        <Avatar className="rounded-full bg-gray-200 p-1 items-center justify-center cursor-pointer">
-          <AvatarImage
-            src={
-              selectedChat?.users?.find((user) => user.id !== loggedInUser.id)
-                ?.dp as string
-            }
-          />
-          <AvatarFallback className="text-5xl text-gray-500">
-            <AvatarIcon />
-          </AvatarFallback>
-        </Avatar>
-        <p className="font-semibold text-slate-800 cursor-pointer">
-          {
-            selectedChat?.users?.find((user) => user.id !== loggedInUser.id)
-              ?.name
-          }
-        </p>
+      <div className="flex items-center justify-start min-h-[4.3rem] gap-2 p-4 border-b border-indigo-200 bg-indigo-100">
+        {selectedChat && (
+          <>
+            <Avatar className="rounded-full bg-gray-200 p-1 items-center justify-center cursor-pointer">
+              <AvatarImage
+                src={
+                  selectedChat.users?.some((user) => user.id === -1)
+                    ? "/sentia.png"
+                    : (selectedChat?.users?.find(
+                        (user) => user.id !== loggedInUser.id
+                      )?.dp as string)
+                }
+              />
+              <AvatarFallback className="text-5xl text-gray-500">
+                <AvatarIcon />
+              </AvatarFallback>
+            </Avatar>
+            <p className="font-semibold text-slate-800 cursor-pointer">
+              {
+                selectedChat?.users?.find((user) => user.id !== loggedInUser.id)
+                  ?.name
+              }
+            </p>
+          </>
+        )}
       </div>
 
       <ScrollArea className="h-screen bg-indigo-50" ref={scrollAreaRef}>

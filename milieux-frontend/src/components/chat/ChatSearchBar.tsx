@@ -3,7 +3,7 @@
 import { ChangeEvent, useState } from "react";
 import { Input } from "../ui/Input";
 import SearchLineIcon from "../icons/SearchLineIcon";
-import { searchUsers } from "@/actions/searchAction";
+import { searchUsers } from "@/services/searchService";
 import { z } from "zod";
 import UserSchema from "@/schemas/userSchema";
 import AvatarIcon from "../icons/AvatarIcon";
@@ -72,7 +72,10 @@ export const ChatSearchBar = () => {
               className="cursor-pointer p-2 hover:bg-slate-100 flex items-center space-x-3"
             >
               <Avatar className="rounded-full p-1 items-center justify-center cursor-pointer">
-                <AvatarImage src={user.dp as string} className="rounded-full" />
+                <AvatarImage
+                  src={user.id === -1 ? "/sentia.png" : (user.dp as string)}
+                  className="rounded-full"
+                />
                 <AvatarFallback className="text-4xl text-gray-500">
                   <AvatarIcon />
                 </AvatarFallback>

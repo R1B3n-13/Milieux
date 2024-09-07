@@ -33,8 +33,11 @@ export const ChatList = ({
                 <Avatar className="rounded-full p-1 items-center justify-center cursor-pointer">
                   <AvatarImage
                     src={
-                      chat.users?.find((user) => user.id !== loggedInUser.id)
-                        ?.dp as string
+                      chat.users?.some((user) => user.id === -1)
+                        ? "/sentia.png"
+                        : (selectedChat?.users?.find(
+                            (user) => user.id !== loggedInUser.id
+                          )?.dp as string)
                     }
                     className="rounded-full"
                   />

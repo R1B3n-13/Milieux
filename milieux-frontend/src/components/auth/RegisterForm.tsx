@@ -113,7 +113,7 @@ const RegisterForm = () => {
             onValueChange={handleTabChange}
           >
             <div className="flex justify-center items-center">
-              <TabsList className="gap-7 w-full bg-zinc-100 border-b-2 border-zinc-200 rounded-b-xl p-2">
+              <TabsList className="gap-7 w-full bg-white p-2">
                 <TabsTrigger
                   value="casual"
                   className="w-24 py-2 font-semibold bg-transparent rounded-none focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-[3px] data-[state=active]:border-b-gray-900"

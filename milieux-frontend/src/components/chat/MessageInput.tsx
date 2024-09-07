@@ -11,12 +11,12 @@ import uploadToCloudinary from "@/actions/cloudinaryActions";
 import { toast } from "sonner";
 import { sendMessage } from "@/actions/chatActions";
 import { revalidateMessage } from "@/actions/revalidationActions";
-import { broadcastToSocket } from "@/actions/wsActions";
 
 export const MessageInput = () => {
   const [text, setText] = useState<string>("");
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
-  const { selectedChat, triggerRefresh, setTriggerRefresh } = useChatContext();
+  const { selectedChat, triggerRefresh, setTriggerRefresh, stompClient } =
+    useChatContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +67,18 @@ export const MessageInput = () => {
       toast.error("Something went wrong.");
     } else {
       setTriggerRefresh(!triggerRefresh);
-      await broadcastToSocket(selectedChat?.id);
+
+      if (stompClient && stompClient.active && stompClient.connected) {
+        stompClient!.publish({
+          destination: `/app/chat/${selectedChat?.id}`,
+          body: selectedChat?.id?.toString(),
+        });
+      } else {
+        console.error("STOMP client is not connected");
+        toast.error(
+          "Lost connection to the chat server. Please refresh the page."
+        );
+      }
     }
 
     setIsLoading(false);
@@ -82,51 +93,54 @@ export const MessageInput = () => {
 
   return (
     <>
-      {image && (
-        <div className="flex items-center justify-start pl-5 bg-indigo-50">
-          <div className="relative">
-            <Image
-              src={image as string}
-              alt=""
-              width={200}
-              height={200}
-              className="rounded-lg"
+      {selectedChat && (
+        <>
+          {image && (
+            <div className="flex items-center justify-start pl-5 bg-indigo-50">
+              <div className="relative">
+                <Image
+                  src={image as string}
+                  alt=""
+                  width={200}
+                  height={200}
+                  className="rounded-lg"
+                />
+                <button
+                  className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                  onClick={() => clearImage()}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
+          <div className="p-4 bg-indigo-50 flex items-center gap-2">
+            <Input
+              value={text}
+              onChange={handleInputChange}
+              placeholder="Type a message..."
+              className="flex-grow border rounded-full bg-slate-50 h-11 mr-1 focus-visible:ring-slate-500"
             />
-            <button
-              className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
-              onClick={() => clearImage()}
+
+            <div
+              onClick={handleSendMessage}
+              className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200"
             >
-              ✕
-            </button>
+              <SendFilledIcon />
+            </div>
+
+            <Label className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200">
+              <AttachmentIcon />
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleImageChange(event)}
+                className="hidden"
+              />
+            </Label>
           </div>
-        </div>
+        </>
       )}
-
-      <div className="p-4 bg-indigo-50 flex items-center gap-2">
-        <Input
-          value={text}
-          onChange={handleInputChange}
-          placeholder="Type a message..."
-          className="flex-grow border rounded-full bg-slate-50 h-11 mr-1 focus-visible:ring-slate-500"
-        />
-
-        <div
-          onClick={handleSendMessage}
-          className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200"
-        >
-          <SendFilledIcon />
-        </div>
-
-        <Label className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200">
-          <AttachmentIcon />
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={(event) => handleImageChange(event)}
-            className="hidden"
-          />
-        </Label>
-      </div>
     </>
   );
 };

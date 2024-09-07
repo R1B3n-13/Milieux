@@ -1,24 +1,17 @@
 package com.milieux.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 
-import com.milieux.dtos.ChatMessageDto;
-
+@Controller
 public class RealTimeChatController {
 
-	@Autowired
-	private SimpMessagingTemplate simpMessagingTemplate;
-
 	@MessageMapping("/chat/{chatId}")
-	public ChatMessageDto sendToUser(@Payload ChatMessageDto message, @DestinationVariable String chatId) {
-		
-		System.out.println("dsadas");
-
-		simpMessagingTemplate.convertAndSendToUser(chatId, "/private", message);
+	@SendTo("/topic/chat/{chatId}")
+	public String sendToUser(@Payload String message, @DestinationVariable String chatId) {
 
 		return message;
 	}
