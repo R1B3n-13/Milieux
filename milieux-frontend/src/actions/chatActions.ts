@@ -49,7 +49,7 @@ export async function sendMessage({
   message,
 }: {
   chatId: number | null | undefined;
-  message: { text: string; imagePath: string | null };
+  message: { text: string; imagePath: string | null; messageType: string };
 }) {
   try {
     if (!chatId) {

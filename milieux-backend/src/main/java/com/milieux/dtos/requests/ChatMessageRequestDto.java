@@ -13,4 +13,6 @@ public class ChatMessageRequestDto {
 
 	private String text;
 	private String imagePath;
+
+	private String messageType;
 }

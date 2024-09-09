@@ -15,6 +15,7 @@ import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { toast } from "sonner";
 import { revalidateMessage } from "@/actions/revalidationActions";
+import Markdown from "markdown-to-jsx";
 
 export const MessageBox = ({
   loggedInUser,
@@ -22,8 +23,13 @@ export const MessageBox = ({
   loggedInUser: z.infer<typeof UserSchema>;
 }) => {
   const [messages, setMessages] = useState<z.infer<typeof MessageSchema>[]>([]);
-  const { selectedChat, triggerRefresh, setTriggerRefresh, setStompClient } =
-    useChatContext();
+  const {
+    selectedChat,
+    triggerRefresh,
+    setTriggerRefresh,
+    setStompClient,
+    aiStreamingText,
+  } = useChatContext();
   const stompClientRef = useRef<Client | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -137,7 +143,13 @@ export const MessageBox = ({
             <div className="flex items-center gap-3" key={message.id}>
               {message.user?.id !== loggedInUser.id && (
                 <Avatar className="rounded-full bg-gray-200 w-8 h-8 items-center justify-center cursor-pointer">
-                  <AvatarImage src={message.user?.dp as string} />
+                  <AvatarImage
+                    src={
+                      message.user?.id === -1
+                        ? "/sentia.png"
+                        : (message.user?.dp as string)
+                    }
+                  />
                   <AvatarFallback className="text-4xl text-gray-500">
                     <AvatarIcon />
                   </AvatarFallback>
@@ -145,7 +157,7 @@ export const MessageBox = ({
               )}
 
               <div
-                className={`mb-2 p-2 max-w-xs min-w-14 min-h-10 flex flex-col ${
+                className={`mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col ${
                   message.user?.id === loggedInUser.id
                     ? "bg-indigo-500 text-white ml-auto rounded-br-none"
                     : "bg-gray-300 text-black rounded-bl-none"
@@ -160,7 +172,7 @@ export const MessageBox = ({
                     className="rounded-lg mb-2"
                   />
                 )}
-                <p>{message.text}</p>
+                <Markdown>{message.text || ""}</Markdown>
               </div>
 
               {message.user?.id === loggedInUser.id && (
@@ -173,6 +185,21 @@ export const MessageBox = ({
               )}
             </div>
           ))}
+
+          {aiStreamingText && (
+            <div className="flex items-center gap-3">
+              <Avatar className="rounded-full bg-gray-200 w-8 h-8 items-center justify-center cursor-pointer">
+                <AvatarImage src="/sentia.png" />
+                <AvatarFallback className="text-4xl text-gray-500">
+                  <AvatarIcon />
+                </AvatarFallback>
+              </Avatar>
+
+              <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-gray-300 text-black rounded-bl-none rounded-lg">
+                <Markdown>{aiStreamingText}</Markdown>
+              </div>
+            </div>
+          )}
         </div>
       </ScrollArea>
     </>

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from fastapi.responses import StreamingResponse
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
-from fastapi import APIRouter, Form, UploadFile
+from fastapi import APIRouter, Form, HTTPException, UploadFile
 from utils.stream_generator import stream_generator
 
 load_dotenv()
@@ -61,4 +61,4 @@ async def generate_caption(text: Annotated[str, Form()], media: UploadFile):
     except Exception as e:
         print(f"An error occurred: {e}")
         traceback.print_exc()
-        return {"success": False, "status": 500, "message": "Internal server error", "result": ""}
+        raise HTTPException(status_code=500, detail="Internal server error")

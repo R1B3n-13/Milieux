@@ -31,7 +31,13 @@ public class ChatMessageController {
 	public ResponseEntity<ChatMessageResponseDto> createChatMessage(@PathVariable Long chatId,
 			@RequestBody ChatMessageRequestDto requestDto, @RequestHeader("Authorization") String header) {
 
-		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		Long userId;
+
+		if (requestDto.getMessageType().equals("ai")) {
+			userId = (long) -1;
+		} else {
+			userId = userService.getUserFromAuthHeader(header).getUser().getId();
+		}
 
 		ChatMessageResponseDto responseDto = chatMessageService.createChatMessage(userId, chatId, requestDto);
 

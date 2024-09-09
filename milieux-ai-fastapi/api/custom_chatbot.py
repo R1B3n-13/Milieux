@@ -2,7 +2,7 @@ import json
 import os
 import traceback
 from typing import Annotated
-from fastapi import APIRouter, Form, UploadFile
+from fastapi import APIRouter, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from google.oauth2 import service_account
 import google.ai.generativelanguage as glm
@@ -151,5 +151,5 @@ async def ask_custom_knowledge_base(request: QueryRequest) -> StreamingResponse:
     except Exception as e:
         print(f"An error occurred: {e}")
         traceback.print_exc()
-        return {"success": False, "status": 500, "message": "Internal server error",}
+        raise HTTPException(status_code=500, detail="Internal server error")
 
