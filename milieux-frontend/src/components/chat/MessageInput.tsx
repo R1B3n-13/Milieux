@@ -27,8 +27,8 @@ export const MessageInput = () => {
     triggerRefresh,
     setTriggerRefresh,
     stompClient,
-    aiStreamingText,
     setAiStreamingText,
+    setTempMessage,
   } = useChatContext();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -118,6 +118,7 @@ export const MessageInput = () => {
       throw new Error("Failed to send AI message.");
     } else {
       setAiStreamingText("");
+      setTempMessage([]);
     }
   };
 
@@ -138,6 +139,7 @@ export const MessageInput = () => {
     setIsLoading(false);
     setText("");
     setImage(null);
+    setTempMessage([]);
     setAiStreamingText("");
     revalidateMessage();
   };
@@ -147,6 +149,18 @@ export const MessageInput = () => {
 
     try {
       const imagePath = await uploadImageIfPresent(image);
+
+      setTempMessage((prevMessages) => {
+        const updatedMessages = [...prevMessages];
+
+        updatedMessages[0] = text;
+        if (imagePath) {
+          updatedMessages[1] = imagePath;
+        }
+
+        return updatedMessages;
+      });
+
       const isChatWithAi = selectedChat?.users?.some((user) => user.id === -1);
 
       let streamedText = "";

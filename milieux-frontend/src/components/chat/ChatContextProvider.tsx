@@ -16,6 +16,8 @@ const ChatContext = createContext<{
   setStompClient: React.Dispatch<React.SetStateAction<Client | undefined>>;
   aiStreamingText: string;
   setAiStreamingText: React.Dispatch<React.SetStateAction<string>>;
+  tempMessage: string[];
+  setTempMessage: React.Dispatch<React.SetStateAction<string[]>>;
 } | null>(null);
 
 export function ChatContextProvider({ children }: { children: ReactNode }) {
@@ -25,6 +27,7 @@ export function ChatContextProvider({ children }: { children: ReactNode }) {
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const [stompClient, setStompClient] = useState<Client | undefined>(undefined);
   const [aiStreamingText, setAiStreamingText] = useState("");
+  const [tempMessage, setTempMessage] = useState<string[]>([]);
 
   return (
     <ChatContext.Provider
@@ -37,6 +40,8 @@ export function ChatContextProvider({ children }: { children: ReactNode }) {
         setStompClient,
         aiStreamingText,
         setAiStreamingText,
+        tempMessage,
+        setTempMessage,
       }}
     >
       {children}

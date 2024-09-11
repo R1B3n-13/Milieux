@@ -29,6 +29,7 @@ export const MessageBox = ({
     setTriggerRefresh,
     setStompClient,
     aiStreamingText,
+    tempMessage,
   } = useChatContext();
   const stompClientRef = useRef<Client | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -185,6 +186,30 @@ export const MessageBox = ({
               )}
             </div>
           ))}
+
+          {tempMessage[0] && (
+            <div className="flex items-center gap-3">
+              <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-indigo-500 text-white ml-auto rounded-br-none rounded-lg">
+                {tempMessage[1] && (
+                  <Image
+                    src={tempMessage[1] as string}
+                    alt=""
+                    width={350}
+                    height={350}
+                    className="rounded-lg mb-2"
+                  />
+                )}
+                <Markdown>{tempMessage[0]}</Markdown>
+              </div>
+
+              <Avatar className="rounded-full bg-gray-200 w-8 h-8 items-center justify-center cursor-pointer">
+                <AvatarImage src={loggedInUser.dp as string} />
+                <AvatarFallback className="text-4xl text-gray-500">
+                  <AvatarIcon />
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          )}
 
           {aiStreamingText && (
             <div className="flex items-center gap-3">
