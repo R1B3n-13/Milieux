@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from PIL import Image
 from utils.stream_generator import stream_generator
 from utils.download_media import download_media
+from utils.sentia_chatbot_personalities import sentia_personalities
 
 load_dotenv()
 
@@ -25,6 +26,7 @@ class MessageRequest(BaseModel):
     text: Optional[str] = None
     media_url: Optional[str] = None
     history: list[HistoryItem]
+    personality: Optional[str] = None
 
 genai.configure(api_key=os.environ['GEMINI_API_KEY'])
 
@@ -51,6 +53,9 @@ model = genai.GenerativeModel(
 @router.post("/chat-sentia")
 async def send_message_to_sentia(request: MessageRequest) -> StreamingResponse:
     try:
+        if request.personality:
+            model._system_instruction.parts[0].text = sentia_personalities[request.personality]
+
         chat_history = []
         media_paths = []
 
