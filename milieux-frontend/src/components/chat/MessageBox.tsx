@@ -15,7 +15,17 @@ import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { toast } from "sonner";
 import { revalidateMessage } from "@/actions/revalidationActions";
-import Markdown from "markdown-to-jsx";
+import MarkdownRenderer from "../common/MarkdownRenderer";
+import VideoCallingFilledIcon from "../icons/VideoCallingFilledIcon";
+import AudioCallingFilledIcon from "../icons/AudioCallingFilledIcon";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/Select";
+import { chatbotPersonalityItems } from "./items/chatbotPersonalityItems";
 
 export const MessageBox = ({
   loggedInUser,
@@ -30,6 +40,8 @@ export const MessageBox = ({
     setStompClient,
     aiStreamingText,
     tempMessage,
+    chatPersonality,
+    setChatPersonality,
   } = useChatContext();
   const stompClientRef = useRef<Client | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -134,6 +146,38 @@ export const MessageBox = ({
                   ?.name
               }
             </p>
+
+            {selectedChat.users?.some((user) => user.id === -1) && (
+              <div className="flex ml-auto items-center justify-center">
+                <Select
+                  onValueChange={(str) => setChatPersonality(str)}
+                  value={chatPersonality}
+                >
+                  <SelectTrigger className="w-64 rounded-full bg-amber-50">
+                    <SelectValue placeholder="Select a personality" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {chatbotPersonalityItems.map((model) => (
+                      <SelectItem
+                        className="text-lg"
+                        key={model.value}
+                        value={model.value}
+                      >
+                        {model.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            <div className="ml-auto mr-3 text-slate-700 text-3xl rounded-full cursor-pointer p-1 hover:bg-purple-300">
+              <AudioCallingFilledIcon />
+            </div>
+
+            <div className="text-slate-700 text-3xl rounded-full cursor-pointer p-1 hover:bg-purple-300">
+              <VideoCallingFilledIcon />
+            </div>
           </>
         )}
       </div>
@@ -173,7 +217,8 @@ export const MessageBox = ({
                     className="rounded-lg mb-2"
                   />
                 )}
-                <Markdown>{message.text || ""}</Markdown>
+                <div></div>
+                <MarkdownRenderer text={message.text || ""} />
               </div>
 
               {message.user?.id === loggedInUser.id && (
@@ -199,7 +244,7 @@ export const MessageBox = ({
                     className="rounded-lg mb-2"
                   />
                 )}
-                <Markdown>{tempMessage[0]}</Markdown>
+                <MarkdownRenderer text={tempMessage[0]} />
               </div>
 
               <Avatar className="rounded-full bg-gray-200 w-8 h-8 items-center justify-center cursor-pointer">
@@ -221,7 +266,7 @@ export const MessageBox = ({
               </Avatar>
 
               <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-gray-300 text-black rounded-bl-none rounded-lg">
-                <Markdown>{aiStreamingText}</Markdown>
+                <MarkdownRenderer text={aiStreamingText} />
               </div>
             </div>
           )}

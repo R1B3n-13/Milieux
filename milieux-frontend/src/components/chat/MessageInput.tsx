@@ -29,6 +29,7 @@ export const MessageInput = () => {
     stompClient,
     setAiStreamingText,
     setTempMessage,
+    chatPersonality,
   } = useChatContext();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -85,6 +86,7 @@ export const MessageInput = () => {
         text: message.text || null,
         media_url: message.imagePath || null,
       })),
+      personality: chatPersonality,
     };
 
     const { success, result } = await chatWithSentiaAi(messageForAi);

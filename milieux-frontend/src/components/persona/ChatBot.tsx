@@ -10,7 +10,7 @@ import Loading from "../common/Loading";
 import BotLineIcon from "../icons/BotLineIcon";
 import PersonLineIcon from "../icons/PersonLineIcon";
 import { readStreamableValue } from "ai/rsc";
-import Markdown from "markdown-to-jsx";
+import MarkdownRenderer from "../common/MarkdownRenderer";
 
 const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [query, setQuery] = useState("");
@@ -92,7 +92,11 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
                 <div className="text-2xl text-black bg-gray-200 p-1 rounded-full">
                   <BotLineIcon />
                 </div>
-                {chat.parts ? <Markdown>{chat.parts}</Markdown> : "Thinking..."}
+                {chat.parts ? (
+                  <MarkdownRenderer text={chat.parts} />
+                ) : (
+                  "Thinking..."
+                )}
               </div>
             )}
           </div>

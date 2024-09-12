@@ -211,6 +211,7 @@ export async function chatWithSentiaAi(data: {
     text: string | null;
     media_url: string | null;
   }[];
+  personality: string | undefined;
 }) {
   try {
     const url = new URL("/chat-sentia", backendUrl);
