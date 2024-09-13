@@ -3,14 +3,14 @@ from urllib.parse import urlparse
 from dotenv import load_dotenv
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
-from fastapi import FastAPI
+from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional
-from download_media import download_media
+from utils.download_media import download_media
 
 load_dotenv()
 
-app = FastAPI()
+router = APIRouter()
 
 class Request(BaseModel):
     text: str
@@ -66,7 +66,7 @@ async def generate_response(media_path: str, text: str):
                 "finish_reason": response.candidates[0].finish_reason,
                 "text": ""}
 
-@app.post("/tidbits")
+@router.post("/tidbits")
 async def get_tidbits(request: Request):
     try:
         media_path = ""

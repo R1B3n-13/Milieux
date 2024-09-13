@@ -3,10 +3,31 @@ import { getUserFromAuthToken } from "./services/userService";
 
 export async function middleware(request: NextRequest) {
   const user = await getUserFromAuthToken();
-
   const currentPath = request.nextUrl.pathname;
 
-  if (currentPath.startsWith("/stream") && user.success === false) {
+  const protectedRoutes = [
+    "/stream",
+    "/persona",
+    "/businesses",
+    "/followings",
+    "/followers",
+    "/search",
+    "/bookmarks",
+    "/chat",
+    "/flashes",
+    "/communities",
+    "/videos",
+    "/lists",
+    "/memories",
+    "/gaming",
+    "/kids",
+  ];
+
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    currentPath.startsWith(route)
+  );
+
+  if (isProtectedRoute && user.success === false) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

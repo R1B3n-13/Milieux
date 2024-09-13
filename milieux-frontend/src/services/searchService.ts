@@ -1,10 +1,14 @@
 import getAuthToken from "@/actions/authActions";
+import { getBackendUrl } from "@/actions/getEnvVarActions";
 
 const backendUrl = process.env.BACKEND_URL;
 
 export async function searchUsers(query: string) {
   try {
-    const url = new URL(`/users/search?query=${query}`, backendUrl);
+    const url = new URL(
+      `/users/search?query=${query}`,
+      backendUrl || (await getBackendUrl())
+    );
 
     const authToken = await getAuthToken();
     if (!authToken)

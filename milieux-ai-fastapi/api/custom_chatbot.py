@@ -2,7 +2,7 @@ import json
 import os
 import traceback
 from typing import Annotated
-from fastapi import FastAPI, Form, UploadFile
+from fastapi import APIRouter, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from google.oauth2 import service_account
 import google.ai.generativelanguage as glm
@@ -11,12 +11,12 @@ from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from create_chunk import create_chunk
-from stream_generator import stream_generator
+from utils.create_chunk import create_chunk
+from utils.stream_generator import stream_generator
 
 load_dotenv()
 
-app = FastAPI()
+router = APIRouter()
 
 class HistoryItem(BaseModel):
     role: str
@@ -65,7 +65,7 @@ get_corpus_response = retriever_service_client.get_corpus(get_corpus_request)
 
 corpus_resource_name = get_corpus_response.name
 
-@app.post("/add-pdf")
+@router.post("/add-pdf")
 async def add_pdf_to_corpus(userId: Annotated[str, Form()], pdf: UploadFile):
     try:
         contents = await pdf.read()
@@ -110,7 +110,7 @@ async def add_pdf_to_corpus(userId: Annotated[str, Form()], pdf: UploadFile):
         traceback.print_exc()
         return {"success": False, "status": 500, "message": "Internal server error",}
 
-@app.post("/ask")
+@router.post("/ask")
 async def ask_custom_knowledge_base(request: QueryRequest) -> StreamingResponse:
     try:
         user_query = request.query
@@ -151,5 +151,5 @@ async def ask_custom_knowledge_base(request: QueryRequest) -> StreamingResponse:
     except Exception as e:
         print(f"An error occurred: {e}")
         traceback.print_exc()
-        return {"success": False, "status": 500, "message": "Internal server error",}
+        raise HTTPException(status_code=500, detail="Internal server error")
 

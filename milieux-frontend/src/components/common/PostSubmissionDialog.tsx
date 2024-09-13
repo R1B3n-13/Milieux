@@ -61,6 +61,8 @@ export default function PostSubmissionDialog({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
+  const [isLoading3, setIsLoading3] = useState(false);
+  const [isLoading4, setIsLoading4] = useState(false);
   const [text, setText] = useState<string>("");
   const [isBulbOn, setIsBulbOn] = useState(false);
   const [isCaptionOn, setIsCaptionOn] = useState(false);
@@ -79,9 +81,11 @@ export default function PostSubmissionDialog({
   const [aiText, setAiText] = useState("");
   const scrollAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleAiCall = async () => {
+  const handleAiCall = async (id: string) => {
     if (isCaptionOn) {
       if (!media) return;
+
+      id === "bulb" ? setIsLoading3(true) : setIsLoading4(true);
 
       const formData = new FormData();
       formData.append("text", text ? String(text) : "Generate a caption.");
@@ -95,8 +99,12 @@ export default function PostSubmissionDialog({
         textStream += delta;
         setAiText(textStream);
       }
+
+      id === "bulb" ? setIsLoading3(false) : setIsLoading4(false);
     } else {
       if (text.trim() === "") return;
+
+      id === "bulb" ? setIsLoading3(true) : setIsLoading4(true);
 
       const data = {
         text,
@@ -110,6 +118,8 @@ export default function PostSubmissionDialog({
         textStream += delta;
         setAiText(textStream);
       }
+
+      id === "bulb" ? setIsLoading3(false) : setIsLoading4(false);
     }
   };
 
@@ -294,18 +304,20 @@ export default function PostSubmissionDialog({
               <div
                 className={`absolute right-1 top-0 -translate-y-3 translate-x-3 rounded-full p-1 text-xl cursor-pointer ${
                   isBulbOn ? "text-emerald-600" : "text-rose-600"
-                } bg-amber-200`}
+                }  bg-amber-200`}
                 onClick={() => {
                   if (!isBulbOn) {
                     setIsBulbOn(true);
-                    handleAiCall();
+                    handleAiCall("bulb");
                   } else {
                     setIsBulbOn(false);
                     setAiText("");
                   }
                 }}
               >
-                {isBulbOn ? <BulbFilledIcon /> : <BulbLineIcon />}
+                <div className={`${isLoading3 && "animate-pulse"}`}>
+                  {isBulbOn ? <BulbFilledIcon /> : <BulbLineIcon />}
+                </div>
               </div>
             </div>
 
@@ -318,10 +330,12 @@ export default function PostSubmissionDialog({
                   className="h-40 w-[30rem] focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-gray-400 resize-none"
                 />
                 <div
-                  className="absolute right-1 top-0 -translate-y-5 translate-x-3 rounded-full p-1 text-xl cursor-pointer text-indigo-500 bg-amber-200"
-                  onClick={handleAiCall}
+                  className="absolute right-1 top-0 -translate-y-3 translate-x-3 rounded-full p-1 text-xl cursor-pointer text-indigo-500 bg-amber-200 "
+                  onClick={() => handleAiCall("re")}
                 >
-                  <RedoIcon />
+                  <div className={`${isLoading4 && "animate-spin"}`}>
+                    <RedoIcon />
+                  </div>
                 </div>
               </div>
             )}

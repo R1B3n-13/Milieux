@@ -3,19 +3,19 @@ import json
 import traceback
 from typing import Optional
 from urllib.parse import urlparse
-from fastapi import FastAPI
+from fastapi import APIRouter
 from google.oauth2 import service_account
 import google.ai.generativelanguage as glm
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from create_chunk import create_chunk
-from download_media import download_media
+from utils.create_chunk import create_chunk
+from utils.download_media import download_media
 
 load_dotenv()
 
-app = FastAPI()
+router = APIRouter()
 
 class AddPostRequest(BaseModel):
     text: str
@@ -28,18 +28,18 @@ class SearchRequest(BaseModel):
 genai.configure(api_key=os.environ['GEMINI_API_KEY'])
 
 generation_config_for_media_analysis = {
-  "temperature": 0.1,
+  "temperature": 0.25,
   "top_p": 0.8,
   "top_k": 60,
-  "max_output_tokens": 8192,
+  "max_output_tokens": 200,
   "response_mime_type": "text/plain",
 }
 
 generation_config_for_chunk_analysis = {
-  "temperature": 0.1,
+  "temperature": 0.25,
   "top_p": 0.8,
   "top_k": 60,
-  "max_output_tokens": 8192,
+  "max_output_tokens": 200,
   "response_mime_type": "application/json",
 }
 
@@ -52,7 +52,7 @@ media_analysis_model = genai.GenerativeModel(
         HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
         HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,      
     },
-system_instruction="As a content analyst, analyze the provided media content (photo or video) and generate a description that focuses on the main features of the media. Include only the most relevant details such as prominent objects, significant activities, key locations and any relevant contextual information (e.g., well-known characters, cultural references etc.). Avoid mentioning common elements that are not central to the media's content. The response should be concise and structured to facilitate feeding into a vector database. Do not include any introductory or concluding remarks. If no relevant details can be extracted, return \"null\".\nExamples:\nInput: Photo of a beach with palm trees and people swimming.\nOutput: Beach, palm trees, people swimming, ocean, sand\nInput: Video of a city street with cars, bicycles, and pedestrians.\nOutput: City street, cars, bicycles, pedestrians, buildings\nInput: Photo of a mountain landscape with a river and forest.\nOutput: Mountain, river, forest, trees, rocky terrain\nInput: Video of a soccer game in a stadium with cheering fans.\nOutput: Soccer game, stadium, players, ball, goalposts, fans, grass field\nInput: Blurry photo with no discernible features.\nOutput: null\nInput: Video of a sunset over a lake with birds flying.\nOutput: Sunset, lake, birds flying, water reflection\nInput: Photo of Luffy from One Piece anime.\nOutput: Monkey D. Luffy, anime character, one piece anime",
+system_instruction="As a content analyst, your role is to analyze the provided media content (photo or video) and generate a detailed, descriptive narrative that captures the main features, context, and significance of the media. Focus on the most relevant elements, including prominent objects, significant activities, key locations, and any relevant historical, cultural, or background information. Consider the tone and intent behind the media to provide a description that is both informative and contextually rich. Avoid mentioning common or incidental elements that are not central to the media's content. The response should be detailed enough for various content-related purposes, including feeding into a vector database. Do not include any introductory or concluding remarks. If no relevant details can be extracted, return \"null.\"\nExamples:\n1. **Input**: Photo of the Colosseum in Rome, Italy.\n **Output**: The Colosseum, an ancient amphitheater located in the heart of Rome, Italy, is captured in this image. Built during the first century AD, the Colosseum is an iconic symbol of the Roman Empire's grandeur and architectural prowess. The stone arches and partially ruined structure reflect its historical significance as a venue for gladiatorial contests and public spectacles.\n2. **Input**: Photo of a mountain landscape with a river and forest.\n **Output**: A serene mountain landscape dominated by towering, snow-capped peaks. A river winds through the dense forest of pine trees, reflecting the surrounding natural beauty. The rocky terrain and untouched wilderness suggest a remote, pristine environment.\n3. **Input**: Video of a soccer game in a stadium with cheering fans.\n **Output**: An intense soccer match played in a large, crowded stadium. The players, dressed in brightly colored uniforms, are engaged in fast-paced action as they compete for the ball. The roaring crowd of fans waves banners and cheers enthusiastically, creating an electrifying atmosphere. The well-maintained grass field and stadium lights highlight the importance of the event.\n4. **Input**: Blurry photo with no discernible features.\n **Output**: null\n5. **Input**: Video of the Great Wall of China during sunrise.\n **Output**: A breathtaking view of the Great Wall of China, winding across the mountainous terrain as the first light of dawn breaks over the horizon. The Wall, originally built to protect Chinese states from invasions, stands as a testament to the engineering feats of ancient civilizations. The warm hues of the sunrise bathe the Wall in a golden light, highlighting its length and the rugged beauty of the surrounding landscape.\n6. **Input**: Photo of a group of people holding a protest march with banners.\n **Output**: A dynamic image of a protest march, where a diverse group of people hold banners and signs advocating for social justice. The determined expressions on the faces of the protesters reflect the urgency and passion behind their cause. The background shows an urban setting, with buildings and streets filled with demonstrators, underscoring the widespread nature of the movement.\n7. **Input**: Video of a traditional Japanese tea ceremony.\n **Output**: A serene depiction of a traditional Japanese tea ceremony, where a tea master prepares matcha tea with precise, graceful movements. The ceremony takes place in a tatami-matted room, surrounded by elements of nature, including bonsai trees and a tranquil garden visible through sliding shoji doors. This ritual, steeped in Zen Buddhism, emphasizes mindfulness, respect, and the beauty of simplicity.\n8. **Input**: Video of a medieval castle on a hilltop.\n **Output**: A majestic view of a medieval castle perched atop a hill, overlooking a vast, green valley below. The stone fortress, complete with towering battlements and a drawbridge, evokes the turbulent history of the Middle Ages, where such castles served as both homes for nobility and defensive strongholds. The surrounding landscape adds to the castle's aura of strength and isolation.\n9. **Input**: Photo of Luffy from One Piece anime.\n **Output**: A vibrant image of Monkey D. Luffy, the protagonist from the popular One Piece anime. Luffy is depicted in his iconic straw hat and red vest, with a determined expression on his face. The background includes elements from the anime's world, such as the open sea and pirate ships, underscoring Luffy's adventurous spirit and his quest to find the One Piece treasure.",
 )
 
 chunk_analysis_model = genai.GenerativeModel(
@@ -101,7 +101,7 @@ async def generate_media_analysis_response(media_path: str):
         else:
             return ""
 
-@app.post("/add-post")
+@router.post("/add-post")
 async def add_post_to_corpus(request: AddPostRequest):
     try:
         media_path = ""
@@ -145,15 +145,15 @@ async def add_post_to_corpus(request: AddPostRequest):
         traceback.print_exc()
         return {"success": False, "status": 500, "message": "Internal server error",}
 
-@app.post("/search")
+@router.post("/search")
 async def search_by_user_query(request: SearchRequest):
     try:
         user_query = request.query
         results_count = 20
 
         query_corpus_request = glm.QueryCorpusRequest(name=corpus_resource_name,
-                                                  query=user_query,
-                                                  results_count=results_count)
+                                                    query=user_query,
+                                                    results_count=results_count)
     
         query_corpus_response = retriever_service_client.query_corpus(query_corpus_request)
 

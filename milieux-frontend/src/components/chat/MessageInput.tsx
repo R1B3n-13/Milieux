@@ -11,13 +11,39 @@ import uploadToCloudinary from "@/actions/cloudinaryActions";
 import { toast } from "sonner";
 import { sendMessage } from "@/actions/chatActions";
 import { revalidateMessage } from "@/actions/revalidationActions";
-import { broadcastToSocket } from "@/actions/wsActions";
+import Loading from "../common/Loading";
+import MessageSchema from "@/schemas/messageSchema";
+import { z } from "zod";
+import { getChatMessages } from "@/services/chatService";
+import { readStreamableValue } from "ai/rsc";
+import { chatWithSentiaAi } from "@/actions/aiActions";
 
 export const MessageInput = () => {
+  const [messages, setMessages] = useState<z.infer<typeof MessageSchema>[]>([]);
   const [text, setText] = useState<string>("");
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
-  const { selectedChat, triggerRefresh, setTriggerRefresh } = useChatContext();
+  const {
+    selectedChat,
+    triggerRefresh,
+    setTriggerRefresh,
+    stompClient,
+    setAiStreamingText,
+    setTempMessage,
+    chatPersonality,
+  } = useChatContext();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchChatMessages = async () => {
+      if (selectedChat?.id) {
+        const response = await getChatMessages(selectedChat.id);
+        if (response.success) {
+          setMessages(response.chatMessages.reverse());
+        }
+      }
+    };
+    fetchChatMessages();
+  }, [selectedChat, triggerRefresh]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -39,94 +65,203 @@ export const MessageInput = () => {
     }
   };
 
-  const handleSendMessage = async () => {
-    setIsLoading(true);
+  const uploadImageIfPresent = async (image: string | ArrayBuffer | null) => {
+    if (!image) return null;
 
-    let imagePath = null;
-
-    if (image) {
-      const uploadResult = await uploadToCloudinary(image as string, "image");
-
-      if (!uploadResult.success) {
-        toast.error("Sending message failed.");
-        setIsLoading(false);
-        return;
-      } else {
-        imagePath = uploadResult.url;
-      }
+    const uploadResult = await uploadToCloudinary(image as string, "image");
+    if (!uploadResult.success) {
+      toast.error("Sending message failed.");
+      throw new Error("Image upload failed.");
     }
 
-    const message = {
+    return uploadResult.url;
+  };
+
+  const handleAiMessage = async (imagePath: string | null) => {
+    const messageForAi = {
       text,
-      imagePath,
+      media_url: imagePath,
+      history: messages.map((message) => ({
+        role: message.user?.id === -1 ? "model" : "user",
+        text: message.text || null,
+        media_url: message.imagePath || null,
+      })),
+      personality: chatPersonality,
     };
 
-    const response = await sendMessage({ chatId: selectedChat?.id, message });
+    const { success, result } = await chatWithSentiaAi(messageForAi);
 
-    if (!response.success) {
-      toast.error("Something went wrong.");
-    } else {
-      setTriggerRefresh(!triggerRefresh);
-      await broadcastToSocket(selectedChat?.id);
+    if (!success) {
+      throw new Error("AI response generation failed.");
     }
 
+    let textStream = "";
+    for await (const delta of readStreamableValue(result)) {
+      textStream += delta;
+      setAiStreamingText(textStream);
+    }
+
+    return textStream;
+  };
+
+  const sendAiStreamingMessage = async (streamedText: string) => {
+    const aiMessage = {
+      text: streamedText,
+      imagePath: null,
+      messageType: "ai",
+    };
+
+    const response = await sendMessage({
+      chatId: selectedChat?.id,
+      message: aiMessage,
+    });
+
+    if (!response.success) {
+      throw new Error("Failed to send AI message.");
+    } else {
+      setAiStreamingText("");
+      setTempMessage([]);
+    }
+  };
+
+  const notifyOtherUsers = (chatId: number | undefined | null) => {
+    if (stompClient && stompClient.active && stompClient.connected) {
+      stompClient!.publish({
+        destination: `/app/chat/${chatId}`,
+        body: chatId?.toString(),
+      });
+    } else {
+      toast.error(
+        "Lost connection to the chat server. Please refresh the page."
+      );
+    }
+  };
+
+  const resetStateAfterMessageSend = () => {
     setIsLoading(false);
     setText("");
     setImage(null);
+    setTempMessage([]);
+    setAiStreamingText("");
     revalidateMessage();
+  };
+
+  const handleSendMessage = async () => {
+    setIsLoading(true);
+
+    try {
+      const imagePath = await uploadImageIfPresent(image);
+
+      setTempMessage((prevMessages) => {
+        const updatedMessages = [...prevMessages];
+
+        updatedMessages[0] = text;
+        if (imagePath) {
+          updatedMessages[1] = imagePath;
+        }
+
+        return updatedMessages;
+      });
+
+      const isChatWithAi = selectedChat?.users?.some((user) => user.id === -1);
+
+      let streamedText = "";
+      if (isChatWithAi) {
+        streamedText = await handleAiMessage(imagePath);
+      }
+
+      const normalMessage = {
+        text,
+        imagePath,
+        messageType: "normal",
+      };
+
+      const response = await sendMessage({
+        chatId: selectedChat?.id,
+        message: normalMessage,
+      });
+
+      if (!response.success) {
+        throw new Error("Failed to send message.");
+      }
+
+      setTriggerRefresh(!triggerRefresh);
+
+      if (isChatWithAi && streamedText) {
+        await sendAiStreamingMessage(streamedText);
+      } else {
+        notifyOtherUsers(selectedChat?.id);
+      }
+    } catch (error) {
+      console.error("Error occurred: " + error);
+      toast.error("Something went wrong.");
+    } finally {
+      resetStateAfterMessageSend();
+    }
   };
 
   const clearImage = () => {
     setImage(null);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
     <>
-      {image && (
-        <div className="flex items-center justify-start pl-5 bg-indigo-50">
-          <div className="relative">
-            <Image
-              src={image as string}
-              alt=""
-              width={200}
-              height={200}
-              className="rounded-lg"
+      {selectedChat && (
+        <>
+          {image && (
+            <div className="flex items-center justify-start pl-5 bg-indigo-50">
+              <div className="relative">
+                <Image
+                  src={image as string}
+                  alt=""
+                  width={200}
+                  height={200}
+                  className="rounded-lg"
+                />
+                <button
+                  className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                  onClick={() => clearImage()}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
+          <div className="p-4 bg-indigo-50 flex items-center gap-2">
+            <Input
+              value={text}
+              onChange={handleInputChange}
+              onKeyDown={() => handleKeyDown}
+              placeholder="Type a message..."
+              className="flex-grow border rounded-full bg-slate-50 h-11 mr-1 focus-visible:ring-slate-500"
             />
-            <button
-              className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
-              onClick={() => clearImage()}
+
+            <div
+              onClick={handleSendMessage}
+              className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200"
             >
-              ✕
-            </button>
+              {isLoading ? <Loading text="" /> : <SendFilledIcon />}
+            </div>
+
+            <Label className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200">
+              <AttachmentIcon />
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleImageChange(event)}
+                className="hidden"
+              />
+            </Label>
           </div>
-        </div>
+        </>
       )}
-
-      <div className="p-4 bg-indigo-50 flex items-center gap-2">
-        <Input
-          value={text}
-          onChange={handleInputChange}
-          placeholder="Type a message..."
-          className="flex-grow border rounded-full bg-slate-50 h-11 mr-1 focus-visible:ring-slate-500"
-        />
-
-        <div
-          onClick={handleSendMessage}
-          className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200"
-        >
-          <SendFilledIcon />
-        </div>
-
-        <Label className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200">
-          <AttachmentIcon />
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={(event) => handleImageChange(event)}
-            className="hidden"
-          />
-        </Label>
-      </div>
     </>
   );
 };

@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { z } from "zod";
 import ChatSchema from "@/schemas/chatSchema";
+import { Client } from "@stomp/stompjs";
 
 const ChatContext = createContext<{
   selectedChat: z.infer<typeof ChatSchema> | null;
@@ -11,6 +12,14 @@ const ChatContext = createContext<{
   >;
   triggerRefresh: boolean;
   setTriggerRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  stompClient: Client | undefined;
+  setStompClient: React.Dispatch<React.SetStateAction<Client | undefined>>;
+  aiStreamingText: string;
+  setAiStreamingText: React.Dispatch<React.SetStateAction<string>>;
+  tempMessage: string[];
+  setTempMessage: React.Dispatch<React.SetStateAction<string[]>>;
+  chatPersonality: string | undefined;
+  setChatPersonality: React.Dispatch<React.SetStateAction<string | undefined>>;
 } | null>(null);
 
 export function ChatContextProvider({ children }: { children: ReactNode }) {
@@ -18,6 +27,12 @@ export function ChatContextProvider({ children }: { children: ReactNode }) {
     typeof ChatSchema
   > | null>(null);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
+  const [stompClient, setStompClient] = useState<Client | undefined>(undefined);
+  const [aiStreamingText, setAiStreamingText] = useState("");
+  const [tempMessage, setTempMessage] = useState<string[]>([]);
+  const [chatPersonality, setChatPersonality] = useState<string | undefined>(
+    undefined
+  );
 
   return (
     <ChatContext.Provider
@@ -26,6 +41,14 @@ export function ChatContextProvider({ children }: { children: ReactNode }) {
         setSelectedChat,
         triggerRefresh,
         setTriggerRefresh,
+        stompClient,
+        setStompClient,
+        aiStreamingText,
+        setAiStreamingText,
+        tempMessage,
+        setTempMessage,
+        chatPersonality,
+        setChatPersonality,
       }}
     >
       {children}

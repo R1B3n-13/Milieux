@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,6 +45,7 @@ public class Chat {
 	@JsonIgnore
 	private List<ChatMessage> chatMessages = new ArrayList<>();
 	
+	@Column(length = 4000)
 	private String lastText;
 
 	private ZonedDateTime createdAt;

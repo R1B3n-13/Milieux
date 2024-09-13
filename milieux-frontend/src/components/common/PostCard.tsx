@@ -32,6 +32,7 @@ import DiamondQuestionIcon from "../icons/DiamondQuestionIcon";
 import TidbitsDialog from "./TidbitsDialog";
 import { useState } from "react";
 import Link from "next/link";
+import MarkdownRenderer from "./MarkdownRenderer";
 
 const PostCard = ({
   post,
@@ -66,7 +67,7 @@ const PostCard = ({
   return (
     <div className="flex transition-all">
       <Card className="bg-white shadow-md w-full">
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-1">
           <div className="flex gap-4">
             <div className="cursor-pointer">
               <Link
@@ -119,12 +120,12 @@ const PostCard = ({
           </div>
         </CardHeader>
 
-        <CardContent className="px-0">
+        <CardContent className="px-0 py-0">
           {(post.isSafe !== false || isSafe === true) && (
             <div className="flex flex-col">
               {post.text && (
-                <p className="pb-3 px-6 text-slate-700 font-medium">
-                  {post.text}
+                <p className="px-6 text-slate-700 font-medium">
+                  <MarkdownRenderer text={post.text} />
                 </p>
               )}
 
@@ -162,7 +163,7 @@ const PostCard = ({
           )}
         </CardContent>
 
-        <CardFooter className="flex items-center text-2xl text-slate-700">
+        <CardFooter className="px-6 py-3 flex items-center text-2xl text-slate-700">
           <div className="flex items-center gap-2">
             <div className="cursor-pointer" onClick={handleLoveIconClick}>
               {post.likedByUsers?.find((user) => user.id === userId) !==
