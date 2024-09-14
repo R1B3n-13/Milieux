@@ -162,12 +162,10 @@ const Persona = async ({ id }: { id: number | null }) => {
 
             <TabsContent value="chatbot">
               <div className="flex flex-col gap-4 mt-4">
-                <div className="grid grid-cols-2">
-                  <div className="col-span-1">
-                    <PdfSubmissionField userId={user.id} />
-                  </div>
-                </div>
-                <ChatBot userId={user.id} />
+                {user.id === loggedInUser.id && user.isBusiness && (
+                  <PdfSubmissionField userId={user.id} />
+                )}
+                {user.isBusiness && <ChatBot userId={user.id} />}
               </div>
             </TabsContent>
           </Tabs>

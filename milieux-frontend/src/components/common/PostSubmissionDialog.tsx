@@ -414,7 +414,7 @@ export default function PostSubmissionDialog({
                 </div>
               ) : (
                 <div className="w-fit max-w-72 flex items-center justify-center gap-4">
-                  <div className="relative">
+                  <div className="relative rounded-lg overflow-hidden">
                     <VideoPlayer
                       src={selectedMedia as string}
                       width={200}
