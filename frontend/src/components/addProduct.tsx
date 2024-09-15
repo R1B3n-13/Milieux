@@ -4,6 +4,7 @@ import React from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useStoreContext } from '@/contexts/StoreContext';
 import {
   Form,
   FormControl,
@@ -24,10 +25,17 @@ const formSchema = z.object({
     .transform((val) => parseFloat(val)),
   category: z.string().min(2).max(15),
   description: z.string().max(250),
-  imgURL: z.string().url("Invalid URL"),
+  imgurl: z.string(),
 });
 
-const AddProduct = () => {
+interface AddProductProps {
+  onProductAdded: (newProduct: any) => void; // Notify parent when a product is added
+}
+
+const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
+  const { storeInfo } = useStoreContext();
+  const PORT = process.env.PORT || 'http://localhost:8081/api';
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,21 +43,57 @@ const AddProduct = () => {
       productPrice: "",
       category: "",
       description: "",
-      imgURL: "",
+      imgurl: "",
     },
   });
 
-  const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Form Data: ", data);
+  // Function to generate a random product ID
+  const generateProductId = () => {
+    return Math.floor(Math.random() * 1000000); // Adjust the range as needed
+  };
+
+  // Function to handle form submission and make the API call
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    const newProduct = {
+      id: generateProductId(),
+      name: data.productName,
+      price: data.productPrice,
+      category: data.category,
+      description: data.description,
+      imgurl: data.imgurl,
+      store_id: storeInfo.id, // Replace with dynamic store_id if needed
+    };
+
+    try {
+      const response = await fetch(`${PORT}/product/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newProduct),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create product");
+      }
+
+      // Notify parent about the new product
+      onProductAdded(newProduct);
+
+      // Optionally reset the form after submission
+      form.reset();
+    } catch (error) {
+      console.error("Error creating product:", error);
+    }
   };
 
   return (
-    <div className="flex flex-row font-montserrat">
-      <div className="flex flex-row gap-2 max-w-64 w-full">
+    <div className="flex flex-row font-montserrat w-[30%]">
+      <div className="flex flex-row gap-2 w-full">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="flex flex-col gap-2 max-w-md w-[100%]"
+            className="flex flex-col gap-2 w-[100%]"
           >
             <FormField
               control={form.control}
@@ -58,7 +102,7 @@ const AddProduct = () => {
                 <FormItem>
                   <FormLabel>Product Name:</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Product name" type="text" />
+                    <Input {...field} placeholder="Product name" type="text"/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,7 +158,7 @@ const AddProduct = () => {
 
             <FormField
               control={form.control}
-              name="imgURL"
+              name="imgurl"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Image URL:</FormLabel>

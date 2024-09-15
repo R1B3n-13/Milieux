@@ -3,10 +3,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import dotenv from 'dotenv';
 
 interface StoreContextType {
   storeInfo: any;
   loading: boolean;
+  userId: any;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -15,11 +17,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [storeInfo, setStoreInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const storeId = 1; // You can set the store id dynamically if needed
+  const userId = 1;
+  const PORT = process.env.PORT || 'http://localhost:8081/api';
 
   useEffect(() => {
     const fetchStoreInfo = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/store/find/${storeId}`);
+        const response = await fetch(PORT+`/store/find/${storeId}`);
         if (response.ok) {
           const data = await response.json();
           setStoreInfo(data);
@@ -37,7 +41,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [storeId]);
 
   return (
-    <StoreContext.Provider value={{ storeInfo, loading }}>
+    <StoreContext.Provider value={{ storeInfo, loading, userId }}>
       {children}
     </StoreContext.Provider>
   );

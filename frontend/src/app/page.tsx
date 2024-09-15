@@ -4,9 +4,8 @@ import { StoreProvider, useStoreContext } from '@/contexts/StoreContext';
 import { CustomerReviews, Hero, PopularProducts } from '@/sections';
 import { useShoppingCart } from '@/contexts/ShoppingCartContext';
 import ShoppingCart from '@/components/ShoppingCart';
-import Image from 'next/image';
 
-import cartIcon from '@/assets/icons/cart.svg';
+import ShoppingCartContainer from '@/components/ShoppingCartContainer';
 
 export default function Home() {
   const { storeInfo, loading } = useStoreContext();
@@ -21,17 +20,10 @@ export default function Home() {
 
   return (
     <div>
+
       <ShoppingCart />
-      <div>
-        <Image
-          src={cartIcon}
-          alt='cart icon'
-          onClick={() => setOpen(true)}
-          className="fixed top-10 right-10"
-          height={50}
-          width={50}
-        />
-      </div>
+      <ShoppingCartContainer />
+
       <section className="xl:padding-l px-[15rem] wide:padding-r padding-b">
         <Hero />
       </section>
@@ -40,9 +32,9 @@ export default function Home() {
         <PopularProducts />
       </section>
 
-      <section className="padding px-[15rem] pb-[1rem]">
+      {/* <section className="padding px-[15rem] pb-[1rem]">
         <CustomerReviews />
-      </section>
+      </section> */}
     </div>
   );
 }

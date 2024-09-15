@@ -1,15 +1,24 @@
-'use client'
+'use client';
 
 import React from 'react';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useShoppingCart } from '@/contexts/ShoppingCartContext'; // Adjust the import path as needed
+import { useShoppingCart } from '@/contexts/ShoppingCartContext';
+import { useStoreContext } from '@/contexts/StoreContext';
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 const ShoppingCart: React.FC = () => {
+  const { storeInfo } = useStoreContext();
   const { cart, removeFromCart, updateQuantity, open, setOpen } = useShoppingCart();
+  const router = useRouter(); // Initialize the router
 
   const calculateSubtotal = () => {
     return cart.reduce((total, product) => total + product.price * product.quantity, 0).toFixed(2);
+  };
+
+  const handleCheckout = () => {
+    setOpen(false); // Close the cart dialog
+    router.push('/orders'); // Navigate to the orders page
   };
 
   return (
@@ -67,7 +76,6 @@ const ShoppingCart: React.FC = () => {
                                     </h3>
                                     <p className="ml-4">${product.price.toFixed(2)}</p>
                                   </div>
-                                  {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                 </div>
                                 <div className="flex flex-1 items-end justify-between text-sm">
                                   <div className="flex items-center">
@@ -75,7 +83,7 @@ const ShoppingCart: React.FC = () => {
                                       type="button"
                                       onClick={() => updateQuantity(product.id, product.quantity - 1)}
                                       className="text-gray-500 hover:text-gray-600"
-                                      disabled={product.quantity <= 1} // Prevent negative quantities
+                                      disabled={product.quantity <= 1}
                                     >
                                       -
                                     </button>
@@ -92,7 +100,8 @@ const ShoppingCart: React.FC = () => {
                                     <button
                                       type="button"
                                       onClick={() => removeFromCart(product.id)}
-                                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                                      className="font-medium "
+                                      style={{ color: storeInfo.ui_secondary_color }}
                                     >
                                       Remove
                                     </button>
@@ -114,12 +123,13 @@ const ShoppingCart: React.FC = () => {
                   </div>
                   <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                   <div className="mt-6">
-                    <a
-                      href="#"
-                      className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                    <button
+                      className="flex items-center justify-center rounded-md border border-transparent px-6 py-3 text-base font-medium text-white shadow-sm"
+                      style={{ backgroundColor: storeInfo.ui_secondary_color }}
+                      onClick={handleCheckout} // Checkout button now navigates to the orders page
                     >
                       Checkout
-                    </a>
+                    </button>
                   </div>
                   <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                     <p>
@@ -127,7 +137,8 @@ const ShoppingCart: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setOpen(false)}
-                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                        className="font-medium "
+                        style={{ color: storeInfo.ui_secondary_color }}
                       >
                         Continue Shopping
                         <span aria-hidden="true"> &rarr;</span>

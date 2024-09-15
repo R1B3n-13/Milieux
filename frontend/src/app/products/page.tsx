@@ -2,8 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { useStoreContext } from '@/contexts/StoreContext'; // Import the context hook
+import { useShoppingCart } from '@/contexts/ShoppingCartContext';
+import ShoppingCart from '@/components/ShoppingCart';
 import CategoryBar from '@/components/CategoryBar';
 import ProductList from '@/components/ProductList';
+
+import cartIcon from '@/assets/icons/cart.svg';
+import { Button } from '@/components/ui/button';
+
+import Image from 'next/image';
+import dotenv from 'dotenv';
+import ShoppingCartContainer from '@/components/ShoppingCartContainer';
+dotenv.config();
 
 interface Product {
     id: number;
@@ -22,6 +32,10 @@ const Page: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [sortOrder, setSortOrder] = useState<string>('');
+    const [categories, setCategories] = useState<string[]>([]); // To store all unique categories
+    const PORT = process.env.PORT || 'http://localhost:8081/api';
+    const { setOpen } = useShoppingCart(); // Use the setOpen from the context to open/close cart
+    const { getCartItemCount } = useShoppingCart();
 
     useEffect(() => {
         if (storeInfo) {
@@ -31,14 +45,17 @@ const Page: React.FC = () => {
 
     const fetchProducts = async (store_id: number) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/product/store/${store_id}`);
-
+            const response = await fetch(PORT + `/product/store/${store_id}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch products');
             }
 
-            const data = await response.json();
+            const data: Product[] = await response.json();
             setProducts(data);
+
+            // Extract unique categories from the products
+            const uniqueCategories = Array.from(new Set(data.map(product => product.category)));
+            setCategories(uniqueCategories);
         } catch (error) {
             console.error('Error fetching products:', error);
             setError('Failed to fetch products');
@@ -58,7 +75,7 @@ const Page: React.FC = () => {
     const handleSortChange = (value: string) => {
         setSortOrder(value);
     };
-    
+
     const filteredProducts = selectedCategories.length
         ? products.filter((product) =>
             selectedCategories.includes(product.category)
@@ -69,7 +86,6 @@ const Page: React.FC = () => {
         let sorted = [...filteredProducts];
 
         const parsePrice = (price: any) => {
-            // Ensure price is a string and has a currency symbol
             return typeof price === 'string' ? parseFloat(price.slice(1)) : parseFloat(price);
         };
 
@@ -88,12 +104,16 @@ const Page: React.FC = () => {
 
     return (
         <div>
+
+            <ShoppingCartContainer />
+
             <div className='container grid grid-cols-4 gap-6 pt-10 pb-16 items-start'>
 
                 <div className='col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hidden'>
                     <div className='divide-y divide-gray-200 space-y-5'>
                         <h3 className='text-xl text-gray-800 mb-3 uppercase font-medium'>Categories</h3>
                         <CategoryBar
+                            categories={categories} // Pass unique categories here
                             selectedCategories={selectedCategories}
                             onCategoryChange={handleCategoryChange}
                         />

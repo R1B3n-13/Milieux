@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from "@/components/ProductCard";
 import { useStoreContext } from '@/contexts/StoreContext'; // Import the context hook
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface Product {
     id: number;
@@ -15,14 +17,14 @@ interface Product {
 
 const PopularProducts: React.FC = () => {
     const { storeInfo } = useStoreContext(); // Access storeInfo from context
+    const PORT = process.env.PORT || 'http://localhost:8081/api';
 
-    // Ensure storeInfo is available
     if (!storeInfo) {
         return <p>Loading store info...</p>;
     }
 
     const accentColor = storeInfo.ui_accent_color;
-    console.log('Top Products:', storeInfo.top_items);
+    // console.log('Top Products:', storeInfo.top_items);
 
     const [topProducts, setTopProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);  // Loading state
@@ -32,7 +34,7 @@ const PopularProducts: React.FC = () => {
         try {
             const fetchedProducts: Product[] = [];
             for (const productId of storeInfo.top_items) {
-                const response = await fetch(`http://localhost:8080/api/product/find/${productId}`);
+                const response = await fetch(PORT + `/product/find/${productId}`);
 
                 if (response.ok) {
                     const data: Product = await response.json();
@@ -69,18 +71,27 @@ const PopularProducts: React.FC = () => {
     }
 
     return (
-        <div>
-            <section id="products" className="max-container max-sm:mt-12">
-                <div className="flex flex-col justify-start gap-5">
-                    <h2 className="text-4xl font-palanquin font-bold text-slate-gray">
-                        Our <span style={{ color: accentColor }}>Top</span> Products
-                    </h2>
-                </div>
+        <div className='flex flex-col items-center pb-4'>
+            <div>
+                <section id="products" className="max-container max-sm:mt-12">
+                    <div className="flex flex-col justify-start gap-5">
+                        <h2 className="text-4xl font-palanquin font-bold text-slate-gray">
+                            <span style={{ color: accentColor }}>Featured</span> Products
+                        </h2>
+                    </div>
 
-                <div className="mt-16 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-4 gap-14">
-                    {content}
-                </div>
-            </section>
+                    <div className="mt-16 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-4 gap-14">
+                        {content}
+                    </div>
+                </section>
+
+            </div>
+
+            <Link href={'/products'}>
+                <Button className="mt-8" variant="outline">
+                    See more
+                </Button>
+            </Link>
         </div>
     );
 };

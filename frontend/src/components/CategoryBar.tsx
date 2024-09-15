@@ -1,37 +1,27 @@
-import { catergories } from '@/constants';
-import React from 'react';
-
 interface CategoryBarProps {
+  categories: string[];
   selectedCategories: string[];
   onCategoryChange: (category: string) => void;
 }
 
-const CategoryBar: React.FC<CategoryBarProps> = ({ selectedCategories, onCategoryChange }) => {
-  const categories = catergories; // Replace with your actual categories
-
+const CategoryBar: React.FC<CategoryBarProps> = ({ categories, selectedCategories, onCategoryChange }) => {
   return (
-    <div>
-      {categories.map((category, index) => (
-        <div key={index} className='space-y-2'>
-          <div className='flex items-center'>
-            <input
-              type="checkbox"
-              id={`cat-${index}`}
-              className='text-coral-red focus:ring-0 rounded-sm cursor-pointer'
-              onChange={() => onCategoryChange(category)}
-              checked={selectedCategories.includes(category)}
-            />
-            <label
-              htmlFor={`cat-${index}`}
-              className='text-gray-600 ml-3 cursor-pointer'
-            >
-              {category}
-            </label>
-            <div className='ml-auto text-gray-600'>(15)</div>
-          </div>
-        </div>
-      ))}
-    </div>
+      <div className="flex gap-2 flex-col mt-2 pt-2">
+          {categories.map((category) => (
+              <div key={category}>
+                  <label>
+                      <input
+                          type="checkbox"
+                          value={category}
+                          checked={selectedCategories.includes(category)}
+                          onChange={() => onCategoryChange(category)}
+                          className="mr-2"
+                      />
+                      {category}
+                  </label>
+              </div>
+          ))}
+      </div>
   );
 };
 

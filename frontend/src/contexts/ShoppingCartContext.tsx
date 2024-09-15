@@ -17,6 +17,7 @@ interface ShoppingCartContextType {
   updateQuantity: (id: string | number, quantity: number) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
+  getCartItemCount: () => number;
 }
 
 const ShoppingCartContext = createContext<ShoppingCartContextType | undefined>(undefined);
@@ -60,8 +61,12 @@ export const ShoppingCartProvider: React.FC<{ children: ReactNode }> = ({ childr
     });
   };
 
+  const getCartItemCount = () => {
+    return cart.reduce((count, product) => count + product.quantity, 0);
+  };
+
   return (
-    <ShoppingCartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, open, setOpen }}>
+    <ShoppingCartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, open, setOpen, getCartItemCount }}>
       {children}
     </ShoppingCartContext.Provider>
   );

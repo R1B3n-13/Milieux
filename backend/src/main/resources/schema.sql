@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS product (
     id INT NOT NULL,
-    prod_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     category VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    descr TEXT,
-    img_url VARCHAR(255),   -- Changed from imgUrl to img_url
+    description TEXT,
+    imgurl VARCHAR(255),   -- Changed from imgUrl to img_url
     store_id INTEGER NOT NULL,
     -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
@@ -45,10 +45,13 @@ CREATE TABLE IF NOT EXISTS orders (
     status INTEGER NOT NULL
 );
 
-
--- CREATE TABLE IF NOT EXISTS store (
+-- create TABLE IF NOT EXISTS user (
 --     id SERIAL PRIMARY KEY,
 --     name VARCHAR(255) NOT NULL,
+--     imgurl VARCHAR(255)
+-- );
+-- CREATE TABLE IF NOT EXISTS store (
+--     id SERIAL PRIMARY KEY,
 --     address VARCHAR(255) NOT NULL,
 --     phone VARCHAR(255) NOT NULL,
 --     email VARCHAR(255) NOT NULL,
