@@ -9,5 +9,5 @@ import com.milieux.models.ChatMessage;
 
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 	
-	List<ChatMessage> findByChatOrderByTimestampDesc(Chat chat);
+	public List<ChatMessage> findByChatOrderByTimestampDesc(Chat chat);
 }
