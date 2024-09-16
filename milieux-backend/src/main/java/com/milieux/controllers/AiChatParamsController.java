@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,10 +38,8 @@ public class AiChatParamsController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 
-	@GetMapping
-	public ResponseEntity<AiChatParamsResponseDto> getAiChatParams(@RequestHeader("Authorization") String header) {
-
-		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
+	@GetMapping("/{userId}")
+	public ResponseEntity<AiChatParamsResponseDto> getAiChatParams(@PathVariable Long userId) {
 
 		AiChatParamsResponseDto responseDto = aiChatParamsService.getAiChatParams(userId);
 
