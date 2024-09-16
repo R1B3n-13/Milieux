@@ -1,9 +1,13 @@
 import getAuthToken from "@/actions/authActions";
 import { getBackendUrl } from "@/actions/getEnvVarActions";
 
-export async function getAiChatParams() {
+export async function getAiChatParams(userId: number | null | undefined) {
   try {
-    const url = new URL(`/ai-chat/params`, await getBackendUrl());
+    if (!userId) {
+      throw new Error("Invalid user id.");
+    }
+
+    const url = new URL(`/ai-chat/params/${userId}`, await getBackendUrl());
 
     const authToken = await getAuthToken();
     if (!authToken)

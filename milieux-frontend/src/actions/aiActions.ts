@@ -455,8 +455,6 @@ export async function createAiChatParams(data: {
   try {
     const url = new URL(`/ai-chat/params/create`, await getBackendUrl());
 
-    console.log(data.currentPdfName);
-
     const authToken = await getAuthToken();
     if (!authToken)
       return {

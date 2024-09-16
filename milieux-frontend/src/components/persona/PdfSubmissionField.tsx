@@ -41,7 +41,7 @@ const PdfSubmissionField = ({
 
   useEffect(() => {
     const initAiChatParams = async () => {
-      const response = await getAiChatParams();
+      const response = await getAiChatParams(userId);
 
       if (response.success) {
         aiChatParams = response.aiChatParams;
