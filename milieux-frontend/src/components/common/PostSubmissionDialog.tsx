@@ -91,7 +91,11 @@ export default function PostSubmissionDialog({
       formData.append("text", text ? String(text) : "Generate a caption.");
       formData.append("media", media);
 
-      const { result } = await generateCaption(formData);
+      const { result, success } = await generateCaption(formData);
+
+      if (!success) {
+        toast.error("Something went wrong. Please try again.");
+      }
 
       let textStream = "";
 
@@ -110,7 +114,11 @@ export default function PostSubmissionDialog({
         text,
       };
 
-      const { result } = await checkAndCorrectText(data);
+      const { result, success } = await checkAndCorrectText(data);
+
+      if (!success) {
+        toast.error("Something went wrong. Please try again.");
+      }
 
       let textStream = "";
 

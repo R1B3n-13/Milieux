@@ -125,9 +125,9 @@ const PostCard = ({
           {(post.isSafe !== false || isSafe === true) && (
             <div className="flex flex-col">
               {post.text && (
-                <p className="px-6 text-slate-700 font-medium">
+                <div className="px-6 text-slate-700 font-medium">
                   <MarkdownRenderer text={post.text} />
-                </p>
+                </div>
               )}
 
               {post.imagePath && (
