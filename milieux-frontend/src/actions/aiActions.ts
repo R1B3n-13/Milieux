@@ -1,6 +1,8 @@
 "use server";
 
 import { createStreamableValue } from "ai/rsc";
+import { getBackendUrl } from "./getEnvVarActions";
+import getAuthToken from "./authActions";
 
 const backendUrl = process.env.AI_BACKEND_URL;
 
@@ -132,6 +134,10 @@ export async function askCustomChatbot(data: {
   query: string;
   userId: number | null | undefined;
   history: { role: "user" | "model"; parts: string }[];
+  temperature: number;
+  top_p: number;
+  top_k: number;
+  system_instruction: string;
 }) {
   try {
     if (!data.userId) throw new Error("Invalid user id.");
@@ -139,6 +145,7 @@ export async function askCustomChatbot(data: {
     const url = new URL("/ask", backendUrl);
 
     const stream = createStreamableValue("");
+    let responseOk = true;
 
     (async () => {
       const response = await fetch(url, {
@@ -151,7 +158,7 @@ export async function askCustomChatbot(data: {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch the response from the server.");
+        responseOk = false;
       }
 
       const reader = response.body?.getReader();
@@ -186,12 +193,16 @@ export async function askCustomChatbot(data: {
       stream.done();
     })();
 
-    return {
-      status: 200,
-      success: true,
-      message: "Streaming finished.",
-      result: stream.value,
-    };
+    if (!responseOk) {
+      throw new Error("Failed to fetch the response from the server.");
+    } else {
+      return {
+        status: 200,
+        success: true,
+        message: "Streaming finished.",
+        result: stream.value,
+      };
+    }
   } catch (error) {
     console.error("Getting query response resulted in error:", error);
     return {
@@ -217,6 +228,7 @@ export async function chatWithSentiaAi(data: {
     const url = new URL("/chat-sentia", backendUrl);
 
     const stream = createStreamableValue("");
+    let responseOk = true;
 
     (async () => {
       const response = await fetch(url, {
@@ -229,7 +241,7 @@ export async function chatWithSentiaAi(data: {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch the response from the server.");
+        responseOk = false;
       }
 
       const reader = response.body?.getReader();
@@ -264,12 +276,16 @@ export async function chatWithSentiaAi(data: {
       stream.done();
     })();
 
-    return {
-      status: 200,
-      success: true,
-      message: "Streaming finished.",
-      result: stream.value,
-    };
+    if (!responseOk) {
+      throw new Error("Failed to fetch the response from the server.");
+    } else {
+      return {
+        status: 200,
+        success: true,
+        message: "Streaming finished.",
+        result: stream.value,
+      };
+    }
   } catch (error) {
     console.error(
       "Getting response from chatbot Sentia resulted in error:",
@@ -289,6 +305,7 @@ export async function checkAndCorrectText(data: { text: string }) {
     const url = new URL("/proof-reading", backendUrl);
 
     const stream = createStreamableValue("");
+    let responseOk = true;
 
     (async () => {
       const response = await fetch(url, {
@@ -301,7 +318,7 @@ export async function checkAndCorrectText(data: { text: string }) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch the response from the server.");
+        responseOk = false;
       }
 
       const reader = response.body?.getReader();
@@ -336,12 +353,16 @@ export async function checkAndCorrectText(data: { text: string }) {
       stream.done();
     })();
 
-    return {
-      status: 200,
-      success: true,
-      message: "Streaming finished.",
-      result: stream.value,
-    };
+    if (!responseOk) {
+      throw new Error("Failed to fetch the response from the server.");
+    } else {
+      return {
+        status: 200,
+        success: true,
+        message: "Streaming finished.",
+        result: stream.value,
+      };
+    }
   } catch (error) {
     console.error("Proof reading resulted in error:", error);
     return {
@@ -358,6 +379,7 @@ export async function generateCaption(data: FormData) {
     const url = new URL("/caption", backendUrl);
 
     const stream = createStreamableValue("");
+    let responseOk = true;
 
     (async () => {
       const response = await fetch(url, {
@@ -367,7 +389,7 @@ export async function generateCaption(data: FormData) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch the response from the server.");
+        responseOk = false;
       }
 
       const reader = response.body?.getReader();
@@ -402,12 +424,16 @@ export async function generateCaption(data: FormData) {
       stream.done();
     })();
 
-    return {
-      status: 200,
-      success: true,
-      message: "Streaming finished.",
-      result: stream.value,
-    };
+    if (!responseOk) {
+      throw new Error("Failed to fetch the response from the server.");
+    } else {
+      return {
+        status: 200,
+        success: true,
+        message: "Streaming finished.",
+        result: stream.value,
+      };
+    }
   } catch (error) {
     console.error("Generating caption resulted in error:", error);
     return {
@@ -415,6 +441,48 @@ export async function generateCaption(data: FormData) {
       success: false,
       message: "Uh oh! Something went wrong. Please try again.",
       result: createStreamableValue("").value,
+    };
+  }
+}
+
+export async function createAiChatParams(data: {
+  currentPdfName: string | null | undefined;
+  temperature: number;
+  topP: number;
+  topK: number;
+  systemInstruction: string;
+}) {
+  try {
+    const url = new URL(`/ai-chat/params/create`, await getBackendUrl());
+
+    const authToken = await getAuthToken();
+    if (!authToken)
+      return {
+        status: 401,
+        success: false,
+        message: "Jwt auth token is missing",
+      };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify(data),
+      cache: "no-cache",
+      next: {
+        tags: ["createAiChatParams"],
+      },
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error("Creating ai chat params resulted in error:", error);
+    return {
+      status: 500,
+      success: false,
+      message: "Uh oh! Something went wrong. Please try again.",
     };
   }
 }

@@ -10,6 +10,7 @@ import org.hibernate.type.SqlTypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -67,7 +68,7 @@ public class User {
 	@Column(name = "following_id")
 	private List<Long> followings = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Post> posts;
 
@@ -83,7 +84,7 @@ public class User {
 	@JsonIgnore
 	private List<Post> likedComments = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Reel> reels = new ArrayList<>();
 
@@ -97,7 +98,7 @@ public class User {
 	@ManyToMany(mappedBy = "users")
 	@JsonIgnore
 	private List<Chat> chats = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "user")
 	@JsonIgnore
 	private List<ChatMessage> chatMessages = new ArrayList<>();

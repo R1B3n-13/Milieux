@@ -11,6 +11,10 @@ import BotLineIcon from "../icons/BotLineIcon";
 import PersonLineIcon from "../icons/PersonLineIcon";
 import { readStreamableValue } from "ai/rsc";
 import MarkdownRenderer from "../common/MarkdownRenderer";
+import { z } from "zod";
+import AiChatParamsSchema from "@/schemas/aiChatParamsSchema";
+import { getAiChatParams } from "@/services/aiService";
+import { defaultSystemInstruction } from "./items/defaultSystemInstruction";
 
 const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [query, setQuery] = useState("");
@@ -18,7 +22,38 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [chatHistory, setChatHistory] = useState<
     { role: "user" | "model"; parts: string }[]
   >([]);
+  const [temperature, setTemperature] = useState(0.8);
+  const [topP, setTopP] = useState(0.8);
+  const [topK, setTopK] = useState(60);
+  const [systemInstruction, setSystemInstruction] = useState(
+    defaultSystemInstruction
+  );
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  let aiChatParams: z.infer<typeof AiChatParamsSchema> = {
+    temperature: 0.8,
+    topP: 0.8,
+    topK: 60,
+    systemInstruction: defaultSystemInstruction,
+  };
+
+  useEffect(() => {
+    const initAiChatParams = async () => {
+      const response = await getAiChatParams(userId);
+
+      if (response.success) {
+        aiChatParams = response.aiChatParams;
+        setTemperature(aiChatParams.temperature || 0.8);
+        setTopP(aiChatParams.topP || 0.8);
+        setTopK(aiChatParams.topK || 60);
+        setSystemInstruction(
+          aiChatParams.systemInstruction || defaultSystemInstruction
+        );
+      }
+    };
+
+    initAiChatParams();
+  }, []);
 
   const handleSubmit = async () => {
     if (query.trim() === "" || !userId) return;
@@ -29,6 +64,10 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       query,
       userId,
       history: chatHistory,
+      temperature: temperature,
+      top_p: topP,
+      top_k: topK,
+      system_instruction: systemInstruction,
     };
 
     setChatHistory([
@@ -38,6 +77,8 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     ]);
 
     setQuery("");
+
+    console.log("data: " + data.temperature);
 
     const { result } = await askCustomChatbot(data);
 

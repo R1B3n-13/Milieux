@@ -33,6 +33,7 @@ import TidbitsDialog from "./TidbitsDialog";
 import { useState } from "react";
 import Link from "next/link";
 import MarkdownRenderer from "./MarkdownRenderer";
+import VideoPlayer from "./VideoPlayer";
 
 const PostCard = ({
   post,
@@ -124,13 +125,13 @@ const PostCard = ({
           {(post.isSafe !== false || isSafe === true) && (
             <div className="flex flex-col">
               {post.text && (
-                <p className="px-6 text-slate-700 font-medium">
+                <div className="px-6 text-slate-700 font-medium">
                   <MarkdownRenderer text={post.text} />
-                </p>
+                </div>
               )}
 
               {post.imagePath && (
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center mt-1">
                   <Image
                     src={post.imagePath}
                     alt="post image"
@@ -143,10 +144,13 @@ const PostCard = ({
 
               {post.videoPath && (
                 <div className="flex items-center justify-center">
-                  <video controls width="614">
-                    <source src={post.videoPath} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
+                  <VideoPlayer
+                    src={post.videoPath}
+                    width={1000}
+                    className="w-full h-full rounded-none"
+                    controls
+                    autoPlay={false}
+                  />
                 </div>
               )}
             </div>

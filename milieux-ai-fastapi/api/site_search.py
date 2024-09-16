@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import traceback
 from typing import Optional
 from urllib.parse import urlparse
@@ -87,8 +88,12 @@ async def generate_media_analysis_response(media_path: str):
     if(media_path):
         file = genai.upload_file(path=media_path)
 
+        start_time = time.time()
+        timeout = 30
         while file.state.name == "PROCESSING":
-            continue
+            if time.time() - start_time > timeout:
+                break
+            time.sleep(0.1)
 
         if file.state.name == "FAILED":
             raise ValueError(file.state.name)

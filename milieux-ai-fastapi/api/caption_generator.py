@@ -1,4 +1,5 @@
 import os
+import time
 import traceback
 from typing import Annotated
 from dotenv import load_dotenv
@@ -44,8 +45,12 @@ async def generate_caption(text: Annotated[str, Form()], media: UploadFile):
 
         file = genai.upload_file(path=media_path)
 
+        start_time = time.time()
+        timeout = 30
         while file.state.name == "PROCESSING":
-            continue
+            if time.time() - start_time > timeout:
+                break
+            time.sleep(0.1)
 
         if file.state.name == "FAILED":
             raise ValueError(file.state.name)

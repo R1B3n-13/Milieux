@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,7 +45,7 @@ public class Post {
 	private String text;
 	private String imagePath;
 	private String videoPath;
-	
+
 	@Column(length = 4000)
 	private String tidbits;
 	private Boolean isSafe;
@@ -56,7 +57,7 @@ public class Post {
 	@JsonIgnore
 	private List<User> likedByUsers = new ArrayList<>();
 
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Comment> comments = new ArrayList<>();
 
