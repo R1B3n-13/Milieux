@@ -71,4 +71,5 @@ public class JdbcClientProductRepository {
             .param("id", id)
             .update();
     }
+
 }

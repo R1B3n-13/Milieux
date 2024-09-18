@@ -5,15 +5,21 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Repository
 public class JdbcClientStoreRepository {
     private final JdbcClient jdbcClient;
+    private final ObjectMapper objectMapper;
 
-    public JdbcClientStoreRepository(JdbcClient jdbcClient) {
+    public JdbcClientStoreRepository(JdbcClient jdbcClient, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         this.jdbcClient = jdbcClient;
     }
 
@@ -58,8 +64,7 @@ public class JdbcClientStoreRepository {
                             rs.getString("banner_subtext"),
                             rs.getString("logo_url"),
                             uiImages,
-                            topItems
-                    );
+                            topItems);
                 }).list();
     }
 
@@ -106,15 +111,14 @@ public class JdbcClientStoreRepository {
                             rs.getString("banner_subtext"),
                             rs.getString("logo_url"),
                             uiImages,
-                            topItems
-                    );
+                            topItems);
                 })
-                .optional(); 
+                .optional();
     }
-    
+
     public List<Store> findByName(String name) {
         return jdbcClient.sql("SELECT * FROM store WHERE name LIKE :name")
-                .param("name", "%" + name + "%")  // Use wildcards to match substring
+                .param("name", "%" + name + "%") // Use wildcards to match substring
                 .query((rs, rowNum) -> {
                     // Convert PgArray to List<String> and List<Integer>
                     Array imagesArray = rs.getArray("ui_images");
@@ -155,15 +159,16 @@ public class JdbcClientStoreRepository {
                             rs.getString("banner_subtext"),
                             rs.getString("logo_url"),
                             uiImages,
-                            topItems
-                    );
+                            topItems);
                 })
-                .list();  // Return the list of matching stores
-    }    
+                .list(); // Return the list of matching stores
+    }
 
     public void create(Store store) {
-        jdbcClient.sql("INSERT INTO store (name, ui_type, ui_font, ui_font_special, ui_accent_color, ui_base_color, ui_secondary_color, banner, banner_subtext, logo_url, ui_images, top_items) " +
-                "VALUES (:name, :ui_type, :ui_font, :ui_font_special, :ui_accent_color, :ui_base_color, :ui_secondary_color, :banner, :banner_subtext, :logo_url, :ui_images, :top_items)")
+        jdbcClient.sql(
+                "INSERT INTO store (name, ui_type, ui_font, ui_font_special, ui_accent_color, ui_base_color, ui_secondary_color, banner, banner_subtext, logo_url, ui_images, top_items) "
+                        +
+                        "VALUES (:name, :ui_type, :ui_font, :ui_font_special, :ui_accent_color, :ui_base_color, :ui_secondary_color, :banner, :banner_subtext, :logo_url, :ui_images, :top_items)")
                 .param("name", store.name())
                 .param("ui_type", store.ui_type())
                 .param("ui_font", store.ui_font())
@@ -175,7 +180,8 @@ public class JdbcClientStoreRepository {
                 .param("banner_subtext", store.banner_subtext())
                 .param("logo_url", store.logo_url())
                 .param("ui_images", store.ui_images().toArray(new String[0])) // Converts List<String> to String array
-                .param("top_items", store.top_items().toArray(new Integer[0])) // Converts List<Integer> to Integer array
+                .param("top_items", store.top_items().toArray(new Integer[0])) // Converts List<Integer> to Integer
+                                                                               // array
                 .update();
     }
 
@@ -194,13 +200,51 @@ public class JdbcClientStoreRepository {
                 .param("banner_subtext", store.banner_subtext())
                 .param("logo_url", store.logo_url())
                 .param("ui_images", store.ui_images().toArray(new String[0])) // Converts List<String> to String array
-                .param("top_items", store.top_items().toArray(new Integer[0])) // Converts List<Integer> to Integer array
+                .param("top_items", store.top_items().toArray(new Integer[0])) // Converts List<Integer> to Integer
+                                                                               // array
                 .update();
     }
 
     public void delete(Integer id) {
         jdbcClient.sql("DELETE FROM store WHERE id = :id")
                 .param("id", id)
+                .update();
+    }
+
+    public void updateUiImages(Integer id, List<String> images) {
+
+        String imagesArray = "{" + String.join(",", images.stream()
+                .map(image -> "\"" + image.replace("\"", "\\\"") + "\"")
+                .toArray(String[]::new)) + "}";
+
+        System.out.println(imagesArray);
+
+        // Update the ui_images column in the store table
+        jdbcClient.sql("UPDATE store SET ui_images = CAST(:ui_images AS text[]) WHERE id = :id")
+                .param("id", id)
+                .param("ui_images", imagesArray)
+                .update();
+    }
+
+    public void updateUiType(Integer id, Integer uiType) {
+        System.out.println(uiType);
+        jdbcClient.sql("UPDATE store SET ui_type = :ui_type WHERE id = :id")
+                .param("id", id)
+                .param("ui_type", uiType)
+                .update();
+    }
+
+    public void updateTopProducts(Integer id, List<Integer> products) {
+        jdbcClient.sql("UPDATE store SET top_items = :top_items WHERE id = :id")
+                .param("id", id)
+                .param("top_items", products.toArray(new Integer[0])) // Converts List<Integer> to Integer array
+                .update();
+    }
+
+    public void updateName(Integer id, String name) {
+        jdbcClient.sql("UPDATE store SET name = :name WHERE id = :id")
+                .param("id", id)
+                .param("name", name)
                 .update();
     }
 }

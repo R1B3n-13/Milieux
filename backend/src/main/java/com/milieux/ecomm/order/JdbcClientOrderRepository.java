@@ -226,4 +226,18 @@ public class JdbcClientOrderRepository {
         Assert.state(updated == 1, "Failed to update order with ID: " + order.id());
     }
 
+    public int getTotalOrders(Integer id) {
+        return jdbcClient.sql("SELECT COUNT(*) FROM orders WHERE store_id = :id")
+                .param("id", id) // Bind the store_id to the query
+                .query((rs, rowNum) -> rs.getInt(1)) // Extract the count from the result set
+                .single(); // Return the single result (the count)
+    }
+    
+    public void ship(Integer id) {
+        var updated = jdbcClient.sql("UPDATE orders SET status = 1 WHERE id = :id")
+                .param("id", id)
+                .update();
+        Assert.state(updated == 1, "Failed to ship order with ID: " + id);
+    }
+
 }

@@ -6,6 +6,7 @@ import { useShoppingCart } from '@/contexts/ShoppingCartContext';
 import ShoppingCart from '@/components/ShoppingCart';
 
 import ShoppingCartContainer from '@/components/ShoppingCartContainer';
+import CarouselContainer from '@/components/CarouselContainer';
 
 export default function Home() {
   const { storeInfo, loading } = useStoreContext();
@@ -24,17 +25,16 @@ export default function Home() {
       <ShoppingCart />
       <ShoppingCartContainer />
 
+
+
       <section className="xl:padding-l px-[15rem] wide:padding-r padding-b">
-        <Hero />
+        {storeInfo.ui_type === 1 && <Hero />}
+        {storeInfo.ui_type === 2 && <CarouselContainer />}
       </section>
 
-      <section className="padding px-[15rem]">
+      <section className="padding px-[15rem] pt-10">
         <PopularProducts />
       </section>
-
-      {/* <section className="padding px-[15rem] pb-[1rem]">
-        <CustomerReviews />
-      </section> */}
     </div>
   );
 }

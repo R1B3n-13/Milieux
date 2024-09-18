@@ -55,7 +55,7 @@ const Hero = () => {
             <div className="relative flex-1 flex justify-center items-center xl:min-h-full max-xl:py-40 bg-hero bg-cover bg-center" style={{ backgroundColor: ui_secondary_color }}>
                 <img src={bigImage} alt="Shoe Collection" width={610} height={500} className="object-contain relative z-10 mt-[12rem] mb-[4rem]" />
                 <div className="flex sm:gap-6 gap-4 absolute z-10 -bottom-[5%] sm:left-[10%] max-sm:px-6">
-                    {ui_images.map((img) => (
+                    {ui_images.map((img:any) => (
                         <div key={img}>
                             <HomeProdCard
                                 imgURL={img}

@@ -57,4 +57,18 @@ public class OrderController {
 
         repository.update(order, id);
     }
+
+    @GetMapping("/total/{id}")
+    Integer total(@PathVariable Integer id) {
+        return repository.getTotalOrders(id);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/ship/{id}")
+    void ship(@PathVariable Integer id) {
+        repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        repository.ship(id);
+    }
 }

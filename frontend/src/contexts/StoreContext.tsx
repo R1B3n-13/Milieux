@@ -1,5 +1,3 @@
-// src/contexts/StoreContext.tsx
-
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
@@ -9,6 +7,7 @@ interface StoreContextType {
   storeInfo: any;
   loading: boolean;
   userId: any;
+  setStoreInfo: React.Dispatch<React.SetStateAction<any>>; // Expose setStoreInfo to update the storeInfo
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -23,7 +22,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     const fetchStoreInfo = async () => {
       try {
-        const response = await fetch(PORT+`/store/find/${storeId}`);
+        const response = await fetch(PORT + `/store/find/${storeId}`);
         if (response.ok) {
           const data = await response.json();
           setStoreInfo(data);
@@ -41,7 +40,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [storeId]);
 
   return (
-    <StoreContext.Provider value={{ storeInfo, loading, userId }}>
+    <StoreContext.Provider value={{ storeInfo, setStoreInfo, loading, userId }}>
       {children}
     </StoreContext.Provider>
   );

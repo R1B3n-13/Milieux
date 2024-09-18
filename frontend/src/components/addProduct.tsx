@@ -16,7 +16,6 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
-// Zod schema with number validation transformed to string for inputs
 const formSchema = z.object({
   productName: z.string().min(2).max(50),
   productPrice: z
@@ -29,10 +28,10 @@ const formSchema = z.object({
 });
 
 interface AddProductProps {
-  onProductAdded: (newProduct: any) => void; // Notify parent when a product is added
+  refreshProducts: () => void;
 }
 
-const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
+const AddProduct: React.FC<AddProductProps> = ({ refreshProducts }) => {
   const { storeInfo } = useStoreContext();
   const PORT = process.env.PORT || 'http://localhost:8081/api';
 
@@ -40,19 +39,17 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       productName: "",
-      productPrice: "",
+      productPrice: 0,
       category: "",
       description: "",
       imgurl: "",
     },
   });
 
-  // Function to generate a random product ID
   const generateProductId = () => {
-    return Math.floor(Math.random() * 1000000); // Adjust the range as needed
+    return Math.floor(Math.random() * 1000);
   };
 
-  // Function to handle form submission and make the API call
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     const newProduct = {
       id: generateProductId(),
@@ -61,7 +58,7 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
       category: data.category,
       description: data.description,
       imgurl: data.imgurl,
-      store_id: storeInfo.id, // Replace with dynamic store_id if needed
+      store_id: storeInfo.id,
     };
 
     try {
@@ -77,10 +74,8 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
         throw new Error("Failed to create product");
       }
 
-      // Notify parent about the new product
-      onProductAdded(newProduct);
+      refreshProducts();
 
-      // Optionally reset the form after submission
       form.reset();
     } catch (error) {
       console.error("Error creating product:", error);
@@ -88,12 +83,10 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
   };
 
   return (
-    <div className="flex flex-row font-montserrat w-[30%]">
-      <div className="flex flex-row gap-2 w-full">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="flex flex-col gap-2 w-[100%]"
+            className="flex flex-col gap-2 w-[40%] ml-10"
           >
             <FormField
               control={form.control}
@@ -175,8 +168,6 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
             </Button>
           </form>
         </Form>
-      </div>
-    </div>
   );
 };
 
