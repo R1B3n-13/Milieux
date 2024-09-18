@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS product (
 
 CREATE TABLE IF NOT EXISTS store (
     id SERIAL PRIMARY KEY,
+    owner_id INTEGER,
     name VARCHAR(255) NOT NULL,
     ui_type INT NOT NULL,
     ui_font VARCHAR(100),

@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 @RestController
 @RequestMapping("/api/store")
 @CrossOrigin(origins = "http://localhost:3000")

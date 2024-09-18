@@ -5,21 +5,14 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 public class JdbcClientStoreRepository {
     private final JdbcClient jdbcClient;
-    private final ObjectMapper objectMapper;
 
-    public JdbcClientStoreRepository(JdbcClient jdbcClient, ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public JdbcClientStoreRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 
@@ -53,6 +46,7 @@ public class JdbcClientStoreRepository {
 
                     return new Store(
                             rs.getInt("id"),
+                            rs.getInt("owner_id"),
                             rs.getString("name"),
                             rs.getInt("ui_type"),
                             rs.getString("ui_font"),
@@ -100,6 +94,7 @@ public class JdbcClientStoreRepository {
                     // Construct and return the Store object
                     return new Store(
                             rs.getInt("id"),
+                            rs.getInt("owner_id"),
                             rs.getString("name"),
                             rs.getInt("ui_type"),
                             rs.getString("ui_font"),
@@ -148,6 +143,7 @@ public class JdbcClientStoreRepository {
                     // Construct and return the Store object
                     return new Store(
                             rs.getInt("id"),
+                            rs.getInt("owner_id"),
                             rs.getString("name"),
                             rs.getInt("ui_type"),
                             rs.getString("ui_font"),
@@ -166,9 +162,10 @@ public class JdbcClientStoreRepository {
 
     public void create(Store store) {
         jdbcClient.sql(
-                "INSERT INTO store (name, ui_type, ui_font, ui_font_special, ui_accent_color, ui_base_color, ui_secondary_color, banner, banner_subtext, logo_url, ui_images, top_items) "
+                "INSERT INTO store (owner_id, name, ui_type, ui_font, ui_font_special, ui_accent_color, ui_base_color, ui_secondary_color, banner, banner_subtext, logo_url, ui_images, top_items) "
                         +
-                        "VALUES (:name, :ui_type, :ui_font, :ui_font_special, :ui_accent_color, :ui_base_color, :ui_secondary_color, :banner, :banner_subtext, :logo_url, :ui_images, :top_items)")
+                        "VALUES (:owner_id, :name, :ui_type, :ui_font, :ui_font_special, :ui_accent_color, :ui_base_color, :ui_secondary_color, :banner, :banner_subtext, :logo_url, :ui_images, :top_items)")
+                .param("owner_id", store.owner_id())
                 .param("name", store.name())
                 .param("ui_type", store.ui_type())
                 .param("ui_font", store.ui_font())
