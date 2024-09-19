@@ -5,6 +5,7 @@ import java.util.List;
 public record Store(
     Integer id,
     String name,
+    String category,
     Integer ui_type,
     String ui_font,
     String ui_font_special,

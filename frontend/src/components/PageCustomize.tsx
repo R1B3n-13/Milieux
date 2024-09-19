@@ -34,7 +34,7 @@ const PageCustomize = () => {
     const [error, setError] = useState<string | null>(null);
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [topProducts, setTopProducts] = useState<Product[]>([]);
+    const [selectedUiImages, setselectedUiImages] = useState<File[] | null>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);  // Loading state
     const [selectedProducts, setSelectedProducts] = useState<number[]>([]);  // State for selected products
@@ -43,6 +43,7 @@ const PageCustomize = () => {
     useEffect(() => {
         if (storeInfo && storeInfo.top_items) {
             // fetchTopProducts();
+            // setTopProducts(storeInfo.top_items);
             fetchProducts(storeInfo.id);
         }
     }, [storeInfo]);
@@ -169,7 +170,6 @@ const PageCustomize = () => {
             setSelectedFile(file);
         }
     };
-
 
     const handleHeroUpdate = async () => {
         try {

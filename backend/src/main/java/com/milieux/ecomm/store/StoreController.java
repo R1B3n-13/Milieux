@@ -48,19 +48,16 @@ public class StoreController {
     // Create a new store
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
-    public void create(@RequestBody Store store) {
-        repository.create(store); // Calls the repository to insert the store
+    public void create(@RequestBody Map<String, Object> storeData) {
+        Integer temp_id = (Integer) storeData.get("id"); 
+        String name = (String) storeData.get("name");
+        String category = (String) storeData.get("category");
+        
+        System.out.println(temp_id);
+        repository.create(temp_id, name, category);
     }
-
-    // Update an existing store
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/update/{id}")
-    public void update(@RequestBody Store store, @PathVariable Integer id) {
-        repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Store not found"));
-
-        repository.update(store, id); // Calls the repository to update the store
-    }
+    
+    
 
     // update top products
     @ResponseStatus(HttpStatus.NO_CONTENT)

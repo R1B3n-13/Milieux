@@ -12,9 +12,9 @@ CREATE TABLE IF NOT EXISTS product (
 
 CREATE TABLE IF NOT EXISTS store (
     id SERIAL PRIMARY KEY,
-    owner_id INTEGER,
     name VARCHAR(255) NOT NULL,
-    ui_type INT NOT NULL,
+    category TEXT,
+    ui_type INT,
     ui_font VARCHAR(100),
     ui_font_special VARCHAR(100),
     ui_accent_color VARCHAR(7), -- This assumes storing color as HEX

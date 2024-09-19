@@ -47,6 +47,7 @@ public class JdbcClientStoreRepository {
                     return new Store(
                             rs.getInt("id"),
                             rs.getString("name"),
+                            rs.getString("category"),
                             rs.getInt("ui_type"),
                             rs.getString("ui_font"),
                             rs.getString("ui_font_special"),
@@ -94,6 +95,7 @@ public class JdbcClientStoreRepository {
                     return new Store(
                             rs.getInt("id"),
                             rs.getString("name"),
+                            rs.getString("category"),
                             rs.getInt("ui_type"),
                             rs.getString("ui_font"),
                             rs.getString("ui_font_special"),
@@ -142,6 +144,7 @@ public class JdbcClientStoreRepository {
                     return new Store(
                             rs.getInt("id"),
                             rs.getString("name"),
+                            rs.getString("category"),
                             rs.getInt("ui_type"),
                             rs.getString("ui_font"),
                             rs.getString("ui_font_special"),
@@ -157,44 +160,13 @@ public class JdbcClientStoreRepository {
                 .list(); // Return the list of matching stores
     }
 
-    public void create(Store store) {
+    public void create(Integer id, String name, String category) {
+        // System.out.println(name + ' ' + category);
         jdbcClient.sql(
-                "INSERT INTO store (name, ui_type, ui_font, ui_font_special, ui_accent_color, ui_base_color, ui_secondary_color, banner, banner_subtext, logo_url, ui_images, top_items) "
-                        +
-                        "VALUES (:name, :ui_type, :ui_font, :ui_font_special, :ui_accent_color, :ui_base_color, :ui_secondary_color, :banner, :banner_subtext, :logo_url, :ui_images, :top_items)")
-                .param("name", store.name())
-                .param("ui_type", store.ui_type())
-                .param("ui_font", store.ui_font())
-                .param("ui_font_special", store.ui_font_special())
-                .param("ui_accent_color", store.ui_accent_color())
-                .param("ui_base_color", store.ui_base_color())
-                .param("ui_secondary_color", store.ui_secondary_color())
-                .param("banner", store.banner())
-                .param("banner_subtext", store.banner_subtext())
-                .param("logo_url", store.logo_url())
-                .param("ui_images", store.ui_images().toArray(new String[0])) // Converts List<String> to String array
-                .param("top_items", store.top_items().toArray(new Integer[0])) // Converts List<Integer> to Integer
-                                                                               // array
-                .update();
-    }
-
-    public void update(Store store, Integer id) {
-        jdbcClient.sql(
-                "UPDATE store SET name = :name, ui_type = :ui_type, ui_font = :ui_font, ui_font_special = :ui_font_special, ui_accent_color = :ui_accent_color, ui_base_color = :ui_base_color, ui_secondary_color = :ui_secondary_color, banner = :banner, banner_subtext = :banner_subtext, logo_url = :logo_url, ui_images = :ui_images, top_items = :top_items WHERE id = :id")
+                "INSERT INTO store (id, name, category) VALUES (:id, :name, :category)")
                 .param("id", id)
-                .param("name", store.name())
-                .param("ui_type", store.ui_type())
-                .param("ui_font", store.ui_font())
-                .param("ui_font_special", store.ui_font_special())
-                .param("ui_accent_color", store.ui_accent_color())
-                .param("ui_base_color", store.ui_base_color())
-                .param("ui_secondary_color", store.ui_secondary_color())
-                .param("banner", store.banner())
-                .param("banner_subtext", store.banner_subtext())
-                .param("logo_url", store.logo_url())
-                .param("ui_images", store.ui_images().toArray(new String[0])) // Converts List<String> to String array
-                .param("top_items", store.top_items().toArray(new Integer[0])) // Converts List<Integer> to Integer
-                                                                               // array
+                .param("name", name)
+                .param("category", category)
                 .update();
     }
 
@@ -243,8 +215,8 @@ public class JdbcClientStoreRepository {
 
     public void updateLogo(Integer id, String url) {
         jdbcClient.sql("UPDATE store SET logo_url = :url WHERE id = :id")
-        .param("id", id)
-        .param("url", url)
-        .update();
+                .param("id", id)
+                .param("url", url)
+                .update();
     }
 }
