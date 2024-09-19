@@ -25,6 +25,9 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [temperature, setTemperature] = useState(0.8);
   const [topP, setTopP] = useState(0.8);
   const [topK, setTopK] = useState(60);
+  const [currentPdfName, setCurrentPdfName] = useState<
+    string | null | undefined
+  >(null);
   const [systemInstruction, setSystemInstruction] = useState(
     defaultSystemInstruction
   );
@@ -46,6 +49,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
         setTemperature(aiChatParams.temperature || 0.8);
         setTopP(aiChatParams.topP || 0.8);
         setTopK(aiChatParams.topK || 60);
+        setCurrentPdfName(aiChatParams.currentPdfName);
         setSystemInstruction(
           aiChatParams.systemInstruction || defaultSystemInstruction
         );
@@ -111,55 +115,68 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   }, [chatHistory]);
 
   return (
-    <div className="bg-white h-full p-3 w-full flex flex-col rounded-lg shadow-md">
-      <ScrollArea
-        ref={scrollAreaRef}
-        className="bg-white py-7 px-20 w-full max-h-[700px] overflow-y-auto z-10"
-      >
-        {chatHistory.map((chat, index) => (
-          <div key={index} className="mb-4">
-            <div className="flex justify-end">
-              {chat.role === "user" && (
-                <div className="flex items-center gap-3 text-sm text-slate-700 bg-indigo-50 p-2 rounded-lg w-fit max-w-[40rem] break-words">
-                  <div className="text-2xl text-slate-800 bg-indigo-200 p-1 rounded-full">
-                    <PersonLineIcon />
+    <div
+      className={`${
+        currentPdfName &&
+        "bg-white h-full p-3 w-full flex flex-col rounded-lg shadow-md"
+      }`}
+    >
+      {currentPdfName ? (
+        <>
+          <ScrollArea
+            ref={scrollAreaRef}
+            className="bg-white py-7 px-20 w-full max-h-[700px] overflow-y-auto z-10"
+          >
+            {chatHistory.map((chat, index) => (
+              <div key={index} className="mb-4">
+                <div className="flex justify-end">
+                  {chat.role === "user" && (
+                    <div className="flex items-center gap-3 text-sm text-slate-700 bg-indigo-50 p-2 rounded-lg w-fit max-w-[40rem] break-words">
+                      <div className="text-2xl text-slate-800 bg-indigo-200 p-1 rounded-full">
+                        <PersonLineIcon />
+                      </div>
+                      {chat.parts}
+                    </div>
+                  )}
+                </div>
+                {chat.role === "model" && (
+                  <div className="flex items-center gap-3 text-slate-700 text-sm p-2 rounded-lg w-fit mt-1">
+                    <div className="text-2xl text-black bg-gray-200 p-1 rounded-full">
+                      <BotLineIcon />
+                    </div>
+                    {chat.parts ? (
+                      <MarkdownRenderer text={chat.parts} />
+                    ) : (
+                      "Thinking..."
+                    )}
                   </div>
-                  {chat.parts}
-                </div>
-              )}
-            </div>
-            {chat.role === "model" && (
-              <div className="flex items-center gap-3 text-slate-700 text-sm p-2 rounded-lg w-fit mt-1">
-                <div className="text-2xl text-black bg-gray-200 p-1 rounded-full">
-                  <BotLineIcon />
-                </div>
-                {chat.parts ? (
-                  <MarkdownRenderer text={chat.parts} />
-                ) : (
-                  "Thinking..."
                 )}
               </div>
-            )}
+            ))}
+          </ScrollArea>
+          <div className="relative flex items-center justify-center p-4">
+            <TextArea
+              className="flex items-center justify-center pl-5 pr-11 py-[0.9rem] resize-none rounded-full min-h-0 h-12 bg-indigo-50 border-none no-scrollbar max-h-40 overflow-y-auto"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask Chappy about the business..."
+            />
+            <Button
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="absolute right-7 top-1/2 p-0 transform -translate-y-1/2 text-indigo-500 rounded-full hover:text-indigo-500 hover:bg-indigo-50"
+              variant="ghost"
+            >
+              {isLoading ? <Loading text="" /> : <SendFilledIcon />}
+            </Button>
           </div>
-        ))}
-      </ScrollArea>
-      <div className="relative flex items-center justify-center p-4">
-        <TextArea
-          className="flex items-center justify-center pl-5 pr-11 py-[0.9rem] resize-none rounded-full min-h-0 h-12 bg-indigo-50 border-none no-scrollbar max-h-40 overflow-y-auto"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask Chappy about the business..."
-        />
-        <Button
-          onClick={handleSubmit}
-          disabled={isLoading}
-          className="absolute right-7 top-1/2 p-0 transform -translate-y-1/2 text-indigo-500 rounded-full hover:text-indigo-500 hover:bg-indigo-50"
-          variant="ghost"
-        >
-          {isLoading ? <Loading text="" /> : <SendFilledIcon />}
-        </Button>
-      </div>
+        </>
+      ) : (
+        <div className="flex justify-center text-slate-700 mt-20">
+          Chappy is not configured by the business.
+        </div>
+      )}
     </div>
   );
 };

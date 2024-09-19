@@ -36,7 +36,7 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
   });
 
   return (
-    <div>
+    <>
       {photos.map((post: z.infer<typeof PostSchema>) => (
         <div key={post.id} className="w-full">
           <PostCard
@@ -46,7 +46,7 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
           />
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

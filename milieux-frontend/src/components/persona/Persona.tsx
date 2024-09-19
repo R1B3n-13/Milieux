@@ -13,6 +13,7 @@ import { z } from "zod";
 import FollowButton from "./FollowButton";
 import PdfSubmissionField from "./PdfSubmissionField";
 import ChatBot from "./ChatBot";
+import StoreButton from "./StoreButton";
 
 const Persona = async ({ id }: { id: number | null }) => {
   let user: z.infer<typeof UserSchema> = {};
@@ -115,7 +116,7 @@ const Persona = async ({ id }: { id: number | null }) => {
                   Videos
                 </TabsTrigger>
 
-                {user.id === loggedInUser.id && user.isBusiness && (
+                {user.isBusiness && (
                   <TabsTrigger
                     value="chatbot"
                     className="w-24 py-2 font-semibold bg-transparent rounded-none focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-[3px] data-[state=active]:border-b-blue-600"
@@ -130,6 +131,11 @@ const Persona = async ({ id }: { id: number | null }) => {
               <div className="grid grid-cols-5">
                 <div className="col-span-2 mt-2">
                   <AboutCard id={id} />
+                  {user.isBusiness && (
+                    <div className="flex justify-center">
+                      <StoreButton id={id} />
+                    </div>
+                  )}
                 </div>
                 <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
                   {user.id === loggedInUser.id && <PostCreationCard />}
@@ -142,6 +148,11 @@ const Persona = async ({ id }: { id: number | null }) => {
               <div className="grid grid-cols-5">
                 <div className="col-span-2 mt-2">
                   <AboutCard id={id} />
+                  {user.isBusiness && (
+                    <div className="flex justify-center">
+                      <StoreButton id={id} />
+                    </div>
+                  )}
                 </div>
                 <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
                   <PersonaPhotos id={id} />
@@ -153,6 +164,11 @@ const Persona = async ({ id }: { id: number | null }) => {
               <div className="grid grid-cols-5">
                 <div className="col-span-2 mt-2">
                   <AboutCard id={id} />
+                  {user.isBusiness && (
+                    <div className="flex justify-center">
+                      <StoreButton id={id} />
+                    </div>
+                  )}
                 </div>
                 <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
                   <PersonaVideos id={id} />
@@ -162,10 +178,10 @@ const Persona = async ({ id }: { id: number | null }) => {
 
             <TabsContent value="chatbot">
               <div className="flex flex-col gap-4 mt-4">
-                {user.id === loggedInUser.id && user.isBusiness && (
+                {user.id === loggedInUser.id && (
                   <PdfSubmissionField userId={user.id} />
                 )}
-                {user.isBusiness && <ChatBot userId={user.id} />}
+                <ChatBot userId={user.id} />
               </div>
             </TabsContent>
           </Tabs>
