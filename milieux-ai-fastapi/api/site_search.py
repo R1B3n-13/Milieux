@@ -89,7 +89,7 @@ async def generate_media_analysis_response(media_path: str):
         file = genai.upload_file(path=media_path)
 
         start_time = time.time()
-        timeout = 30
+        timeout = 10
         while file.state.name == "PROCESSING":
             if time.time() - start_time > timeout:
                 break
