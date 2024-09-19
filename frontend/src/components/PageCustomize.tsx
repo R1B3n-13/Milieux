@@ -127,6 +127,42 @@ const PageCustomize = () => {
         }
     };
 
+    const handleLogoUpdate = async () => {
+        try {
+            let uploadedImageUrl = null;
+
+            // If a file is selected, upload it to Cloudinary
+            if (selectedFile) {
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(selectedFile);
+
+                fileReader.onload = async () => {
+                    const fileBase64 = fileReader.result as string;
+
+                    const { success, url } = await uploadToCloudinary(fileBase64, 'image');
+
+                    if (success) {
+                        uploadedImageUrl = url;
+                        console.log("Logo uploaded:", uploadedImageUrl);
+                    } else {
+                        throw new Error("Image upload failed");
+                    }
+
+                    // After successful image upload, update the store's ui_images
+                    await updateLogo(uploadedImageUrl);
+                };
+            } else {
+                // If no file is uploaded, just update the UI type
+                console.log('only ui type');
+
+                await updateStoreUiType();
+            }
+        } catch (error: any) {
+            console.error('Error updating store UI:', error);
+            setError(error.message || 'Failed to update store UI');
+        }
+    }
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files && e.target.files[0];
         if (file) {
@@ -159,15 +195,50 @@ const PageCustomize = () => {
                     // After successful image upload, update the store's ui_images
                     await updateUiImages(uploadedImageUrl);
                 };
-            } else {
-                // If no file is uploaded, just update the UI type
-                console.log('only ui type');
-                
+            }   else {
                 await updateStoreUiType();
             }
         } catch (error: any) {
             console.error('Error updating store UI:', error);
             setError(error.message || 'Failed to update store UI');
+        }
+    };
+
+    const updateLogo = async (imageUrl: string | null) => {
+        if (!imageUrl) return;
+
+        try {
+            const response = await fetch(`${PORT}/store/update/logo/${storeInfo.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(imageUrl),
+            });
+            setSelectedFile(null);
+            
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Store not found');
+                } else {
+                    throw new Error('Failed to update store images');
+                }
+            }
+
+            // After successful image update, update the StoreContext with the new images
+            setStoreInfo((prevStoreInfo: any) => ({
+                ...prevStoreInfo,
+                logo_url: imageUrl,
+            }));
+
+            toast({
+                title: "Logo",
+                description: "Logo updated successfully",
+            });
+
+        } catch (error: any) {
+            console.error('Error updating Logo:', error);
+            setError(error.message || 'Failed to update images');
         }
     };
 
@@ -246,40 +317,6 @@ const PageCustomize = () => {
             setError(error.message || 'Failed to update store UI');
         }
     };
-    // const handleHeroUpdate = async () => {
-    //     try {
-    //         const response = await fetch(`${PORT}/store/update/ui-type/${storeInfo.id}`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ ui_type: uiType }),
-    //         });
-
-    //         if (!response.ok) {
-    //             if (response.status === 404) {
-    //                 throw new Error('Store not found');
-    //             } else {
-    //                 throw new Error('Failed to update store UI');
-    //             }
-    //         }
-
-    //         // After successful UI update, update the StoreContext with the new UI type
-    //         setStoreInfo((prevStoreInfo: any) => ({
-    //             ...prevStoreInfo,
-    //             ui_type: uiType,
-    //         }));
-
-    //         toast({
-    //             title: "Hero section updated",
-    //             description: `Hero section set to ${uiType === 1 ? 'Static Images' : 'Carousel'}`,
-    //         });
-
-    //     } catch (error: any) {
-    //         console.error('Error updating store UI:', error);
-    //         setError(error.message || 'Failed to update store UI');
-    //     }
-    // };
 
     const handleTopProductsUpdate = async () => {
         try {
@@ -351,18 +388,20 @@ const PageCustomize = () => {
                         {error && <p className='text-red-500'>{error}</p>}
                     </AccordionItem>
 
+                    {/* Logo Update */}
                     <AccordionItem value='item2'>
                         <AccordionTrigger className='flex p-2 w-full justify-center items-center'>
                             Change store logo
                         </AccordionTrigger>
                         <AccordionContent className='flex items-center justify-center gap-2 p-5'>
-                            <Input className='w-[30%] focus:border-none' placeholder='Store name' type='file' />
-                            <Button className='w-[20%] h-[40%] bg-black text-white hover:bg-gray-800 hover:text-white' variant={'ghost'}>
+                            <Input className='w-[30%] border-[1.5px] border-gray-200 focus:border-none' placeholder='Update Logo' type='file' onChange={handleFileChange} />
+                            <Button onClick={handleLogoUpdate} className='w-[20%] h-[40%] bg-black text-white hover:bg-gray-800 hover:text-white' variant={'ghost'}>
                                 Submit
                             </Button>
                         </AccordionContent>
                     </AccordionItem>
 
+                    {/* Banner update  */}
                     <AccordionItem value='item3'>
                         <AccordionTrigger className='flex p-2 w-full justify-center items-center'>
                             Change store banner
@@ -375,6 +414,7 @@ const PageCustomize = () => {
                         </AccordionContent>
                     </AccordionItem>
 
+                    {/* banner-subtext update */}
                     <AccordionItem value='item4'>
                         <AccordionTrigger className='flex p-2 w-full justify-center items-center'>
                             Change store banner subtext
@@ -387,6 +427,7 @@ const PageCustomize = () => {
                         </AccordionContent>
                     </AccordionItem>
 
+                    {/* Hero Section */}
                     <AccordionItem value='item5'>
                         <AccordionTrigger className='flex p-2 w-full justify-center items-center'>
                             Change Hero Section
@@ -449,6 +490,7 @@ const PageCustomize = () => {
                         </AccordionContent>
                     </AccordionItem>
 
+                    {/* Featured Productrs */}
                     <AccordionItem value='item6'>
                         <AccordionTrigger className='flex p-2 w-full justify-center items-center'>
                             Update Featured Products

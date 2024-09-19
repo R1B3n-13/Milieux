@@ -87,6 +87,20 @@ public class StoreController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/update/logo/{id}")
+    public void updateLogo(@PathVariable Integer id, @RequestBody String url)   {
+        String updatedLogoUrl = "";
+
+        for (int i = 1; i < url.length() - 1; i++)
+            updatedLogoUrl += url.charAt(i);
+
+        repository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Store not found"));
+        
+        repository.updateLogo(id, updatedLogoUrl);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/update/ui-type/{id}")
     public void updateUiType(@PathVariable Integer id, @RequestBody Map<String, Integer> body) {
         Integer uiType = body.get("ui_type");

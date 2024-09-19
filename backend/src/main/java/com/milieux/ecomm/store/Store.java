@@ -4,7 +4,6 @@ import java.util.List;
 
 public record Store(
     Integer id,
-    Integer owner_id,
     String name,
     Integer ui_type,
     String ui_font,

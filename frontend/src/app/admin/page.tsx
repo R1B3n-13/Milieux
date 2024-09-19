@@ -102,7 +102,7 @@ const Admin: React.FC = () => {
 
     return (
         <div className="flex flex-col px-10 gap-5 justify-between">
-            <AdminTopBar name={storeInfo.name} headerLogo={headerLogo} />
+            <AdminTopBar name={storeInfo.name} headerLogo={storeInfo.logo_url} />
             <div className="flex flex-row gap-2">
                 <Card className="flex flex-col justify-start items-start gap-5 border-0 rounded-xl px-10 shadow-none w-max font-normal text-xl">
                     
