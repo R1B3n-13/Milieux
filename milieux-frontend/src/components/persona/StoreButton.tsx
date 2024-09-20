@@ -16,34 +16,37 @@ const StoreButton = async ({ id }: { id: number | null | undefined }) => {
   }
 
   return (
-    <div className="mt-4">
+    <div className="w-32">
       {!id && storeResponse?.status === 404 && (
         <a
           href="https://example.com"
-          className="inline-block px-3 py-3 bg-slate-900 text-white font-semibold text-center rounded-full hover:bg-slate-800"
+          className="inline-block w-full py-[0.4rem] bg-orange-600 text-white font-medium text-center rounded-full hover:bg-orange-500"
         >
-          <div className="flex justify-center text-2xl">
+          <div className="flex items-center gap-1 justify-center">
             <StoreIcon />
+            <span>Create store</span>
           </div>
         </a>
       )}
       {!id && storeResponse?.success && (
         <a
           href="https://example.com"
-          className="inline-block px-3 py-3 bg-slate-900 text-white font-semibold text-center rounded-full hover:bg-slate-800"
+          className="inline-block w-full py-[0.4rem] bg-orange-600 text-white font-medium text-center rounded-full hover:bg-orange-500"
         >
-          <div className="flex justify-center text-2xl">
+          <div className="flex items-center gap-1 justify-center">
             <StoreIcon />
+            <span>Visit store</span>
           </div>
         </a>
       )}
       {id && storeResponse?.success && storeResponse.data.ui_type && (
         <a
           href="https://example.com"
-          className="inline-block px-3 py-3 bg-slate-900 text-white font-semibold text-center rounded-full hover:bg-slate-800"
+          className="inline-block w-full py-[0.4rem] bg-orange-600 text-white font-medium text-center rounded-full hover:bg-orange-500"
         >
-          <div className="flex justify-center text-2xl">
+          <div className="flex items-center gap-1 justify-center">
             <StoreIcon />
+            <span>Visit store</span>
           </div>
         </a>
       )}

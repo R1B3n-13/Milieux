@@ -11,9 +11,9 @@ import UserSchema from "@/schemas/userSchema";
 import { getUserFromAuthToken, getUserById } from "@/services/userService";
 import { z } from "zod";
 import FollowButton from "./FollowButton";
-import PdfSubmissionField from "./PdfSubmissionField";
-import ChatBot from "./ChatBot";
 import StoreButton from "./StoreButton";
+import Bot2FilledIcon from "../icons/Bot2FilledIcon";
+import Link from "next/link";
 
 const Persona = async ({ id }: { id: number | null }) => {
   let user: z.infer<typeof UserSchema> = {};
@@ -78,6 +78,22 @@ const Persona = async ({ id }: { id: number | null }) => {
           </div>
 
           <div className="flex items-end justify-end -mt-[8.3rem] mr-12">
+            {user.isBusiness && (
+              <div className="flex items-center justify-center gap-4 mr-4 z-50">
+                <StoreButton id={id} />
+
+                <Link
+                  href={`/chappy/${user.id}`}
+                  className="w-36 py-[0.4rem] font-medium flex items-center gap-1 justify-center bg-rose-600 text-white rounded-full hover:bg-rose-500 cursor-pointer"
+                >
+                  <div className="text-xl">
+                    <Bot2FilledIcon />
+                  </div>
+                  {user.id === loggedInUser.id ? "Setup Chappy" : "Ask Chappy"}
+                </Link>
+              </div>
+            )}
+
             {user.id === loggedInUser.id ? (
               <EditPersonaDialog
                 dialogButton={
@@ -115,15 +131,6 @@ const Persona = async ({ id }: { id: number | null }) => {
                 >
                   Videos
                 </TabsTrigger>
-
-                {user.isBusiness && (
-                  <TabsTrigger
-                    value="chatbot"
-                    className="w-24 py-2 font-semibold bg-transparent rounded-none focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-[3px] data-[state=active]:border-b-blue-600"
-                  >
-                    Chappy
-                  </TabsTrigger>
-                )}
               </TabsList>
             </div>
 
@@ -131,11 +138,6 @@ const Persona = async ({ id }: { id: number | null }) => {
               <div className="grid grid-cols-5">
                 <div className="col-span-2 mt-2">
                   <AboutCard id={id} />
-                  {user.isBusiness && (
-                    <div className="flex justify-center">
-                      <StoreButton id={id} />
-                    </div>
-                  )}
                 </div>
                 <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
                   {user.id === loggedInUser.id && <PostCreationCard />}
@@ -145,43 +147,14 @@ const Persona = async ({ id }: { id: number | null }) => {
             </TabsContent>
 
             <TabsContent value="photos">
-              <div className="grid grid-cols-5">
-                <div className="col-span-2 mt-2">
-                  <AboutCard id={id} />
-                  {user.isBusiness && (
-                    <div className="flex justify-center">
-                      <StoreButton id={id} />
-                    </div>
-                  )}
-                </div>
-                <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
-                  <PersonaPhotos id={id} />
-                </div>
+              <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-4">
+                <PersonaPhotos id={id} />
               </div>
             </TabsContent>
 
             <TabsContent value="videos">
-              <div className="grid grid-cols-5">
-                <div className="col-span-2 mt-2">
-                  <AboutCard id={id} />
-                  {user.isBusiness && (
-                    <div className="flex justify-center">
-                      <StoreButton id={id} />
-                    </div>
-                  )}
-                </div>
-                <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
-                  <PersonaVideos id={id} />
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="chatbot">
-              <div className="flex flex-col gap-4 mt-4">
-                {user.id === loggedInUser.id && (
-                  <PdfSubmissionField userId={user.id} />
-                )}
-                <ChatBot userId={user.id} />
+              <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-4">
+                <PersonaVideos id={id} />
               </div>
             </TabsContent>
           </Tabs>

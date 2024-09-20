@@ -27,7 +27,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [topK, setTopK] = useState(60);
   const [currentPdfName, setCurrentPdfName] = useState<
     string | null | undefined
-  >(null);
+  >(undefined);
   const [systemInstruction, setSystemInstruction] = useState(
     defaultSystemInstruction
   );
@@ -53,6 +53,8 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
         setSystemInstruction(
           aiChatParams.systemInstruction || defaultSystemInstruction
         );
+      } else {
+        setCurrentPdfName(null);
       }
     };
 
@@ -125,7 +127,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
         <>
           <ScrollArea
             ref={scrollAreaRef}
-            className="bg-white py-7 px-20 w-full max-h-[700px] overflow-y-auto z-10"
+            className="bg-white py-7 px-20 w-full h-full max-h-[700px] overflow-y-auto z-10"
           >
             {chatHistory.map((chat, index) => (
               <div key={index} className="mb-4">
@@ -173,9 +175,13 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
           </div>
         </>
       ) : (
-        <div className="flex justify-center text-slate-700 mt-20">
-          Chappy is not configured by the business.
-        </div>
+        <>
+          {currentPdfName !== undefined && (
+            <div className="flex items-center justify-center text-slate-700 h-[88vh]">
+              Chappy is not configured by the business.
+            </div>
+          )}
+        </>
       )}
     </div>
   );
