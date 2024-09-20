@@ -10,12 +10,12 @@ export async function revalidateFollow() {
   revalidateTag("followUser");
 }
 
-export async function revalidatePostUpdate() {
-  revalidateTag("updatePost");
-}
-
 export async function revalidatePost() {
   revalidateTag("createPost");
+}
+
+export async function revalidatePostUpdate() {
+  revalidateTag("updatePost");
 }
 
 export async function revalidateAppreciation() {

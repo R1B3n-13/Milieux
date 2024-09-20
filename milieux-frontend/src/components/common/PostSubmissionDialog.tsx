@@ -249,7 +249,7 @@ export default function PostSubmissionDialog({
     if (!response.success) {
       toast.error("Something went wrong.");
     } else {
-      revalidatePost();
+      await revalidatePost();
       toast.success("Post created successfully!");
     }
 
