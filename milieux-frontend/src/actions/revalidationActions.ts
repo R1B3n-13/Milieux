@@ -45,3 +45,7 @@ export async function revalidateMessage() {
 export async function revalidateAiChatParams() {
   revalidateTag("createAiChatParams");
 }
+
+export async function revalidateStore() {
+  revalidateTag("createStore");
+}
