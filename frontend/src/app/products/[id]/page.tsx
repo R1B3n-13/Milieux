@@ -9,6 +9,11 @@ import ReviewCard from '@/components/ReviewCard';
 import dotenv from 'dotenv';
 import ShoppingCartContainer from '@/components/ShoppingCartContainer';
 import { useRouter } from 'next/navigation'; // Import useRouter
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+import { Textarea } from '@headlessui/react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 dotenv.config();
 
@@ -27,8 +32,10 @@ interface ProductPageProps {
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
+
     const { id } = params;
-    const { storeInfo } = useStoreContext();
+
+    const { storeInfo, loggedUserInfo } = useStoreContext();
     const { addToCart } = useShoppingCart(); // Access the context
     const router = useRouter(); // Initialize router
 
@@ -39,38 +46,80 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
 
     const PORT = process.env.PORT || 'http://localhost:8081/api';
 
+    const [rating, setRating] = useState(4);
+    const [open, setOpen] = useState(false);
+    const [reviewText, setReviewText] = useState('');
+    const [username, setUsername] = useState('');
+
     useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const res = await fetch(PORT + `/product/find/${id}`);
-                if (!res.ok) {
-                    throw new Error('Product not found');
-                }
-                const data: Product = await res.json();
-                setProduct(data);
-                fetchReviews();
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        const fetchReviews = async () => {
-            try {
-                const res = await fetch(`${PORT}/review/find/${id}`);
-                if (!res.ok) {
-                    throw new Error('Failed to fetch reviews');
-                }
-                const data = await res.json();
-                setReviews(data);
-            } catch (err) {
-                console.error('Error fetching reviews:', err);
-            }
-        }
-
         fetchProduct();
-    }, [id]);
+        fetchReviews();
+    }, [storeInfo]);
+
+    const fetchProduct = async () => {
+        try {
+            const res = await fetch(PORT + `/product/find/${id}`);
+            if (!res.ok) {
+                throw new Error('Product not found');
+            }
+            const data: Product = await res.json();
+
+
+            setProduct(data);
+            console.log("reviews: ", reviews);
+
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    const fetchReviews = async () => {
+        try {
+            const res = await fetch(`${PORT}/reviews/product/${id}`);
+            if (!res.ok) {
+                throw new Error('Failed to fetch reviews');
+            }
+            const data = await res.json();
+            setReviews(data);
+        } catch (err) {
+            console.error('Error fetching reviews:', err);
+        }
+    }
+
+    const generateReviewId = () => {
+        return Math.floor(Math.random() * 1000);
+    };
+
+    const handleSubmitReview = async () => {
+        const reviewData = {
+            id: generateReviewId(),
+            product_id: product?.id,
+            user_id: loggedUserInfo.id,
+            rating: rating,
+            review: reviewText
+        };
+    
+        try {
+            const response = await fetch(`${PORT}/reviews/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reviewData),
+            });
+    
+            if (response.ok) {
+                console.log('Review submitted successfully');
+                setReviews((prevReviews) => [...prevReviews, reviewData]);
+                setOpen(false); 
+            } else {
+                console.error('Failed to submit review');
+            }
+        } catch (error) {
+            console.error('Error submitting review:', error);
+        }
+    };
 
     if (loading) {
         return <p>Loading...</p>;
@@ -111,7 +160,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
 
     return (
         <>
-        <ShoppingCartContainer />
+            <ShoppingCartContainer />
             <div className='flex flex-col h-full'>
                 <div className='flex flex-row items-center justify-center w-full gap-12 py-[100px] min-h-[100%]'>
                     <div className='mt-[-10rem]'>
@@ -146,16 +195,81 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
                             </div>
                         </div>
 
-                        <div className='relative gap-2 w-full items-start'>
-                            <h3 className='font-semibold text-2xl'>Reviews</h3>
+                        <div className='relative gap-2 w-full items-start '>
 
-                            {reviews.length === 0 ? (
-                                <p className='pt-2'>No reviews yet</p>
-                            ) : (
-                                reviews.map((review) => (
-                                    <ReviewCard key={review.id} imgurl={review.imgurl} customerName={review.customerName} rating={review.rating} feedback={review.feedback} />
-                                ))
-                            )}
+                            <h3 className='font-semibold text-2xl'>Reviews</h3>
+                            <div className='flex py-2'>
+                                <Dialog open={open} onOpenChange={setOpen}>
+                                    <DialogTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="bg-blue-800 text-white font-bold py-2 hover:bg-blue-700 hover:text-white"
+                                        >
+                                            Write a Review
+                                        </Button>
+                                    </DialogTrigger>
+
+                                    <DialogContent className="sm:max-w-[425px]">
+                                        <DialogHeader>
+                                            <DialogTitle>Write a review</DialogTitle>
+                                            <DialogDescription>Click confirm to upload your review.</DialogDescription>
+                                        </DialogHeader>
+
+                                        <div className="flex flex-col gap-4 py-4 w-full">
+                                            <div className="flex flex-col gap-4">
+                                                <div className="flex justify-between items-center gap-4 mx-2">
+                                                    <Label htmlFor="rating" className="text-right">Rating</Label>
+                                                    <div className="relative w-[70%]">
+                                                        <div className="absolute top-[-25px] left-0 right-0 flex justify-between text-sm text-gray-500">
+                                                            <span>1</span>
+                                                            <span>2</span>
+                                                            <span>3</span>
+                                                            <span>4</span>
+                                                            <span>5</span>
+                                                        </div>
+                                                        <Slider
+                                                            id="rating"
+                                                            defaultValue={[rating]}
+                                                            max={5}
+                                                            step={1}
+                                                            className="relative z-10 h-2"
+                                                            onValueChange={(value) => setRating(value[0])}
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex flex-col gap-2 items-start">
+                                                    <Label htmlFor="review" className="text-right">Review</Label>
+                                                    <Textarea
+                                                        id="review"
+                                                        placeholder="Write your review here"
+                                                        value={reviewText}
+                                                        onChange={(e) => setReviewText(e.target.value)}
+                                                        className="w-full h-24 border-[1.5px] border-gray-200"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <DialogFooter>
+                                                <Button type="submit" onClick={handleSubmitReview}>Submit</Button>
+                                            </DialogFooter>
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+
+                            </div>
+                            <ScrollArea className="h-[470px] w-full">
+                                <div className="flex flex-col gap-2 p-4">
+                                    {reviews.length === 0 ? (
+                                        <p className='pt-2'>This Product has no reviews</p>
+                                    ) : (
+                                        reviews.map((review) => (
+                                            <ReviewCard key={review.id} review={review} />
+                                        ))
+                                    )}
+                                </div>
+                            </ScrollArea>
+
                         </div>
                     </div>
                 </div>

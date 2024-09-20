@@ -2,9 +2,9 @@
 // const nextConfig = {};
 const nextConfig = {
     reactStrictMode: true,
+    // dangerouslyAllowSVG: true,
     images: {
-      domains: ['drive.google.com', 'i.ibb.co', 'res.cloudinary.com'],
-      // domains: ['w7.pngwing.com'],
+      domains: ['drive.google.com', 'i.ibb.co', 'res.cloudinary.com', 'placehold.co'],
     },
     experimental: {
       serverActions: {

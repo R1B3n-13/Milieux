@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import ProductCard from "@/components/ProductCard";
-import { useStoreContext } from '@/contexts/StoreContext'; // Import the context hook
+import { useStoreContext } from '@/contexts/StoreContext';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import CustomizeFeatured from '@/components/Customization/CustomizeFeatured';
 
 interface Product {
     id: number;
@@ -16,7 +17,7 @@ interface Product {
 }
 
 const PopularProducts: React.FC = () => {
-    const { storeInfo } = useStoreContext(); // Access storeInfo from context
+    const { storeInfo, loggedInUserId, setStoreInfo } = useStoreContext();
     const PORT = process.env.PORT || 'http://localhost:8081/api';
 
     if (!storeInfo) {
@@ -24,10 +25,9 @@ const PopularProducts: React.FC = () => {
     }
 
     const accentColor = storeInfo.ui_accent_color;
-    // console.log('Top Products:', storeInfo.top_items);
 
     const [topProducts, setTopProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);  // Loading state
+    const [loading, setLoading] = useState<boolean>(true);
 
     const fetchTopProducts = async () => {
         setLoading(true);  // Set loading to true before fetching
@@ -51,14 +51,12 @@ const PopularProducts: React.FC = () => {
         }
     };
 
-    // Fetch top products when component mounts or when storeInfo changes
     useEffect(() => {
         if (storeInfo && storeInfo.top_items) {
             fetchTopProducts();
         }
     }, [storeInfo]);
 
-    // Handling the three possible states: loading, products available, or no products
     let content;
     if (loading) {
         content = <p>Loading top products...</p>;
@@ -74,10 +72,21 @@ const PopularProducts: React.FC = () => {
         <div className='flex flex-col items-center pb-4'>
             <div>
                 <section id="products" className="max-container max-sm:mt-12">
-                    <div className="flex flex-col justify-start gap-5">
-                        <h2 className="text-4xl font-palanquin font-bold text-slate-gray">
-                            <span style={{ color: accentColor }}>Featured</span> Products
-                        </h2>
+
+                    <div className='flex justify-between w-full'>
+                        <div className="flex flex-col justify-start">
+                            <h2 className="text-4xl font-palanquin font-bold text-slate-gray">
+                                <span style={{ color: accentColor }}>Featured</span> Products
+                            </h2>
+                            <p className="text-lg text-gray-500">
+                                Check out our Featured products
+                            </p>
+                        </div>
+
+                        { storeInfo.id === loggedInUserId && (
+                            <CustomizeFeatured />
+                        )}
+
                     </div>
 
                     <div className="mt-16 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-4 gap-14">

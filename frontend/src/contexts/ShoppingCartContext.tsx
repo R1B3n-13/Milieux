@@ -15,6 +15,7 @@ interface ShoppingCartContextType {
   addToCart: (product: Product) => void;
   removeFromCart: (id: string | number) => void;
   updateQuantity: (id: string | number, quantity: number) => void;
+  clearCart: () => void;  // Add clearCart function to the context
   open: boolean;
   setOpen: (open: boolean) => void;
   getCartItemCount: () => number;
@@ -30,12 +31,10 @@ export const ShoppingCartProvider: React.FC<{ children: ReactNode }> = ({ childr
     setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex(p => p.id === product.id);
       if (existingProductIndex > -1) {
-        // Update quantity if product already in cart
         const updatedCart = [...prevCart];
         updatedCart[existingProductIndex].quantity += product.quantity;
         return updatedCart;
       } else {
-        // Add new product to cart
         return [...prevCart, product];
       }
     });
@@ -52,7 +51,6 @@ export const ShoppingCartProvider: React.FC<{ children: ReactNode }> = ({ childr
       if (productIndex > -1) {
         updatedCart[productIndex].quantity = quantity;
         if (quantity <= 0) {
-          // Remove product if quantity is 0 or less
           return updatedCart.filter(p => p.id !== id);
         }
         return updatedCart;
@@ -61,12 +59,17 @@ export const ShoppingCartProvider: React.FC<{ children: ReactNode }> = ({ childr
     });
   };
 
+  // Implement clearCart function
+  const clearCart = () => {
+    setCart([]);
+  };
+
   const getCartItemCount = () => {
     return cart.reduce((count, product) => count + product.quantity, 0);
   };
 
   return (
-    <ShoppingCartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, open, setOpen, getCartItemCount }}>
+    <ShoppingCartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, open, setOpen, getCartItemCount }}>
       {children}
     </ShoppingCartContext.Provider>
   );

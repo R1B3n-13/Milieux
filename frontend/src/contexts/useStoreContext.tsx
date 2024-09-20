@@ -1,1 +1,0 @@
-export const StoreContext = createContext<StoreInfo | undefined>(undefined);

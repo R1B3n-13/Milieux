@@ -46,6 +46,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
     void create(@RequestBody Order order) {
+        // System.out.println(order);
         repository.create(order);
     }
 
