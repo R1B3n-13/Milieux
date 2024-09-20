@@ -1,2 +1,0 @@
-# Milieux
-A BizNet project

@@ -3,6 +3,7 @@ import { getPostsByUserId, getSavedPosts } from "@/services/postService";
 import { getUserFromAuthToken } from "@/services/userService";
 import { z } from "zod";
 import PostCard from "../common/PostCard";
+import VideoPlayer from "../common/VideoPlayer";
 
 const PersonaPostList = async ({ id }: { id: number | null }) => {
   const savedPostResponsePromise = getSavedPosts();
@@ -27,7 +28,9 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
     }
   }
 
-  const videos = posts.filter((post) => post.videoPath);
+  const videos = posts
+    .filter((post) => post.videoPath)
+    .map((post) => post.videoPath);
 
   const savedPostSet = new Set();
 
@@ -36,17 +39,21 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
   });
 
   return (
-    <div>
-      {videos.map((post: z.infer<typeof PostSchema>) => (
-        <div key={post.id} className="w-full">
-          <PostCard
-            post={post}
-            userId={loggedInUserResponse.user.id}
-            isSaved={savedPostSet.has(post.id)}
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {videos.map((video, index) => (
+          <div key={index} className="w-full h-48 rounded-lg overflow-hidden">
+            <VideoPlayer
+              src={video || ""}
+              width={500}
+              className="w-full h-full object-cover rounded-lg"
+              controls
+              autoPlay={false}
+            />
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

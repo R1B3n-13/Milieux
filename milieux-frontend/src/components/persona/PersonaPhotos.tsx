@@ -3,6 +3,7 @@ import { getPostsByUserId, getSavedPosts } from "@/services/postService";
 import { getUserFromAuthToken } from "@/services/userService";
 import { z } from "zod";
 import PostCard from "../common/PostCard";
+import Image from "next/image";
 
 const PersonaPostList = async ({ id }: { id: number | null }) => {
   const savedPostResponsePromise = getSavedPosts();
@@ -27,7 +28,9 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
     }
   }
 
-  const photos = posts.filter((post) => post.imagePath);
+  const photos = posts
+    .filter((post) => post.imagePath)
+    .map((post) => post.imagePath);
 
   const savedPostSet = new Set();
 
@@ -36,17 +39,21 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
   });
 
   return (
-    <div>
-      {photos.map((post: z.infer<typeof PostSchema>) => (
-        <div key={post.id} className="w-full">
-          <PostCard
-            post={post}
-            userId={loggedInUserResponse.user.id}
-            isSaved={savedPostSet.has(post.id)}
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {photos.map((photo, index) => (
+          <div key={index} className="w-full h-48">
+            <Image
+              src={photo || ""}
+              alt={`image-${index}`}
+              width={500}
+              height={500}
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

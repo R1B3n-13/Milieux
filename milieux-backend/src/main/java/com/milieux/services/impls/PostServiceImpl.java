@@ -64,7 +64,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostListResponseDto getPostsByIds(List<Long> postIds) {
 
-		List<Post> posts = postRepository.findAllById(postIds);
+		List<Post> posts = postRepository.findAllByIdInOrderByCreatedAtDesc(postIds);
 
 		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
 				.collect(Collectors.toList());
@@ -86,10 +86,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostListResponseDto getPostsByUserId(Long userId) {
 
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
-
-		List<Post> posts = user.getPosts();
+		List<Post> posts = postRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
 
 		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
 				.collect(Collectors.toList());

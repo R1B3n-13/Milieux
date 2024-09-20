@@ -21,7 +21,7 @@ const TidbitsDialog = ({
         <DialogHeader>
           <div className="flex flex-col gap-2 items-center justify-center">
             <DialogTitle className="text-md text-gray-500 font-normal">
-              Did you know?
+              Tidbits
             </DialogTitle>
           </div>
         </DialogHeader>
