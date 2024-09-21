@@ -18,6 +18,7 @@ public class UserDto {
 	private Long id;
 	
 	private Boolean isBusiness;
+	private Boolean isStoreLandingPage;
 	
 	private String name;
 	private String email;

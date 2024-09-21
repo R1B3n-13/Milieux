@@ -14,6 +14,7 @@ import lombok.Setter;
 public class UserRequestDto {
 
 	private Boolean isBusiness;
+	private Boolean isStoreLandingPage;
 	
 	private String name;
 	private String email;
