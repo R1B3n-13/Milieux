@@ -10,7 +10,6 @@ import {
 } from "./ui/carousel";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import Link from "next/link";
 import UpdateFromHome from "./Customization/UpdateFromHome";
 
 const CarouselContainer = () => {
@@ -74,7 +73,7 @@ const CarouselContainer = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-          
+
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>

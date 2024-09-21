@@ -113,6 +113,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
       id: generateReviewId(),
       product_id: product?.id,
       user_id: loggedUserInfo.id,
+      user_name: loggedUserInfo.name,
+      user_image: loggedUserInfo.dp,
       rating: rating,
       review: reviewText,
     };

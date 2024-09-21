@@ -62,7 +62,12 @@ const CustomizeUiImages = () => {
 
       // If a file is selected, upload it to Cloudinary
       const fileReader = new FileReader();
-      fileReader.readAsDataURL(selectedFile as File);
+
+      if (selectedFile) {
+        fileReader.readAsDataURL(selectedFile);
+      } else {
+        throw new Error("No file selected");
+      }
 
       fileReader.onload = async () => {
         const fileBase64 = fileReader.result as string;
