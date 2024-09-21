@@ -1,5 +1,8 @@
 "use client";
 
+import getAuthToken from "@/actions/social/authActions";
+import { getUserFromAuthToken } from "@/services/social/userService";
+import { useSearchParams } from "next/navigation";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface StoreContextType {
@@ -7,45 +10,60 @@ interface StoreContextType {
   loggedUserInfo: any;
   loading: boolean;
   loggedInUserId: any;
-  setStoreInfo: React.Dispatch<React.SetStateAction<any>>; // Expose setStoreInfo to update the storeInfo
-  authToken: string;
+  setStoreInfo: React.Dispatch<React.SetStateAction<any>>;
+  authToken: string | undefined;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
+const initialLoggedUserInfo = {
+  id: null,
+  isBusiness: false,
+  name: "",
+  email: "",
+  dp: "",
+  banner: "",
+  status: "",
+  intro: "",
+  address: "",
+  userType: {
+    gender: "",
+    category: "",
+  },
+  followers: [],
+  followings: [],
+  createdAt: "",
+};
+
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const loggedUserInfo = {
-    id: 1453,
-    isBusiness: true,
-    name: "Sadik Al Barid",
-    email: "sdas@asdas.ccc",
-    dp: "http://res.cloudinary.com/dcr5xry0g/image/upload/v1720890143/ryqwrkx8xdqgaoqennwy.jpg",
-    banner:
-      "http://res.cloudinary.com/dcr5xry0g/image/upload/v1720892114/gqx5z26ripjkmi2o6fq8.jpg",
-    status: "Hungry 🙁",
-    intro: "I'm nobody",
-    address: "Lake City, Sylhet",
-    userType: {
-      gender: "",
-      category: "Automotive",
-    },
-    followers: [],
-    followings: [1302],
-    createdAt: "2024-07-01T20:35:35.459543Z",
-  };
-
+  const [loggedUserInfo, setLoggedUserInfo] = useState(initialLoggedUserInfo);
   const [storeInfo, setStoreInfo] = useState(null);
   const [loading, setLoading] = useState(true);
-  const storeId = 1453; // You can set the store id dynamically if needed
+  const storeId = useSearchParams().get("id");
   const loggedInUserId = loggedUserInfo.id;
   const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
-  const authToken =
-    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYWtlMTJAZmFrZS5jb20iLCJpc3MiOiJtaWxpZXV4LmNvbSIsImlhdCI6MTcyNjkyODIwMCwiZXhwIjoxNzI3MDE0NjAwfQ.nVi2vPoNJVWWEfrF_P_vje7QL0ZICJZjeX92TJK1N44Q8JV3NjZJjocepMxMlAGqD2krSKUIzVSv4SN2DE62zA";
+  const [authToken, setAuthToken] = useState<string | undefined>("");
+
+  useEffect(() => {
+    const fetchLoggedUserInfo = async () => {
+      await getAuthToken().then(setAuthToken);
+
+      const loggedInUserResponse = await getUserFromAuthToken();
+
+      if (loggedInUserResponse.success) {
+        setLoggedUserInfo(loggedInUserResponse.user);
+      }
+    };
+
+    fetchLoggedUserInfo();
+  }, []);
 
   useEffect(() => {
     const fetchStoreInfo = async () => {
+      if (!authToken) return;
+
       try {
         const response = await fetch(PORT + `/store/find/${storeId}`, {
           method: "GET",
@@ -55,6 +73,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
           },
           cache: "no-cache",
         });
+
         if (response.ok) {
           const data = await response.json();
           setStoreInfo(data);
@@ -69,7 +88,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     fetchStoreInfo();
-  }, [storeId]);
+  }, [authToken, storeId]);
 
   return (
     <StoreContext.Provider

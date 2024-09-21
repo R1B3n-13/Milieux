@@ -16,6 +16,8 @@ import UpdateFromHome from "./Customization/UpdateFromHome";
 const CarouselContainer = () => {
   const router = useRouter();
 
+  const socialFrontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+
   const { storeInfo, loggedInUserId } = useStoreContext();
   const [ui_images, setUi_images] = useState([
     "https://placehold.co/600x400/png",
@@ -88,10 +90,14 @@ const CarouselContainer = () => {
         >
           Shop Now!
         </Button>
-        <Button variant="ghost">
+
+        <a
+          href={`${socialFrontendUrl}/persona/${storeInfo.id}`}
+          style={{ backgroundColor: storeInfo.ui_secondary_color }}
+          className="p-2 rounded-lg"
+        >
           See our social page
-          <Link href="/products"></Link>
-        </Button>
+        </a>
       </div>
     </>
   );
