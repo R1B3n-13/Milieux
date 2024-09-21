@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/order")
-@CrossOrigin(origins = "http://localhost:3000")
 public class OrderController {    
     private final JdbcClientOrderRepository repository;
 

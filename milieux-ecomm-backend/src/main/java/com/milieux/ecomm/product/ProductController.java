@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/product")
-@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
 
     private final JdbcClientProductRepository repository;
