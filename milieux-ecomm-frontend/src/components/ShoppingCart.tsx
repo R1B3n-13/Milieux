@@ -22,7 +22,11 @@ const ShoppingCart: React.FC = () => {
   };
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} className="relative z-10">
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      className="relative z-10"
+    >
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
@@ -38,7 +42,9 @@ const ShoppingCart: React.FC = () => {
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                 <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                   <div className="flex items-start justify-between">
-                    <DialogTitle className="text-lg font-medium text-gray-900">Shopping cart</DialogTitle>
+                    <DialogTitle className="text-lg font-medium text-gray-900">
+                      Shopping cart
+                    </DialogTitle>
                     <div className="ml-3 flex h-7 items-center">
                       <button
                         type="button"
@@ -54,9 +60,14 @@ const ShoppingCart: React.FC = () => {
 
                   <div className="mt-8">
                     <div className="flow-root">
-                      <ul role="list" className="-my-6 divide-y divide-gray-200">
+                      <ul
+                        role="list"
+                        className="-my-6 divide-y divide-gray-200"
+                      >
                         {cart.length === 0 ? (
-                          <p className="text-center py-6">Your cart is empty.</p>
+                          <p className="text-center py-6">
+                            Your cart is empty.
+                          </p>
                         ) : (
                           cart.map((product) => (
                             <li key={product.id} className="flex py-6">
@@ -74,23 +85,37 @@ const ShoppingCart: React.FC = () => {
                                     <h3>
                                       <a href="#">{product.name}</a>
                                     </h3>
-                                    <p className="ml-4">${product.price.toFixed(2)}</p>
+                                    <p className="ml-4">
+                                      ${product.price.toFixed(2)}
+                                    </p>
                                   </div>
                                 </div>
                                 <div className="flex flex-1 items-end justify-between text-sm">
                                   <div className="flex items-center">
                                     <button
                                       type="button"
-                                      onClick={() => updateQuantity(product.id, product.quantity - 1)}
+                                      onClick={() =>
+                                        updateQuantity(
+                                          product.id,
+                                          product.quantity - 1
+                                        )
+                                      }
                                       className="text-gray-500 hover:text-gray-600"
                                       disabled={product.quantity <= 1}
                                     >
                                       -
                                     </button>
-                                    <span className="mx-2">{product.quantity}</span>
+                                    <span className="mx-2">
+                                      {product.quantity}
+                                    </span>
                                     <button
                                       type="button"
-                                      onClick={() => updateQuantity(product.id, product.quantity + 1)}
+                                      onClick={() =>
+                                        updateQuantity(
+                                          product.id,
+                                          product.quantity + 1
+                                        )
+                                      }
                                       className="text-gray-500 hover:text-gray-600"
                                     >
                                       +
@@ -101,7 +126,9 @@ const ShoppingCart: React.FC = () => {
                                       type="button"
                                       onClick={() => removeFromCart(product.id)}
                                       className="font-medium "
-                                      style={{ color: storeInfo.ui_secondary_color }}
+                                      style={{
+                                        color: storeInfo.ui_secondary_color,
+                                      }}
                                     >
                                       Remove
                                     </button>
@@ -121,11 +148,18 @@ const ShoppingCart: React.FC = () => {
                     <p>Subtotal</p>
                     <p>${calculateSubtotal()}</p>
                   </div>
-                  <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                  <p className="mt-0.5 text-sm text-gray-500">
+                    Shipping and taxes calculated at checkout.
+                  </p>
                   <div className="mt-6">
                     <button
-                      className="flex items-center justify-center rounded-md border border-transparent px-6 py-3 text-base font-medium text-white shadow-sm"
-                      style={{ backgroundColor: storeInfo.ui_secondary_color }}
+                      className={`flex items-center justify-center rounded-md border border-transparent px-6 py-3 text-base font-medium text-white shadow-sm ${
+                        storeInfo.ui_secondary_color ? "" : "bg-blue-800"
+                      }`}
+                      style={{
+                        backgroundColor:
+                          storeInfo.ui_secondary_color || undefined,
+                      }}
                       onClick={handleCheckout} // Checkout button now navigates to the orders page
                     >
                       Checkout
@@ -133,7 +167,7 @@ const ShoppingCart: React.FC = () => {
                   </div>
                   <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                     <p>
-                      or{' '}
+                      or{" "}
                       <button
                         type="button"
                         onClick={() => setOpen(false)}

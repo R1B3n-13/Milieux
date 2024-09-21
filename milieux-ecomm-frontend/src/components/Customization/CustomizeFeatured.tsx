@@ -19,8 +19,8 @@ interface Product {
 }
 
 const CustomizeFeatured = () => {
-    const { storeInfo, setStoreInfo } = useStoreContext();
-    const PORT = process.env.PORT || 'http://localhost:8081/api';
+    const { storeInfo, setStoreInfo, authToken } = useStoreContext();
+    const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
 
     const [loading, setLoading] = useState<boolean>(true);
     const [products, setProducts] = useState<Product[]>([]);
@@ -30,7 +30,17 @@ const CustomizeFeatured = () => {
     const fetchAllProducts = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${PORT}/product/store/${storeInfo.id}`);
+            const response = await fetch(
+              `${PORT}/product/store/${storeInfo.id}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${authToken}`,
+                },
+                cache: "no-cache",
+              }
+            );
 
             if (response.ok) {
                 const data: Product[] = await response.json();
@@ -61,13 +71,17 @@ const CustomizeFeatured = () => {
 
     const updateFeaturedProducts = async () => {
         try {
-            const response = await fetch(`${PORT}/store/update/top-products/${storeInfo.id}`, {
-                method: 'POST',
+            const response = await fetch(
+              `${PORT}/store/update/top-products/${storeInfo.id}`,
+              {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${authToken}`,
                 },
                 body: JSON.stringify(selectedProductIds),
-            });
+              }
+            );
 
             if (!response.ok) {
                 throw new Error('Failed to update featured products');
