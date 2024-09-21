@@ -21,6 +21,18 @@ const nextConfig = {
       bodySizeLimit: "100mb",
     },
   },
+  async rewrites() {
+    return [
+      {
+        source: "/ecomm",
+        destination: `${process.env.ECOMM_FRONTEND_URL}/ecomm`,
+      },
+      {
+        source: "/ecomm/:path+",
+        destination: `${process.env.ECOMM_FRONTEND_URL}/ecomm/:path+`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

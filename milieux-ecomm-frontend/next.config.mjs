@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
-// const nextConfig = {};
 const nextConfig = {
+  basePath: "/ecomm",
   reactStrictMode: true,
-  // dangerouslyAllowSVG: true,
   images: {
     domains: [
       "drive.google.com",
@@ -14,9 +13,9 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: "10mb", // 2mb is the default
+      bodySizeLimit: "100mb", // 2mb is the default
     },
   },
 };
-  
+
 export default nextConfig;

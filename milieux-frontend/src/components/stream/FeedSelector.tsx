@@ -41,7 +41,9 @@ const FeedSelector = () => {
       }
     };
 
-    fetchSelectedFeed();
+    if (selectedFeed) {
+      fetchSelectedFeed();
+    }
   }, [selectedFeed]);
 
   if (loading) {

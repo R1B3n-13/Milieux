@@ -42,7 +42,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
   const loggedInUserId = loggedUserInfo.id;
   const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
   const authToken =
-    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYWtlMTJAZmFrZS5jb20iLCJpc3MiOiJtaWxpZXV4LmNvbSIsImlhdCI6MTcyNjgzOTIwOCwiZXhwIjoxNzI2OTI1NjA4fQ.-Ohz2mcUxMMDO9dI8THBQedc46fLYZql0Ipo7li7IUpaWcXXE8O9XWaMuKekZk6zAxubNtOWHzZtcdOh8vAclQ";
+    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYWtlMTJAZmFrZS5jb20iLCJpc3MiOiJtaWxpZXV4LmNvbSIsImlhdCI6MTcyNjkyODIwMCwiZXhwIjoxNzI3MDE0NjAwfQ.nVi2vPoNJVWWEfrF_P_vje7QL0ZICJZjeX92TJK1N44Q8JV3NjZJjocepMxMlAGqD2krSKUIzVSv4SN2DE62zA";
 
   useEffect(() => {
     const fetchStoreInfo = async () => {

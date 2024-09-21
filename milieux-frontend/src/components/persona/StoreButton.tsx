@@ -27,28 +27,19 @@ const StoreButton = async ({ id }: { id: number | null | undefined }) => {
       {user.id === loggedInUser?.id && storeResponse?.status === 404 && (
         <StoreCreationButton user={user} loggedInUser={loggedInUser} />
       )}
-      {user.id === loggedInUser.id && storeResponse?.success && (
-        <a
-          href="https://example.com"
-          className="inline-block w-full py-[0.4rem] bg-orange-600 text-white font-medium text-center rounded-full hover:bg-orange-500"
-        >
-          <div className="flex items-center gap-1 justify-center">
-            <StoreIcon />
-            <span>Visit store</span>
-          </div>
-        </a>
-      )}
-      {id && storeResponse?.success && storeResponse.data.ui_type && (
-        <a
-          href="https://example.com"
-          className="inline-block w-full py-[0.4rem] bg-orange-600 text-white font-medium text-center rounded-full hover:bg-orange-500"
-        >
-          <div className="flex items-center gap-1 justify-center">
-            <StoreIcon />
-            <span>Visit store</span>
-          </div>
-        </a>
-      )}
+      {storeResponse?.success &&
+        (user.id === loggedInUser.id ||
+          (user.id !== loggedInUser.id && storeResponse.data.ui_type)) && (
+          <a
+            href={`/ecomm?id=${user.id}`}
+            className="inline-block w-full py-[0.4rem] bg-orange-600 text-white font-medium text-center rounded-full hover:bg-orange-500"
+          >
+            <div className="flex items-center gap-1 justify-center">
+              <StoreIcon />
+              <span>Visit store</span>
+            </div>
+          </a>
+        )}
     </div>
   );
 };
