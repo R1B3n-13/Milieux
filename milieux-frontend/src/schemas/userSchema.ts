@@ -3,6 +3,7 @@ import { z } from "zod";
 const UserSchema = z.object({
   id: z.number().nullable().optional(),
   isBusiness: z.boolean().nullable().optional(),
+  isStoreLandingPage: z.boolean().nullable().optional(),
   name: z.string().nullable().optional(),
   email: z.string().email().nullable().optional(),
   dp: z.string().nullable().optional(),
