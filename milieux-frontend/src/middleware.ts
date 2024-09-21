@@ -21,6 +21,7 @@ export async function middleware(request: NextRequest) {
     "/memories",
     "/gaming",
     "/kids",
+    "/ecomm",
   ];
 
   const isProtectedRoute = protectedRoutes.some((route) =>

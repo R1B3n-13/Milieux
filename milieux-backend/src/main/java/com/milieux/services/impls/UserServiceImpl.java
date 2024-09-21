@@ -139,6 +139,9 @@ public class UserServiceImpl implements UserService {
 		if (requestDto.getPassword() != null && !requestDto.getPassword().isEmpty()) {
 			existingUser.setPassword(requestDto.getPassword());
 		}
+		if (requestDto.getIsStoreLandingPage() != null) {
+			existingUser.setIsStoreLandingPage(requestDto.getIsStoreLandingPage());
+		}
 
 		userRepository.save(existingUser);
 

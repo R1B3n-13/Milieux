@@ -26,21 +26,35 @@ const fetchFeeds = async (
   }
 };
 
-export const getBBCFeeds = async () => {
-  const feedURL = "https://feeds.bbci.co.uk/news/rss.xml";
-  return await fetchFeeds(feedURL, {
-    item: [["media:thumbnail", "thumbnail"]],
-  });
+const feedConfigs: Record<
+  string,
+  { url: string; customFields: Record<string, any> }
+> = {
+  bbc: {
+    url: "https://feeds.bbci.co.uk/news/rss.xml",
+    customFields: {
+      item: [["media:thumbnail", "thumbnail"]],
+    },
+  },
+  wired: {
+    url: "https://www.wired.com/feed/rss",
+    customFields: {
+      item: [["media:thumbnail", "thumbnail"]],
+    },
+  },
+  sky_sports: {
+    url: "https://www.skysports.com/rss/12040",
+    customFields: {
+      item: [["media:thumbnail", "thumbnail"]],
+    },
+  },
 };
 
-export const getWiredFeeds = async () => {
-  const feedURL = "https://www.wired.com/feed/rss";
-  return await fetchFeeds(feedURL, {
-    item: [["media:thumbnail", "thumbnail"]],
-  });
-};
-
-export const getESPNFeeds = async () => {
-  const feedURL = "https://www.espn.com/espn/rss/";
-  return await fetchFeeds(feedURL);
+export const getFeeds = async (key: string) => {
+  const config = feedConfigs[key];
+  if (!config) {
+    console.error(`No configuration found for key: ${key}`);
+    return [];
+  }
+  return await fetchFeeds(config.url, config.customFields);
 };

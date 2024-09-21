@@ -17,6 +17,7 @@ import { z } from "zod";
 import { revalidateAiChatParams } from "@/actions/revalidationActions";
 import ExpandLessIcon from "../icons/ExpandLessIcon";
 import ExpandMoreIcon from "../icons/ExpandMoreIcon";
+import CircleQuestionIcon from "../icons/CircleQuestionIcon";
 
 const PdfSubmissionField = ({
   userId,
@@ -126,7 +127,7 @@ const PdfSubmissionField = ({
     <>
       <div
         onClick={() => setIsSettingsExpanded(!isSettingsExpanded)}
-        className="flex items-center gap-1 text-slate-800 font-semibold mb-4"
+        className="flex items-center gap-1 text-slate-800 font-semibold mb-4 cursor-pointer"
       >
         <div className="text-xl">
           {isSettingsExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -138,7 +139,7 @@ const PdfSubmissionField = ({
         )}
       </div>
       {isSettingsExpanded && (
-        <div className="h-[80vh] w-full grid grid-cols-2 gap-4 mb-9">
+        <div className="h-[80vh] w-full grid grid-cols-2 gap-4 mb-14">
           <div className="bg-white p-6 rounded-lg shadow-md w-full col-span-1">
             <h1 className="flex justify-center text-xl text-slate-800 font-semibold mb-6">
               Train Your Custom Chatbot
@@ -312,6 +313,14 @@ const PdfSubmissionField = ({
                 />
               </div>
             </div>
+
+            <a
+              href="https://ai.google.dev/gemini-api/docs/models/generative-models#model-parameters"
+              className="text-blue-500 flex items-center gap-1 text-sm"
+            >
+              <CircleQuestionIcon />
+              Please refer to this site for more information.
+            </a>
 
             <div className="flex justify-end">
               <Button
