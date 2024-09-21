@@ -56,7 +56,7 @@ const CarouselContainer = () => {
         id="home"
         className="w-full flex xl:flex-row flex-col justify-center max-h-full gap-10 max-container px-40 py-5"
       >
-        <div className="flex-1 flex justify-center items-center rounded-3xl xl:min-h-full max-xl:py-40 bg-hero bg-cover bg-center">
+        <div className="flex-1 flex justify-center items-center rounded-xl xl:min-h-full max-xl:py-40 bg-hero bg-cover bg-center overflow-hidden">
           <Carousel>
             <CarouselContent>
               {ui_images.map((img: string, index: number) => (
@@ -69,12 +69,12 @@ const CarouselContainer = () => {
                     alt={`Carousel image ${index + 1}`}
                     width={2000}
                     height={2000}
-                    className="w-full object-cover"
+                    className="w-full object-cover rounded-xl"
                   />
                 </CarouselItem>
               ))}
             </CarouselContent>
-
+          
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
