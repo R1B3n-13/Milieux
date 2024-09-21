@@ -27,8 +27,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Value("${frontend.url}")
-	private String frontendUrl;
+	@Value("${frontend.urls}")
+	private String frontendUrls;
 
 	@Autowired
 	private AuthTokenFilter authTokenFilter;
@@ -65,7 +65,7 @@ public class SecurityConfig {
 
 				CorsConfiguration cfg = new CorsConfiguration();
 
-				cfg.setAllowedOrigins(Arrays.asList(frontendUrl));
+				cfg.setAllowedOrigins(Arrays.asList(frontendUrls.split(",")));
 				cfg.setAllowedMethods(Collections.singletonList("*"));
 				cfg.setAllowedHeaders(Collections.singletonList("*"));
 				cfg.setExposedHeaders(Arrays.asList("Authorization"));
