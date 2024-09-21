@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS review (
     id SERIAL PRIMARY KEY,
     product_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
+    user_name VARCHAR(255),
+    user_image VARCHAR(255),
     rating NUMERIC(3, 1) NOT NULL CHECK (rating >= 0 AND rating <= 10), -- Assuming rating is a decimal value between 0 and 10
     review TEXT
 );

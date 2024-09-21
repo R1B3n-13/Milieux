@@ -15,10 +15,12 @@ public class JdbcClientReviewRepository {
     }
 
     public void create(Review review) {
-        jdbcClient.sql("INSERT INTO review (id, product_id, user_id, rating, review) VALUES (:id, :product_id, :user_id, :rating, :review)")
+            jdbcClient.sql("INSERT INTO review (id, product_id, user_id, user_name, user_image, rating, review) VALUES (:id, :product_id, :user_id, :user_name, :user_image, :rating, :review)")
             .param("id", review.id())
             .param("product_id", review.product_id())
             .param("user_id", review.user_id())
+            .param("user_name", review.user_name())
+            .param("user_image", review.user_image())
             .param("rating", review.rating())
             .param("review", review.review())
             .update();
