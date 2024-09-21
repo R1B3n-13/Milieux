@@ -8,6 +8,8 @@ import { AccordionTrigger } from "@radix-ui/react-accordion";
 import { useToast } from "@/hooks/use-toast";
 import uploadToCloudinary from "@/app/api/cloudinaryActions";
 import { GradientPicker } from "./ui/GradientPicker";
+import { Label } from "./ui/label";
+import { updateUser } from "@/actions/social/userActions";
 
 interface Product {
   id: number;
@@ -20,7 +22,8 @@ interface Product {
 }
 
 const PageCustomize = () => {
-  const { storeInfo, setStoreInfo, authToken } = useStoreContext();
+  const { storeInfo, setStoreInfo, authToken, loggedUserInfo } =
+    useStoreContext();
   const { toast } = useToast();
   const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
 
@@ -36,6 +39,10 @@ const PageCustomize = () => {
   const [accentColor, setAccentColor] = useState<string>("");
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const [isStoreLandingPage, setIsStoreLandingPage] = useState(
+    loggedUserInfo.isStoreLandingPage
+  );
 
   useEffect(() => {
     setBaseColor(storeInfo.ui_base_color);
@@ -292,6 +299,22 @@ const PageCustomize = () => {
     }
   };
 
+  const handleLandingPageChange = async () => {
+    const response = await updateUser({ isStoreLandingPage });
+
+    if (response.success) {
+      toast({
+        title: "Success!",
+        description: "Landing page changed successfully!",
+      });
+    } else {
+      toast({
+        title: "Operation failed",
+        description: "Changing Landing page resulted in error",
+      });
+    }
+  };
+
   return (
     <>
       <ScrollArea className="w-[95%] h-[35rem] mr-2 flex flex-col flex-wrap flex-auto">
@@ -440,6 +463,30 @@ const PageCustomize = () => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+
+        <div className="flex items-center justify-center space-x-2 mt-10">
+          <Input
+            id="checkbox"
+            type="checkbox"
+            checked={isStoreLandingPage}
+            onChange={() => setIsStoreLandingPage(!isStoreLandingPage)}
+            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <Label
+            htmlFor="checkbox"
+            className="text-sm font-medium text-gray-700"
+          >
+            Use store homepage as landing page
+          </Label>
+          <Button
+            className="w-fit h-fit bg-black text-white 
+                                    hover:bg-gray-800 hover:text-white"
+            variant={"ghost"}
+            onClick={handleLandingPageChange}
+          >
+            Save
+          </Button>
+        </div>
       </ScrollArea>
     </>
   );

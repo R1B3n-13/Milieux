@@ -19,6 +19,7 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 const initialLoggedUserInfo = {
   id: null,
   isBusiness: false,
+  isStoreLandingPage: false,
   name: "",
   email: "",
   dp: "",
