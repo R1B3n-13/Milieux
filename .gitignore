@@ -1,6 +1,2 @@
-node_modules
-.next
-.env
-package-lock.json
-/frontend/.next
-ecommerce.session.sql
+.vscode
+.project
