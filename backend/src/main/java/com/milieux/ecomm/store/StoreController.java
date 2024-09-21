@@ -118,6 +118,51 @@ public class StoreController {
 
     }
 
+    // update banner
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/update/banner/{id}")
+    public void updateBanner(@PathVariable Integer id, @RequestBody String url) {
+        String updatedBannerUrl = "";
+
+        for (int i = 1; i < url.length() - 1; i++)
+            updatedBannerUrl += url.charAt(i);
+
+        repository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Store not found"));
+        
+        repository.updateBanner(id, updatedBannerUrl);
+    }
+
+    // update subtext
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/update/subtext/{id}")
+    public void updateSubtext(@PathVariable Integer id, @RequestBody String subtext) {
+        String updatedSubtext = "";
+        for (int i = 1; i < subtext.length() - 1; i++)
+            updatedSubtext += subtext.charAt(i);
+
+        repository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Store not found"));
+        
+        repository.updateSubtext(id, updatedSubtext);
+    }
+
+    // update colors
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/update/colors/{id}")
+    public void updateColors(@PathVariable Integer id, @RequestBody Map<String, String> colors) {
+        String baseColor = colors.get("ui_base_color");
+        String secondaryColor = colors.get("ui_secondary_color");
+        String accentColor = colors.get("ui_accent_color");
+
+        System.out.println(baseColor);
+
+        repository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Store not found"));
+        
+        repository.updateColors(id, baseColor, secondaryColor, accentColor);
+    }
+
     // Delete a store by id
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete/{id}")

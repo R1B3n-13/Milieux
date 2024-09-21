@@ -219,4 +219,27 @@ public class JdbcClientStoreRepository {
                 .param("url", url)
                 .update();
     }
+
+    public void updateBanner(Integer id, String url) {
+        jdbcClient.sql("UPDATE store SET banner = :url WHERE id = :id")
+                .param("id", id)
+                .param("url", url)
+                .update();
+    }
+
+    public void updateSubtext(Integer id, String subtext) {
+        jdbcClient.sql("UPDATE store SET banner_subtext = :subtext WHERE id = :id")
+                .param("id", id)
+                .param("subtext", subtext)
+                .update();
+    }
+
+    public void updateColors(Integer id, String baseColor, String secondaryColor, String accentColor) {
+        jdbcClient.sql("UPDATE store SET ui_base_color = :base_color, ui_secondary_color = :secondary_color, ui_accent_color = :accent_color WHERE id = :id")
+                .param("id", id)
+                .param("base_color", baseColor)
+                .param("secondary_color", secondaryColor)
+                .param("accent_color", accentColor)
+                .update();
+    }
 }

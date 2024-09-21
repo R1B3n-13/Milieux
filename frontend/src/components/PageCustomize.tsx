@@ -7,6 +7,8 @@ import { Accordion, AccordionContent, AccordionItem } from './ui/accordion';
 import { AccordionTrigger } from '@radix-ui/react-accordion';
 import { useToast } from '@/hooks/use-toast';
 import uploadToCloudinary from '@/app/api/cloudinaryActions';
+import { GradientPicker } from './ui/GradientPicker';
+import { set } from 'date-fns';
 
 interface Product {
     id: number;
@@ -23,15 +25,23 @@ const PageCustomize = () => {
     const { toast } = useToast();
     const PORT = process.env.PORT || 'http://localhost:8081/api';
 
-    const [uiType, setUiType] = useState(storeInfo.ui_type);
-
     const [newStoreName, setNewStoreName] = useState<string>('');
+    const [newStoreBanner, setNewStoreBanner] = useState<string>('');
+    const [newStoreSubtext, setNewStoreSubtext] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
+    const [background, setBackground] = useState<string>('');
+    const [baseColor, setBaseColor] = useState<string>('');
+    const [secondaryColor, setSecondaryColor] = useState<string>('');
+    const [accentColor, setAccentColor] = useState<string>('');
+
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    
+
     useEffect(() => {
+        setBaseColor(storeInfo.ui_base_color);
+        setSecondaryColor(storeInfo.ui_secondary_color);
+        setAccentColor(storeInfo.ui_accent_color);
     }, [storeInfo]);
 
 
@@ -70,6 +80,123 @@ const PageCustomize = () => {
         } catch (error: any) {
             console.error('Error updating store name:', error);
             setError(error.message || 'Failed to update store name');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleBannerChange = async () => {
+
+        setIsSubmitting(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`${PORT}/store/update/banner/${storeInfo.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newStoreBanner),
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Store not found');
+                } else {
+                    throw new Error('Failed to update store banner');
+                }
+            }
+
+            setStoreInfo((prevStoreInfo: any) => ({
+                ...prevStoreInfo,
+                banner: newStoreBanner,
+            }));
+
+        } catch (error: any) {
+            console.error('Error updating store name:', error);
+            setError(error.message || 'Failed to update store name');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleColorChange = async () => {
+        setIsSubmitting(true);
+        setError(null);
+    
+        try {
+            const colorData = {
+                ui_base_color: baseColor,
+                ui_secondary_color: secondaryColor,
+                ui_accent_color: accentColor,
+            };
+    
+            const response = await fetch(`${PORT}/store/update/colors/${storeInfo.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(colorData),
+            });
+    
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Store not found');
+                } else {
+                    throw new Error('Failed to update store UI colors');
+                }
+            }
+    
+            // After successful color update, update the StoreContext with the new colors
+            setStoreInfo((prevStoreInfo: any) => ({
+                ...prevStoreInfo,
+                ui_base_color: baseColor,
+                ui_secondary_color: secondaryColor,
+                ui_accent_color: accentColor,
+            }));
+    
+            toast({
+                title: "Colors Updated",
+                description: "Store UI colors have been updated successfully.",
+            });
+        } catch (error: any) {
+            console.error('Error updating store UI colors:', error);
+            setError(error.message || 'Failed to update store UI colors');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+    
+
+    const handleSubtextChange = async () => {
+
+        setIsSubmitting(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`${PORT}/store/update/subtext/${storeInfo.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newStoreSubtext),
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Store not found');
+                } else {
+                    throw new Error('Failed to update store banner');
+                }
+            }
+
+            setStoreInfo((prevStoreInfo: any) => ({
+                ...prevStoreInfo,
+                banner_subtext: newStoreBanner,
+            }));
+
+        } catch (error: any) {
+            setError(error.message || 'Failed to update store suubtext');
         } finally {
             setIsSubmitting(false);
         }
@@ -198,8 +325,17 @@ const PageCustomize = () => {
                             Change store banner
                         </AccordionTrigger>
                         <AccordionContent className='flex items-center justify-center gap-2 p-5'>
-                            <Input className='w-[30%] focus:border-none' placeholder={storeInfo.banner} />
-                            <Button className='w-[20%] h-[40%] bg-black text-white hover:bg-gray-800 hover:text-white' variant={'ghost'}>
+                            <Input className='w-[30%] focus:border-none'
+                                placeholder={storeInfo.banner}
+                                value={newStoreBanner}
+                                onChange={(e) => setNewStoreBanner(e.target.value)}
+                            />
+                            <Button className='w-[20%] h-[40%] bg-black text-white 
+                                    hover:bg-gray-800 hover:text-white'
+                                variant={'ghost'}
+                                onClick={handleBannerChange}
+                            // disabled={isSubmitting}
+                            >
                                 Submit
                             </Button>
                         </AccordionContent>
@@ -211,10 +347,51 @@ const PageCustomize = () => {
                             Change store banner subtext
                         </AccordionTrigger>
                         <AccordionContent className='flex items-center justify-center gap-2 p-5'>
-                            <Input className='w-[30%] focus:border-none' placeholder={storeInfo.banner_subtext} />
-                            <Button className='w-[20%] h-[40%] bg-black text-white hover:bg-gray-800 hover:text-white' variant={'ghost'}>
+                            <Input className='w-[30%] focus:border-none'
+                                placeholder={storeInfo.banner_subtext}
+                                value={newStoreSubtext}
+                                onChange={(e) => setNewStoreSubtext(e.target.value)}
+                            />
+                            <Button className='w-[20%] h-[40%] bg-black text-white 
+                                    hover:bg-gray-800 hover:text-white'
+                                variant={'ghost'}
+                                onClick={handleSubtextChange}
+                            // disabled={isSubmitting}
+                            >
                                 Submit
                             </Button>
+                        </AccordionContent>
+                    </AccordionItem>
+
+                    {/* ui colors */}
+                    <AccordionItem value='item5'>
+                        <AccordionTrigger className='flex p-2 w-full justify-center items-center'>
+                            Change UI colors
+                        </AccordionTrigger>
+                        <AccordionContent className='flex items-center justify-center gap-2 p-5 w-full'>
+                            <div className='flex flex-col gap-2 items-center justify-center'>
+                                <GradientPicker background={baseColor} setBackground={setBaseColor} />
+                                <GradientPicker background={secondaryColor} setBackground={setSecondaryColor} />
+                                <GradientPicker background={accentColor} setBackground={setAccentColor} />
+                                <Button className='w-fit h-fit bg-black text-white 
+                                    hover:bg-gray-800 hover:text-white'
+                                    variant={'ghost'}
+                                    onClick={handleColorChange}
+                                // disabled={isSubmitting}
+                                >
+                                    Submit
+                                </Button>
+                            </div>
+                            <div className='flex flex-col items-start justify-start gap-5 h-fit mb-11'>
+                                <div className='w-[2px] h-[30px]' style={{ background: baseColor }}></div>
+                                <div className='w-[2px] h-[30px]' style={{ background: secondaryColor }}></div>
+                                <div className='w-[2px] h-[30px]' style={{ background: accentColor }}></div>
+                            </div>
+                            <div className='flex flex-col items-start justify-start gap-5 h-fit mb-11'>
+                                <span>Base Color</span>
+                                <span>Secondary Color</span>
+                                <span>Accent Color</span>
+                            </div>
                         </AccordionContent>
                     </AccordionItem>
 
