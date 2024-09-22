@@ -92,34 +92,56 @@ const FlashCarousel = ({
                   )}
 
                   <div className="absolute top-2 left-2 cursor-pointer">
+                    {flash.user?.isStoreLandingPage ? (
+                      <a href={`/ecomm?id=${flash.user.id}`}>
+                        <Avatar className="w-9 h-9">
+                          <AvatarImage src={flash.user?.dp as string} />
+                          <AvatarFallback className="text-5xl text-gray-500">
+                            <AvatarIcon />
+                          </AvatarFallback>
+                        </Avatar>
+                      </a>
+                    ) : (
+                      <Link
+                        href={
+                          flash.user?.id === user.id
+                            ? "/persona"
+                            : `/persona/${flash.user?.id}`
+                        }
+                      >
+                        <Avatar className="w-9 h-9">
+                          <AvatarImage src={flash.user?.dp as string} />
+                          <AvatarFallback className="text-4xl text-gray-500">
+                            <AvatarIcon />
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
+                    )}
+                  </div>
+
+                  {flash.user?.isStoreLandingPage ? (
+                    <a
+                      href={`/ecomm?id=${flash.user.id}`}
+                      className="absolute w-full flex justify-center bottom-1 justify-self-center cursor-pointer"
+                    >
+                      <p className=" text-sm font-semibold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                        {flash.user?.name}
+                      </p>
+                    </a>
+                  ) : (
                     <Link
                       href={
                         flash.user?.id === user.id
                           ? "/persona"
                           : `/persona/${flash.user?.id}`
                       }
+                      className="absolute w-full flex justify-center bottom-1 justify-self-center cursor-pointer"
                     >
-                      <Avatar className="w-9 h-9">
-                        <AvatarImage src={flash.user?.dp as string} />
-                        <AvatarFallback className="text-4xl text-gray-500">
-                          <AvatarIcon />
-                        </AvatarFallback>
-                      </Avatar>
+                      <p className=" text-sm font-semibold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                        {flash.user?.name}
+                      </p>
                     </Link>
-                  </div>
-
-                  <Link
-                    href={
-                      flash.user?.id === user.id
-                        ? "/persona"
-                        : `/persona/${flash.user?.id}`
-                    }
-                    className="absolute w-full flex justify-center bottom-1 justify-self-center cursor-pointer"
-                  >
-                    <p className=" text-sm font-semibold text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-                      {flash.user?.name}
-                    </p>
-                  </Link>
+                  )}
                 </CardContent>
               </Card>
             </Link>

@@ -185,5 +185,6 @@ buildNumber.properties
 env.properties
 ecommerce.session.sql
 milieux.session.sql
+compose.yml
 
 # End of custom

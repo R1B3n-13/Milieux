@@ -9,12 +9,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import AvatarIcon from "../icons/AvatarIcon";
 import { z } from "zod";
 import UserSchema from "@/schemas/userSchema";
+import Link from "next/link";
 
 const AppreciationList = ({
   dialogButton,
+  userId,
   likedByUsers,
 }: {
   dialogButton: JSX.Element;
+  userId: number;
   likedByUsers: z.infer<typeof UserSchema>[];
 }) => {
   return (
@@ -34,14 +37,51 @@ const AppreciationList = ({
               <div key={user.id}>
                 <div className="flex items-center gap-3">
                   <div className="cursor-pointer">
-                    <Avatar>
-                      <AvatarImage />
-                      <AvatarFallback className="text-4xl text-gray-500">
-                        <AvatarIcon />
-                      </AvatarFallback>
-                    </Avatar>
+                    {user?.isStoreLandingPage ? (
+                      <a href={`/ecomm?id=${user.id}`}>
+                        <Avatar>
+                          <AvatarImage src={user?.dp as string} />
+                          <AvatarFallback className="text-5xl text-gray-500">
+                            <AvatarIcon />
+                          </AvatarFallback>
+                        </Avatar>
+                      </a>
+                    ) : (
+                      <Link
+                        href={
+                          user?.id === userId
+                            ? "/persona"
+                            : `/persona/${user?.id}`
+                        }
+                      >
+                        <Avatar>
+                          <AvatarImage src={user?.dp as string} />
+                          <AvatarFallback className="text-5xl text-gray-500">
+                            <AvatarIcon />
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
+                    )}
                   </div>
-                  <p className="cursor-pointer font-semibold text-slate-700">{user.name}</p>
+                  {user?.isStoreLandingPage ? (
+                    <a href={`/ecomm?id=${user.id}`}>
+                      <p className="font-semibold cursor-pointer text-slate-700">
+                        {user?.name}
+                      </p>
+                    </a>
+                  ) : (
+                    <Link
+                      href={
+                        user?.id === userId
+                          ? "/persona"
+                          : `/persona/${user?.id}`
+                      }
+                    >
+                      <p className="font-semibold cursor-pointer text-slate-700">
+                        {user?.name}
+                      </p>
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}

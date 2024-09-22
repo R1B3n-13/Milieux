@@ -64,7 +64,9 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostListResponseDto getPostsByIds(List<Long> postIds) {
 
-		List<Post> posts = postRepository.findAllByIdInOrderByCreatedAtDesc(postIds);
+		Long[] idsArray = postIds.toArray(new Long[0]); 
+
+		List<Post> posts = postRepository.findAllByIdInOrderByIdList(idsArray);
 
 		List<PostDto> dtos = posts.stream().map(post -> modelMapper.map(post, PostDto.class))
 				.collect(Collectors.toList());

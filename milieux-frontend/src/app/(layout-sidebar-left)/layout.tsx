@@ -1,4 +1,4 @@
-import NavBar from "@/components/common/NavBar";
+import NavBarContainer from "@/components/common/NavBarContainer";
 import LeftSideBar from "@/components/layout-sidebar-left/LeftSideBar";
 import React from "react";
 
@@ -6,7 +6,7 @@ const SidebarLeftLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <nav>
-        <NavBar />
+        <NavBarContainer />
       </nav>
 
       <div className="grid grid-cols-11">

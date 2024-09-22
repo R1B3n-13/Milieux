@@ -40,6 +40,9 @@ const AiSearchResult = async ({ query }: { query: string }) => {
 
   return (
     <>
+      <div className="mt-5 ml-7 flex items-center gap-1 text-lg text-slate-800">
+        Showing results for : <p className="font-semibold">{query}</p>{" "}
+      </div>
       {posts.map((post: z.infer<typeof PostSchema>) => (
         <div key={post.id} className="px-40 w-full pt-4">
           <PostCard

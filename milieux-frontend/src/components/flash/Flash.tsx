@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import FlashSchema from "@/schemas/flashSchema";
 import { getAllFlash, getFlashById } from "@/services/flashService";
+import { getUserFromAuthToken } from "@/services/userService";
 import Image from "next/image";
 import Link from "next/link";
 import { z } from "zod";
@@ -14,11 +15,14 @@ import { z } from "zod";
 const Flash = async ({ id }: { id: number }) => {
   const FlashResponsePromise = getFlashById(id);
   const AllFlashResponsePromise = getAllFlash();
+  const loggedInUserResponsePromise = getUserFromAuthToken();
 
-  const [FlashResponse, AllFlashResponse] = await Promise.all([
-    FlashResponsePromise,
-    AllFlashResponsePromise,
-  ]);
+  const [FlashResponse, AllFlashResponse, loggedInUserResponse] =
+    await Promise.all([
+      FlashResponsePromise,
+      AllFlashResponsePromise,
+      loggedInUserResponsePromise,
+    ]);
 
   let index = -1;
 
@@ -73,15 +77,51 @@ const Flash = async ({ id }: { id: number }) => {
           )}
 
           <div className="absolute top-3 left-3 flex items-center gap-2">
-            <Avatar className="w-12 h-12 cursor-pointer">
-              <AvatarImage />
-              <AvatarFallback className="text-5xl text-gray-500">
-                <AvatarIcon />
-              </AvatarFallback>
-            </Avatar>
-            <p className="cursor-pointer text-white font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-              {FlashResponse.reel?.user.name}
-            </p>
+            {FlashResponse.reel?.user?.isStoreLandingPage ? (
+              <a href={`/ecomm?id=${FlashResponse.reel?.user.id}`}>
+                <Avatar className="w-12 h-12 cursor-pointer">
+                  <AvatarImage src={FlashResponse.reel?.user?.dp as string} />
+                  <AvatarFallback className="text-5xl text-gray-500">
+                    <AvatarIcon />
+                  </AvatarFallback>
+                </Avatar>
+              </a>
+            ) : (
+              <Link
+                href={
+                  FlashResponse.reel?.user?.id === loggedInUserResponse.user?.id
+                    ? "/persona"
+                    : `/persona/${FlashResponse.reel?.user?.id}`
+                }
+              >
+                <Avatar className="w-12 h-12 cursor-pointer">
+                  <AvatarImage src={FlashResponse.reel?.user?.dp as string} />
+                  <AvatarFallback className="text-5xl text-gray-500">
+                    <AvatarIcon />
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+            )}
+
+            {FlashResponse.reel?.user?.isStoreLandingPage ? (
+              <a href={`/ecomm?id=${FlashResponse.reel?.user.id}`}>
+                <p className="cursor-pointer text-white font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                  {FlashResponse.reel?.user.name}
+                </p>
+              </a>
+            ) : (
+              <Link
+                href={
+                  FlashResponse.reel?.user?.id === loggedInUserResponse.user?.id
+                    ? "/persona"
+                    : `/persona/${FlashResponse.reel?.user?.id}`
+                }
+              >
+                <p className="cursor-pointer text-white font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                  {FlashResponse.reel?.user.name}
+                </p>
+              </Link>
+            )}
           </div>
 
           <div className="absolute top-1/2 left-0 transform -translate-y-1/2 px-2">
