@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import uploadToCloudinary from "@/actions/cloudinaryActions";
 import { createRemark } from "@/actions/remarkActions";
 import { revalidateRemark } from "@/actions/revalidationActions";
+import AddRemarkIcon from "../icons/AddRemarkIcon";
 
 export default function RemarkSubmissionField({ postId }: { postId: number }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -83,17 +84,22 @@ export default function RemarkSubmissionField({ postId }: { postId: number }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
-        <div className="flex-1">
+        <div className="flex items-center flex-1 space-x-2">
+          <div className="ml-4 -translate-y-3 text-slate-600 text-2xl rounded-full p-1 bg-gray-200">
+            <AddRemarkIcon />
+          </div>
+
           <TextArea
             value={text[postId] || ""}
             onChange={(e) =>
               setText((prev) => ({ ...prev, [postId]: e.target.value }))
             }
             placeholder="Add your remark..."
-            className="resize-none no-scrollbar pl-7"
+            className="resize-none no-scrollbar flex-1 pl-0 focus-visible:ring-0"
             style={{ border: "none" }}
           />
         </div>
+
         <div>
           <input
             id={`image-input-${postId}`}
@@ -104,11 +110,12 @@ export default function RemarkSubmissionField({ postId }: { postId: number }) {
           />
           <label
             htmlFor={`image-input-${postId}`}
-            className="cursor-pointer text-gray-500 text-lg"
+            className="cursor-pointer text-slate-700 text-lg"
           >
             <ImageFilledIcon />
           </label>
         </div>
+
         <div className="pr-5 pl-2">
           <Button
             onClick={() => handleSubmit(postId!)}

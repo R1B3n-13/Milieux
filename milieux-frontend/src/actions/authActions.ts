@@ -73,6 +73,24 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
   }
 }
 
+export async function logoutUser() {
+  try {
+    cookies().delete("jwt");
+    return {
+      status: 200,
+      success: true,
+      message: "Logged out successfully!",
+    };
+  } catch (error) {
+    console.error("Logout error: ", error);
+    return {
+      status: 500,
+      success: false,
+      message: "Uh oh! Something went wrong. Please try again.",
+    };
+  }
+}
+
 export default async function getAuthToken() {
   const authToken = cookies().get("jwt")?.value;
   return authToken;
