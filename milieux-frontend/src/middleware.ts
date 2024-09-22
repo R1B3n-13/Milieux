@@ -28,6 +28,10 @@ export async function middleware(request: NextRequest) {
     currentPath.startsWith(route)
   );
 
+  if (currentPath === "/") {
+    return NextResponse.redirect(new URL("/stream", request.url));
+  }
+
   if (isProtectedRoute && user.success === false) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

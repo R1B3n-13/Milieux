@@ -12,12 +12,15 @@ import RemarkSchema from "@/schemas/remarkSchema";
 import Image from "next/image";
 import { ScrollArea } from "../ui/ScrollArea";
 import months from "@/utils/months";
+import Link from "next/link";
 
 const RemarkList = ({
   dialogButton,
+  userId,
   comments,
 }: {
   dialogButton: JSX.Element;
+  userId: number;
   comments: z.infer<typeof RemarkSchema>[];
 }) => {
   return (
@@ -38,19 +41,55 @@ const RemarkList = ({
                 <div key={comment.id} className="mb-4">
                   <div className="flex items-start gap-3">
                     <div className="flex-shrink-0 cursor-pointer">
-                      <Avatar>
-                        <AvatarImage />
-                        <AvatarFallback className="text-4xl text-gray-500">
-                          <AvatarIcon />
-                        </AvatarFallback>
-                      </Avatar>
+                      {comment.user?.isStoreLandingPage ? (
+                        <a href={`/ecomm?id=${comment.user.id}`}>
+                          <Avatar>
+                            <AvatarImage src={comment.user?.dp as string} />
+                            <AvatarFallback className="text-5xl text-gray-500">
+                              <AvatarIcon />
+                            </AvatarFallback>
+                          </Avatar>
+                        </a>
+                      ) : (
+                        <Link
+                          href={
+                            comment.user?.id === userId
+                              ? "/persona"
+                              : `/persona/${comment.user?.id}`
+                          }
+                        >
+                          <Avatar>
+                            <AvatarImage src={comment.user?.dp as string} />
+                            <AvatarFallback className="text-5xl text-gray-500">
+                              <AvatarIcon />
+                            </AvatarFallback>
+                          </Avatar>
+                        </Link>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-[30rem] bg-gray-100 p-3 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold cursor-pointer text-slate-700">
-                          {comment.user?.name}
-                        </p>
+                        {comment.user?.isStoreLandingPage ? (
+                          <a href={`/ecomm?id=${comment.user.id}`}>
+                            <p className="font-semibold cursor-pointer text-slate-700">
+                              {comment.user?.name}
+                            </p>
+                          </a>
+                        ) : (
+                          <Link
+                            href={
+                              comment.user?.id === userId
+                                ? "/persona"
+                                : `/persona/${comment.user?.id}`
+                            }
+                          >
+                            <p className="font-semibold cursor-pointer text-slate-700">
+                              {comment.user?.name}
+                            </p>
+                          </Link>
+                        )}
+
                         <p className="text-xs text-slate-500">
                           {new Date(comment.createdAt || "")?.getDate()}{" "}
                           {

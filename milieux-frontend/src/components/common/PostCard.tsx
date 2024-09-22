@@ -71,34 +71,53 @@ const PostCard = ({
         <CardHeader className="pb-1">
           <div className="flex gap-4">
             <div className="cursor-pointer">
-              <Link
-                href={
-                  post.user?.id === userId
-                    ? "/persona"
-                    : `/persona/${post.user?.id}`
-                }
-              >
-                <Avatar>
-                  <AvatarImage src={post.user?.dp as string} />
-                  <AvatarFallback className="text-5xl text-gray-500">
-                    <AvatarIcon />
-                  </AvatarFallback>
-                </Avatar>
-              </Link>
+              {post.user?.isStoreLandingPage ? (
+                <a href={`/ecomm?id=${post.user.id}`}>
+                  <Avatar>
+                    <AvatarImage src={post.user?.dp as string} />
+                    <AvatarFallback className="text-5xl text-gray-500">
+                      <AvatarIcon />
+                    </AvatarFallback>
+                  </Avatar>
+                </a>
+              ) : (
+                <Link
+                  href={
+                    post.user?.id === userId
+                      ? "/persona"
+                      : `/persona/${post.user?.id}`
+                  }
+                >
+                  <Avatar>
+                    <AvatarImage src={post.user?.dp as string} />
+                    <AvatarFallback className="text-5xl text-gray-500">
+                      <AvatarIcon />
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
+              )}
             </div>
 
             <div>
-              <Link
-                href={
-                  post.user?.id === userId
-                    ? "/persona"
-                    : `/persona/${post.user?.id}`
-                }
-              >
-                <CardTitle className="mt-1 font-semibold text-slate-700 cursor-pointer">
-                  {post.user?.name}
-                </CardTitle>
-              </Link>
+              {post.user?.isStoreLandingPage ? (
+                <a href={`/ecomm?id=${post.user.id}`}>
+                  <CardTitle className="mt-1 font-semibold text-slate-700 cursor-pointer">
+                    {post.user?.name}
+                  </CardTitle>
+                </a>
+              ) : (
+                <Link
+                  href={
+                    post.user?.id === userId
+                      ? "/persona"
+                      : `/persona/${post.user?.id}`
+                  }
+                >
+                  <CardTitle className="mt-1 font-semibold text-slate-700 cursor-pointer">
+                    {post.user?.name}
+                  </CardTitle>
+                </Link>
+              )}
 
               <CardDescription className="mt-1 cursor-default">
                 {date?.getDate()} {months[date?.getMonth() || 0]}
@@ -190,6 +209,7 @@ const PostCard = ({
                 </p>
               }
               likedByUsers={post.likedByUsers || []}
+              userId={userId}
             />
           </div>
 
@@ -214,6 +234,7 @@ const PostCard = ({
                 </p>
               }
               comments={post.comments || []}
+              userId={userId}
             />
           </div>
 
