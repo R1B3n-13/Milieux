@@ -2,6 +2,7 @@ package com.milieux.services.impls;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.milieux.dtos.AiToolDto;
 import com.milieux.dtos.requests.AiToolRequestDto;
@@ -15,6 +16,7 @@ import com.milieux.repositories.AiToolRepository;
 import com.milieux.repositories.UserRepository;
 import com.milieux.services.AiToolService;
 
+@Service
 public class AiToolServiceImpl implements AiToolService {
 
 	@Autowired
