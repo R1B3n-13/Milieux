@@ -16,8 +16,10 @@ import { Button } from './ui/button'
 const Nav = () => {
 
     const { storeInfo, loggedUserInfo, loading } = useStoreContext();
+    const socialFrontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
     console.log(storeInfo);
-
+    console.log(loggedUserInfo);
+    
 
     if (loading) {
         return <div>Loading...</div>;
@@ -28,12 +30,12 @@ const Nav = () => {
     }
 
     return (
-        <header className='padding-x z-10 w-full h-fit'>
+        <header className='flex items-start padding-x z-10 w-full h-fit'>
 
             <nav className='flex justify-start items-center max-container'>
                 <Link href={`/?id=${storeInfo.id}`} passHref>
                     <Image
-                        className="object-contain max-w-[100px]"
+                        className="object-contain max-w-[80px]"
                         src={
                             storeInfo.logo_url === null
                                 ? "https://placehold.co/600x400/png"
@@ -78,6 +80,21 @@ const Nav = () => {
                                     </Button>
                                 </Link>
                             </NavigationMenuItem>
+
+                            {/* <NavigationMenuItem>
+                                <a
+                                    href={`${socialFrontendUrl}/persona/${storeInfo.id}`}
+                                    className="font-monts errat leading-normal 
+                                    text-lg test-slate-gray rounded-none
+                                    hover:bg-white hover:border-b-2 font-inter"
+                                    style={{
+                                        borderBottomColor: storeInfo.ui_base_color ?
+                                            storeInfo.ui_base_color : "#000000"
+                                    }}
+                                >
+                                    See our social page
+                                </a>
+                            </NavigationMenuItem> */}
 
                             {storeInfo.id === loggedUserInfo.id && (
                                 <Link href={`/admin?id=${storeInfo.id}`} passHref>
