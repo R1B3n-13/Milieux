@@ -12,17 +12,15 @@ const ShoppingCartContainer = () => {
   return (
     <>
             <ShoppingCart />
-            <div className="fixed top-20 right-7 pb-6 h-5 w-5 rounded-2xl font-semibold">
                 <Image
                     src={cartIcon}
                     alt='cart icon'
                     onClick={() => setOpen(true)}
-                    className="fixed top-10 right-10"
+                    className="fixed top-5 right-8"
                     height={50}
                     width={50}
                 />
-                <p className="fixed top-20 right-8 font-semibold "> {getCartItemCount()} </p>
-            </div>
+                <p className="fixed top-10 right-5 font-semibold "> {getCartItemCount()} </p>
     </>
   )
 }

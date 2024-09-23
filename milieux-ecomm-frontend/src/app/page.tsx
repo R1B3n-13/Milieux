@@ -30,19 +30,6 @@ export default function Home() {
   } else {
     return (
       <div>
-        {storeInfo.id === loggedUserInfo.id && (
-          <div className="relative">
-            <div className="absolute top-5 left-8">
-              <Button
-                className="border-[1.5px] border-gray-200 hover:bg-black hover:text-white"
-                variant={"ghost"}
-              >
-                <Link href={"/admin"}>Admin Panel</Link>
-              </Button>
-            </div>
-            {/* Other elements can go here */}
-          </div>
-        )}
 
         <ShoppingCart />
         <ShoppingCartContainer />
