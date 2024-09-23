@@ -130,16 +130,15 @@ export async function addPdfToCorpus(data: FormData) {
   }
 }
 
-export async function askCustomChatbot(data: {
-  query: string;
-  userId: number | null | undefined;
-  history: { role: "user" | "model"; parts: string }[];
-  temperature: number;
-  top_p: number;
-  top_k: number;
-  system_instruction: string;
-}) {
+export async function askCustomChatbot(formData: FormData) {
   try {
+    const requestData = formData.get("request");
+
+    if (!requestData) {
+      throw new Error("Invalid request data.");
+    }
+
+    const data = JSON.parse(requestData.toString());
     if (!data.userId) throw new Error("Invalid user id.");
 
     const url = new URL("/ask", backendUrl);
@@ -150,10 +149,7 @@ export async function askCustomChatbot(data: {
     (async () => {
       const response = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        body: formData,
         cache: "no-cache",
       });
 
