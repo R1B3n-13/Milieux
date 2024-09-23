@@ -19,7 +19,7 @@ interface Product {
   id: number;
   name: string;
   category: string;
-  price: string;
+  price: number;
   description: string;
   imgurl: string;
   store_id: number;

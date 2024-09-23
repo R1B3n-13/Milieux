@@ -21,7 +21,8 @@ const StoreButton = async ({ id }: { id: number | null | undefined }) => {
   }
 
   const storeResponse = await getStoreById(user.id);
-
+  console.log(storeResponse);
+  
   return (
     <div className="w-36 cursor-pointer">
       {user.id === loggedInUser?.id && storeResponse?.status === 404 && (

@@ -32,7 +32,6 @@ interface Product {
 
 const Admin: React.FC = () => {
   const { storeInfo, loading, authToken } = useStoreContext();
-  const [products, setProducts] = useState<Product[]>([]);
   const [isAddItemClicked, setIsAddItemClicked] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
