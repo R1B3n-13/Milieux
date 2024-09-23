@@ -44,7 +44,7 @@ public class AiChatParamsServiceImpl implements AiChatParamsService {
 
 			aiChatParamsRepository.save(aiChatParams);
 
-			return new BaseResponseDto(200, true, "Ai chat params created successfully!");
+			return new BaseResponseDto(201, true, "Ai chat params created successfully!");
 		} else {
 			if (requestDto.getTemperature() != null) {
 				aiChatParams.setTemperature(requestDto.getTemperature());

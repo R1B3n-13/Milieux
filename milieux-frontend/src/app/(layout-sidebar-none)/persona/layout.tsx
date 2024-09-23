@@ -1,10 +1,10 @@
-import NavBar from "@/components/common/NavBar";
+import NavBarContainer from "@/components/common/NavBarContainer";
 
 const PersonaLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <nav>
-        <NavBar />
+        <NavBarContainer />
       </nav>
 
       <div>{children}</div>

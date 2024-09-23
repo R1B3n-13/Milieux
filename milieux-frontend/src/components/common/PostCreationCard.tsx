@@ -25,14 +25,25 @@ const PostCreationCard = async () => {
         <CardHeader className="pb-4 mb-0">
           <div className="flex items-center gap-4">
             <div className="cursor-pointer">
-              <Link href="/persona">
-                <Avatar>
-                  <AvatarImage src={user.dp as string} />
-                  <AvatarFallback className="text-5xl text-gray-500">
-                    <AvatarIcon />
-                  </AvatarFallback>
-                </Avatar>
-              </Link>
+              {user?.isStoreLandingPage ? (
+                <a href={`/ecomm?id=${user.id}`}>
+                  <Avatar>
+                    <AvatarImage src={user?.dp as string} />
+                    <AvatarFallback className="text-5xl text-gray-500">
+                      <AvatarIcon />
+                    </AvatarFallback>
+                  </Avatar>
+                </a>
+              ) : (
+                <Link href="/persona">
+                  <Avatar>
+                    <AvatarImage src={user?.dp as string} />
+                    <AvatarFallback className="text-5xl text-gray-500">
+                      <AvatarIcon />
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
+              )}
             </div>
             <PostSubmissionDialog
               dialogButton={

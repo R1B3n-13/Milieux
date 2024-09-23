@@ -12,8 +12,28 @@ import Image from "next/image";
 import SearchLineIcon from "../icons/SearchLineIcon";
 import AiSearchLineIcon from "../icons/AiSearchLineIcon";
 import AiSearchFilledIcon from "../icons/AiSearchFilledIcon";
+import { z } from "zod";
+import UserSchema from "@/schemas/userSchema";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/DropdownMenu";
+import AccountSettingsIcon from "../icons/AccountSettingsIcon";
+import PrivacySettingsIcon from "../icons/PrivacySettingsIcon";
+import HelpCenterIcon from "../icons/HelpCenterIcon";
+import LogoutIcon from "../icons/LogoutIcon";
+import { logoutUser } from "@/actions/authActions";
+import { toast } from "sonner";
 
-const NavBar = () => {
+const NavBar = ({
+  loggedInUser,
+}: {
+  loggedInUser: z.infer<typeof UserSchema>;
+}) => {
   const pathname = usePathname();
   const [activeItem, setActiveItem] = useState(pathname);
   const [isAiActive, setIsAiActive] = useState(false);
@@ -32,15 +52,23 @@ const NavBar = () => {
       setQuery("");
     }
   };
+  const handleLogout = async () => {
+    const response = await logoutUser();
+
+    if (response.success) {
+      toast.success(response.message);
+      router.push("/login");
+    } else {
+      toast.error("Error logging out. Please try again.");
+      console.error("Error logging out: ", response.message);
+    }
+  };
 
   return (
     <div className="grid grid-cols-11 font-medium text-slate-700 transition-all shadow-md bg-[#FAFAFA] px-4">
       <div className="col-span-3">
         <div className="flex py-2 items-center justify-start gap-5">
-          <Link
-            className="flex items-center cursor-pointer"
-            href={"/stream"}
-          >
+          <Link className="flex items-center cursor-pointer" href={"/stream"}>
             <Image src="/logo.png" width={38} height={38} alt="" />
           </Link>
 
@@ -115,12 +143,53 @@ const NavBar = () => {
           ))}
 
           <div>
-            <Avatar className="rounded-full bg-gray-200 p-1 items-center justify-center cursor-pointer">
-              <AvatarImage />
-              <AvatarFallback className="text-4xl text-stone-600">
-                <AvatarIcon />
-              </AvatarFallback>
-            </Avatar>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar className="rounded-full bg-gray-300 p-1 items-center justify-center cursor-pointer">
+                  <AvatarImage
+                    src={loggedInUser.dp as string}
+                    className="rounded-full"
+                  />
+                  <AvatarFallback className="text-4xl text-stone-600">
+                    <AvatarIcon />
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent className="p-2 mx-3 mt-1 w-fit text-slate-800">
+                <DropdownMenuLabel className="flex justify-center text-emerald-600 cursor-pointer">
+                  {loggedInUser.name}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="flex items-center gap-1">
+                  <div className="text-xl">
+                    <AccountSettingsIcon />
+                  </div>
+                  Account Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-1">
+                  <div className="text-xl">
+                    <PrivacySettingsIcon />
+                  </div>
+                  Privacy Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-1">
+                  <div className="text-xl">
+                    <HelpCenterIcon />
+                  </div>
+                  Help Center
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="flex items-center gap-1"
+                >
+                  <div className="text-xl">
+                    <LogoutIcon />
+                  </div>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>

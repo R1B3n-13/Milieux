@@ -60,6 +60,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
 	}
 
+	@ExceptionHandler(AiToolNotFoundException.class)
+	public ResponseEntity<BaseResponseDto> handleAiToolNotFoundException(AiToolNotFoundException ex) {
+
+		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
+	}
+
 	@ExceptionHandler(AuthTokenNotFoundException.class)
 	public ResponseEntity<BaseResponseDto> handleAuthTokenNotFoundException(AuthTokenNotFoundException ex) {
 

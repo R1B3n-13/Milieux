@@ -1,10 +1,10 @@
-import NavBar from "@/components/common/NavBar";
+import NavBarContainer from "@/components/common/NavBarContainer";
 
 const ChappyLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <nav>
-        <NavBar />
+        <NavBarContainer />
       </nav>
 
       <div className="h-fit">{children}</div>
