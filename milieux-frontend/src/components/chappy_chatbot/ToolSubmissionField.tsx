@@ -26,7 +26,6 @@ const ToolSubmissionField = ({
   userId: number | null | undefined;
 }) => {
   const [file, setFile] = useState<File | null>(null);
-  const [currentFile, setCurrentFile] = useState<Blob | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [temperature, setTemperature] = useState(1);
@@ -45,14 +44,11 @@ const ToolSubmissionField = ({
   };
 
   useEffect(() => {
-    const initAiChatParams = async () => {
+    const initAiTool = async () => {
       const response = await getAiTool(userId);
 
       if (response.success) {
         aiToolParams = response.aiTool;
-        if (aiToolParams.fileData) {
-          setCurrentFile(aiToolParams.fileData);
-        }
         setTemperature(aiToolParams.temperature || 1);
         setTopP(aiToolParams.topP || 0.95);
         setTopK(aiToolParams.topK || 64);
@@ -63,7 +59,7 @@ const ToolSubmissionField = ({
       }
     };
 
-    initAiChatParams();
+    initAiTool();
   }, [isLoading]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +85,7 @@ const ToolSubmissionField = ({
 
     let response;
 
-    if (file && !currentFile) {
+    if (file && !currentFileName) {
       response = await createAiTool(formData);
     } else if (showAdvanced || file) {
       response = await updateAiTool(formData);
@@ -102,7 +98,7 @@ const ToolSubmissionField = ({
     }
 
     toast.success(
-      !currentFile
+      !currentFileName
         ? "Successfully created AI tool!"
         : "AI tools updated successfully!"
     );
