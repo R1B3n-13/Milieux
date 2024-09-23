@@ -13,8 +13,10 @@ import { readStreamableValue } from "ai/rsc";
 import MarkdownRenderer from "../common/MarkdownRenderer";
 import { z } from "zod";
 import AiChatParamsSchema from "@/schemas/aiChatParamsSchema";
-import { getAiChatParams } from "@/services/aiService";
+import { getAiChatParams, getAiTool } from "@/services/aiService";
 import { defaultSystemInstruction } from "./items/defaultSystemInstruction";
+import { defaultSystemInstructionForTool } from "./items/defaultSystemInstructionForTool";
+import AiToolSchema from "@/schemas/aiToolSchema";
 
 const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [query, setQuery] = useState("");
@@ -31,6 +33,15 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [systemInstruction, setSystemInstruction] = useState(
     defaultSystemInstruction
   );
+
+  const [toolFile, setToolFile] = useState<Blob | null>(null);
+  const [toolTemperature, setToolTemperature] = useState(1);
+  const [toolTopP, setToolTopP] = useState(0.95);
+  const [toolTopK, setToolTopK] = useState(64);
+  const [toolSystemInstruction, setToolSystemInstruction] = useState(
+    defaultSystemInstructionForTool
+  );
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   let aiChatParams: z.infer<typeof AiChatParamsSchema> = {
@@ -61,6 +72,34 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     initAiChatParams();
   }, []);
 
+  let aiToolParams: z.infer<typeof AiToolSchema> = {
+    temperature: 1,
+    topP: 0.95,
+    topK: 64,
+    systemInstruction: defaultSystemInstructionForTool,
+  };
+
+  useEffect(() => {
+    const initAiTool = async () => {
+      const response = await getAiTool(userId);
+
+      if (response.success) {
+        aiToolParams = response.aiTool;
+        setToolTemperature(aiToolParams.temperature || 1);
+        setToolTopP(aiToolParams.topP || 0.95);
+        setToolTopK(aiToolParams.topK || 64);
+        if (aiToolParams.fileData) {
+          setToolFile(aiToolParams.fileData);
+        }
+        setToolSystemInstruction(
+          aiToolParams.systemInstruction || defaultSystemInstructionForTool
+        );
+      }
+    };
+
+    initAiTool();
+  }, []);
+
   const handleSubmit = async () => {
     if (query.trim() === "" || !userId) return;
 
@@ -74,6 +113,10 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       top_p: topP,
       top_k: topK,
       system_instruction: systemInstruction,
+      temperature_tool: toolTemperature,
+      top_p_tool: toolTopP,
+      top_k_tool: toolTopK,
+      system_instruction_tool: toolSystemInstruction,
     };
 
     setChatHistory([
@@ -84,9 +127,14 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
 
     setQuery("");
 
-    console.log("data: " + data.temperature);
+    const formData = new FormData();
+    formData.append("request", JSON.stringify(data));
 
-    const { result } = await askCustomChatbot(data);
+    if (toolFile) {
+      formData.append("tool_file", new File([toolFile], "functions_n_schemas"));
+    }
+
+    const { result } = await askCustomChatbot(formData);
 
     let textStream = "";
 

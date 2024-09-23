@@ -18,6 +18,7 @@ import { revalidateAiChatParams } from "@/actions/revalidationActions";
 import ExpandLessIcon from "../icons/ExpandLessIcon";
 import ExpandMoreIcon from "../icons/ExpandMoreIcon";
 import CircleQuestionIcon from "../icons/CircleQuestionIcon";
+import ToolSubmissionField from "./ToolSubmissionField";
 
 const PdfSubmissionField = ({
   userId,
@@ -301,7 +302,7 @@ const PdfSubmissionField = ({
                     !showAdvanced && "opacity-50"
                   }`}
                 >
-                  System instruction
+                  System Instruction
                 </p>
                 <TextArea
                   className={`resize-none h-72 ${
@@ -334,8 +335,10 @@ const PdfSubmissionField = ({
 
           <div className="bg-white p-6 rounded-lg shadow-md w-full col-span-1">
             <h1 className="flex justify-center text-xl text-slate-800 font-semibold mb-6">
-              Add Tools to Your Chatbot
+              Add Tool to Your Chatbot
             </h1>
+
+            <ToolSubmissionField userId={userId} />
           </div>
         </div>
       )}
