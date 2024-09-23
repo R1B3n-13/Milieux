@@ -62,7 +62,7 @@ const Hero = () => {
           </p>
           <div className="flex flex-row space-around gap-6">
             <Button style={{ backgroundColor: storeInfo.ui_accent_color }}>
-              <Link href="/products">Shop Now!</Link>
+              <Link href={`/products?id=${storeInfo.id}`}>Shop Now!</Link>
             </Button>
             <a
               href={`${socialFrontendUrl}/persona/${storeInfo.id}`}

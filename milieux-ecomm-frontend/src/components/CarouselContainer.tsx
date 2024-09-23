@@ -11,13 +11,14 @@ import {
 import Image from "next/image";
 import { Button } from "./ui/button";
 import UpdateFromHome from "./Customization/UpdateFromHome";
+import Link from "next/link";
 
 const CarouselContainer = () => {
   const router = useRouter();
 
   const socialFrontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
 
-  const { storeInfo, loggedInUserId } = useStoreContext();
+  const { storeInfo, loggedInUserId, loading } = useStoreContext();
   const [ui_images, setUi_images] = useState([
     "https://placehold.co/600x400/png",
     "https://placehold.co/600x400/png",
@@ -33,27 +34,15 @@ const CarouselContainer = () => {
     }
   }, [storeInfo.ui_images]);
 
-  const handleShopNow = () => {
-    const storeInfoStr = encodeURIComponent(JSON.stringify(storeInfo.id));
-    router.push(`/products?storeInfo=${storeInfoStr}`);
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <Image
-        className="pt-5 object-contain"
-        src={
-          storeInfo.logo_url === null
-            ? "https://placehold.co/600x400/png"
-            : storeInfo.logo_url
-        }
-        alt="store logo"
-        width={120}
-        height={120}
-      />
       <section
         id="home"
-        className="w-full flex xl:flex-row flex-col justify-center max-h-full gap-10 max-container px-40 py-5"
+        className="w-full flex xl:flex-row flex-col justify-center max-h-full gap-10 max-container px-40"
       >
         <div className="flex-1 flex justify-center items-center rounded-xl xl:min-h-full max-xl:py-40 bg-hero bg-cover bg-center overflow-hidden">
           <Carousel>
@@ -61,7 +50,7 @@ const CarouselContainer = () => {
               {ui_images.map((img: string, index: number) => (
                 <CarouselItem
                   key={index}
-                  className="flex justify-center items-center max-h-[50vh]"
+                  className="flex justify-center items-center max-h-[70vh]"
                 >
                   <Image
                     src={img}
@@ -84,10 +73,10 @@ const CarouselContainer = () => {
 
       <div className="flex w-full justify-center items-center gap-10">
         <Button
-          onClick={handleShopNow}
+          // onClick={handleShopNow}
           style={{ backgroundColor: storeInfo.ui_accent_color }}
         >
-          Shop Now!
+          <Link href={`/products?id=${storeInfo.id}`}>Shop Now!</Link>
         </Button>
 
         <a

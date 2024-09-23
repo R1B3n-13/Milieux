@@ -4,6 +4,7 @@ import "./globals.css";
 import { StoreProvider } from "@/contexts/StoreContext";
 import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
 import { Toaster } from "@/components/ui/toaster";
+import Nav from "@/components/Nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,7 @@ export default function RootLayout({
           </head>
           <body className={inter.className}>
             <div className="relative h-screen">
-              {/* <Nav /> */}
+              <Nav />
               {children}
             </div>
             <Toaster />

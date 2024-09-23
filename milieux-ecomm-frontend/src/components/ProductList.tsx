@@ -9,7 +9,7 @@ interface Product {
     id: string | number;
     imgurl: string;
     name: string;
-    price: string;
+    price: number;
     category: string;
 }
 
@@ -18,27 +18,35 @@ interface ProductListProps {
 }
 
 const ProductList: React.FC<ProductListProps> = ({ products }) => {
-    const { storeInfo } = useStoreContext();
+    const { storeInfo, loading } = useStoreContext();
     const { addToCart } = useShoppingCart();
 
     const handleAddToCart = (product: Product) => {
-        // Prepare product object to match the ShoppingCart context structure
+
         const productToAdd = {
             id: product.id,
             name: product.name,
-            price: product.price, // Assuming price includes a currency symbol
-            quantity: 1, // Default quantity when adding to cart
+            price: product.price, 
+            quantity: 1,
             imageSrc: product.imgurl,
             imageAlt: product.name,
         };
         addToCart(productToAdd);
     };
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!storeInfo) {
+        return <div>Error loading store information</div>;
+    }
+
     return (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
             {products.map((product) => (
                 <div key={product.id} className='bg-white p-4 shadow rounded'>
-                    <Link href={`/products/${product.id}`} className='block'>
+                    <Link href={`/products/${product.id}?id=${storeInfo.id}`} className='block'>
                         <Image
                             src={product.imgurl} // Ensure this is an absolute path
                             alt={product.name}

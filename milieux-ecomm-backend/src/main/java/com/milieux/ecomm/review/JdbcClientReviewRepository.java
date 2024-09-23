@@ -43,6 +43,8 @@ public class JdbcClientReviewRepository {
     }
 
     public List<Review> findByProductId(Integer product_id) {
+
+        System.out.println("product_id: " + product_id);
         return jdbcClient.sql("SELECT * FROM review WHERE product_id = :product_id")
             .param("product_id", product_id)
             .query(Review.class)
