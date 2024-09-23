@@ -486,3 +486,75 @@ export async function createAiChatParams(data: {
     };
   }
 }
+
+export async function createAiTool(data: FormData) {
+  try {
+    const url = new URL(`/ai-chat/tools/create`, await getBackendUrl());
+
+    console.log(data);
+
+    const authToken = await getAuthToken();
+    if (!authToken)
+      return {
+        status: 401,
+        success: false,
+        message: "Jwt auth token is missing",
+      };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: data,
+      cache: "no-cache",
+      next: {
+        tags: ["createAiTool"],
+      },
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error("Creating ai tool resulted in error:", error);
+    return {
+      status: 500,
+      success: false,
+      message: "Uh oh! Something went wrong. Please try again.",
+    };
+  }
+}
+
+export async function updateAiTool(data: FormData) {
+  try {
+    const url = new URL(`/ai-chat/tools/update`, await getBackendUrl());
+
+    const authToken = await getAuthToken();
+    if (!authToken)
+      return {
+        status: 401,
+        success: false,
+        message: "Jwt auth token is missing",
+      };
+
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: data,
+      cache: "no-cache",
+      next: {
+        tags: ["updateAiTool"],
+      },
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error("Updating ai tool resulted in error:", error);
+    return {
+      status: 500,
+      success: false,
+      message: "Uh oh! Something went wrong. Please try again.",
+    };
+  }
+}
