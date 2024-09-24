@@ -1,0 +1,114 @@
+import requests
+
+# Function schemas: Keep the object name as "schemas"
+schemas = {
+    "function_declarations": [
+        {
+            "name": "get_available_flights",
+            "description": "Fetches available flights from a mock API and returns flight details.",
+            "parameters": {
+                "type_": "OBJECT",
+                "properties": {
+                    "dummy": {
+                        "type_": "STRING",
+                        "description": "An empty dummy string.",
+                    },
+                },
+                "required": ["dummy"]
+            }
+        },
+        {
+            "name": "create_booking",
+            "description": "Creates a booking for a specified flight and seat number.",
+            "parameters": {
+                "type_": "OBJECT",
+                "properties": {
+                    "flightNo": {
+                        "type_": "STRING",
+                        "description": "The flight number for which the booking should be made.",
+                    },
+                    "seatNo": {
+                        "type_": "NUMBER",
+                        "description": "The seat number to book on the specified flight.",
+                    }
+                },
+                "required": ["flightNo", "seatNo"]
+            }
+        },
+    ]
+}
+
+
+# Actual Functions
+MOCK_API_FLIGHT_URL = '<FMI>'
+MOCK_API_BOOKING_URL = '<FMI>'
+
+# 1st function
+def get_available_flights(dummy: str) -> dict:
+    try:
+        response = requests.get(MOCK_API_FLIGHT_URL)
+
+        if response.status_code == 200:
+            flights_data = response.json()
+            return {"result": flights_data}
+        else:
+            return {"result": "Error fetching flight details."}
+        
+    except requests.exceptions.RequestException as e:
+        return {"result": "Error fetching flight details."}
+
+# Helper function for 2nd function
+def fetch_flight_details(flightNo):
+    try:
+        response = requests.get(MOCK_API_FLIGHT_URL)
+        response.raise_for_status()
+        flights = response.json()
+        
+        for flight in flights:
+            if flight['flightNo'] == flightNo:
+                return flight
+        return None
+    
+    except requests.RequestException as e:
+        return None
+
+# 2nd Function
+def create_booking(flightNo, seatNo):
+    flight = fetch_flight_details(flightNo)
+    
+    if flight is None:
+        return {"result": f"No flight available with flight number {flightNo}."}
+    
+    if seatNo not in flight['availableSeats']:
+        return {"result": f"No seat available with seat number {seatNo} on flight {flightNo}."}
+    
+    booking_payload = {
+        "flightNo": flightNo,
+        "seatNo": seatNo,
+    }
+
+    try:
+        response = requests.post(MOCK_API_BOOKING_URL, json=booking_payload)
+        response.raise_for_status()
+
+        responseData = response.json();
+
+        returnData = {
+            "bookingNumber": responseData['bookingNumber'],
+            "flightNo": flightNo,
+            "seatNo": seatNo,
+            "paymentLink": f"https://payment.example.com/complete?booking={responseData['bookingNumber']}",
+            "message": "Booking confirmed! Please complete your payment using the link."
+        }
+
+        return {"result": returnData}
+    
+    except requests.RequestException as e:
+        return {"result": "An error occurred while creating the booking."}
+
+
+# Function Dictionary: Keep the dictionary name "functions" 
+functions = {
+    "get_available_flights": get_available_flights,
+    "create_booking": create_booking,
+}

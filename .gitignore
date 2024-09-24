@@ -1,9 +1,2 @@
 .vscode
 .project
-mock-testing-tools-support
-node_modules
-npm-debug.log
-package-lock.json
-compose.yml
-docker-compose.yml
-./resources

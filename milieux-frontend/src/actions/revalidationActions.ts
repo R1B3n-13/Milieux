@@ -46,6 +46,14 @@ export async function revalidateAiChatParams() {
   revalidateTag("createAiChatParams");
 }
 
+export async function revalidateAiTool() {
+  revalidateTag("createAiTool");
+}
+
+export async function revalidateAiToolUpdate() {
+  revalidateTag("updateAiTool");
+}
+
 export async function revalidateStore() {
   revalidateTag("createStore");
 }

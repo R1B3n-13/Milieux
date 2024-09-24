@@ -1,8 +1,10 @@
 package com.milieux.services.impls;
 
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.milieux.dtos.AiToolDto;
 import com.milieux.dtos.requests.AiToolRequestDto;
@@ -16,7 +18,10 @@ import com.milieux.repositories.AiToolRepository;
 import com.milieux.repositories.UserRepository;
 import com.milieux.services.AiToolService;
 
+import jakarta.persistence.EntityManager;
+
 @Service
+@Transactional
 public class AiToolServiceImpl implements AiToolService {
 
 	@Autowired
@@ -27,6 +32,9 @@ public class AiToolServiceImpl implements AiToolService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+
+	@Autowired
+	private EntityManager entityManager;
 
 	@Override
 	public BaseResponseDto createAiTool(Long userId, AiToolRequestDto requestDto) {
@@ -45,14 +53,17 @@ public class AiToolServiceImpl implements AiToolService {
 
 	@Override
 	public AiToolResponseDto getAiTool(Long userId) {
-
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
-		AiTool aiTools = aiToolRepository.findByUser(user)
+		AiTool aiTool = aiToolRepository.findByUser(user)
 				.orElseThrow(() -> new AiToolNotFoundException("Ai tool not found for user with id: " + userId));
 
-		AiToolDto dto = modelMapper.map(aiTools, AiToolDto.class);
+		entityManager.refresh(aiTool);
+
+		Hibernate.initialize(aiTool.getFileData());
+
+		AiToolDto dto = modelMapper.map(aiTool, AiToolDto.class);
 
 		return new AiToolResponseDto(200, true, "Ai tool fetched successfully!", dto);
 	}

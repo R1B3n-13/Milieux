@@ -204,7 +204,7 @@ export const MessageInput = () => {
     setImage(null);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
       handleSendMessage();
@@ -238,7 +238,7 @@ export const MessageInput = () => {
             <Input
               value={text}
               onChange={handleInputChange}
-              onKeyDown={() => handleKeyDown}
+              onKeyDown={handleKeyDown}
               placeholder="Type a message..."
               className="flex-grow border rounded-full bg-slate-50 h-11 mr-1 focus-visible:ring-slate-500"
             />

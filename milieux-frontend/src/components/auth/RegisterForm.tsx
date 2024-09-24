@@ -33,6 +33,17 @@ import categoryItems from "./items/categoryItems";
 import { registerUser } from "@/actions/authActions";
 import Loading from "../common/Loading";
 import { toast } from "sonner";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/Command";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/Popover";
+import { cn } from "@/lib/cn";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
 const RegisterForm = () => {
   const router = useRouter();
@@ -308,55 +319,90 @@ const RegisterForm = () => {
                   control={form.control}
                   name="userType.category"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="flex flex-col">
                       <FormLabel>Category</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={(value) => {
-                            if (value !== "other") {
-                              setSelectedCategory(value);
-                              setOtherCategory("");
-                              field.onChange(value);
-                            } else {
-                              setSelectedCategory("other");
-                              field.onChange(otherCategory);
-                            }
-                          }}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a category">
-                              {selectedCategory !== "other"
-                                ? field.value
-                                : otherCategory}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup className="flex items-center justify-center gap-2 mt-1 mr-1">
-                              <SelectItem value="other" className="w-1/5">
-                                Other
-                              </SelectItem>
-                              <Input
-                                onChange={(e) => {
-                                  const value = e.target.value;
-                                  setOtherCategory(value);
-                                  field.onChange(value);
-                                }}
-                                disabled={selectedCategory !== "other"}
-                                className="w-full"
-                                placeholder="Please specify..."
-                              />
-                            </SelectGroup>
-
-                            <SelectGroup>
-                              {categoryItems.map((category) => (
-                                <SelectItem key={category} value={category}>
-                                  {category}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className="w-full justify-between"
+                            >
+                              {field.value || "Select a category"}
+                              <CaretSortIcon className="ml-2 h-5 w-5 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0">
+                          <Command>
+                            <CommandInput placeholder="Search category..." />
+                            <CommandList>
+                              <CommandEmpty>No category found.</CommandEmpty>
+                              <CommandGroup>
+                                {categoryItems.map((category) => (
+                                  <CommandItem
+                                    key={category}
+                                    value={category}
+                                    onSelect={() => {
+                                      setSelectedCategory(category);
+                                      setOtherCategory("");
+                                      form.setValue(
+                                        "userType.category",
+                                        category
+                                      );
+                                    }}
+                                  >
+                                    <CheckIcon
+                                      className={cn(
+                                        "mr-2 h-4 w-4 bg-green-300 rounded-full",
+                                        selectedCategory === field.value &&
+                                          category === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {category}
+                                  </CommandItem>
+                                ))}
+                                <CommandItem
+                                  value="other"
+                                  onSelect={() => {
+                                    setSelectedCategory("other");
+                                  }}
+                                >
+                                  <CheckIcon
+                                    className={cn(
+                                      "mr-2 h-4 w-4 bg-green-300 rounded-full",
+                                      selectedCategory === "other"
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  <div className="flex items-center gap-1">
+                                    Other
+                                    {selectedCategory === "other" && (
+                                      <Input
+                                        value={otherCategory}
+                                        onChange={(e) => {
+                                          const value = e.target.value;
+                                          setOtherCategory(value);
+                                          form.setValue(
+                                            "userType.category",
+                                            value
+                                          );
+                                        }}
+                                        placeholder="Please specify..."
+                                        className="w-[9rem] rounded-full bg-white"
+                                      />
+                                    )}
+                                  </div>
+                                </CommandItem>
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
