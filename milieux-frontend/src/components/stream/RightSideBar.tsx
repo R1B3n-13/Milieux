@@ -11,7 +11,7 @@ const RightSideBar = () => {
         <h1 className="ml-2">What&apos;s Trending?</h1>
       </div>
 
-      {/* <FeedSelector /> */}
+      <FeedSelector />
     </div>
   );
 };
