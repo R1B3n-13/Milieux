@@ -187,16 +187,17 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
 	return (
 		<>
 			<ShoppingCartContainer />
-			<div className="flex flex-col h-full">
-				<div className="flex flex-row items-start justify-center w-full gap-12 py-[100px] min-h-[100%]">
+			<div className="flex flex-col max-h-[800px] justify-start align-top items-start">
+				<div className="flex flex-row items-start justify-center w-full gap-12 py-[20px] min-h-[100%]">
 					<Image
 						src={product.imgurl}
 						alt={product.name}
 						height={500}
 						width={500}
+						className="rounded-lg max-x-[1000px] w-fit max-y-[1000px] object-cover"
 					/>
 
-					<div className="flex flex-col gap-2 font-montserrat w-[650px] min-h-[100%]">
+					<div className="flex flex-col gap-5 font-montserrat w-[650px] min-h-[100%]">
 						<div className="min-h-[50%]">
 							<p
 								className="text-4xl font-semibold"

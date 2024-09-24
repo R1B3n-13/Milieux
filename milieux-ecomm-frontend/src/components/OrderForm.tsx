@@ -50,17 +50,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onAddressSubmit }) => {
 
   return (
     <div className="w-full optional-address mt-6">
-      <h3 className="text-lg font-semibold">Would you like to provide a shipping address?</h3>
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id="address-toggle"
-          checked={showAddressForm}
-          onCheckedChange={(checked) => setShowAddressForm(!!checked)}
-        />
-        <label htmlFor="address-toggle">Yes, I want to provide a shipping address.</label>
-      </div>
-
-      {showAddressForm && (
+      <h3 className="text-lg font-semibold">Please provide a shipping address</h3>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="w-[75%] space-y-4 mt-4">
             <FormField
@@ -125,7 +115,6 @@ const OrderForm: React.FC<OrderFormProps> = ({ onAddressSubmit }) => {
             </Button>
           </form>
         </Form>
-      )}
     </div>
   );
 };

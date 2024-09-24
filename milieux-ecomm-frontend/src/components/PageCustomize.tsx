@@ -33,7 +33,6 @@ const PageCustomize = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [background, setBackground] = useState<string>("");
   const [baseColor, setBaseColor] = useState<string>("");
   const [secondaryColor, setSecondaryColor] = useState<string>("");
   const [accentColor, setAccentColor] = useState<string>("");
