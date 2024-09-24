@@ -9,8 +9,9 @@ import Nav from "@/components/Nav";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Milieux",
-  description: "",
+  title: "Milieux: Your Social Sphere, Redefined",
+  description:
+    "Redefining social connection by seamlessly bringing people, communities, and shared experiences together in one vibrant platform",
 };
 
 export default function RootLayout({
