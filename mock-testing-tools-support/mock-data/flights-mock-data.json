@@ -1,0 +1,182 @@
+[
+  {
+    "from": "Hazrat Shahjalal International Airport, Dhaka",
+    "to": "Shah Amanat International Airport, Chittagong",
+    "ticketFare": "150.00",
+    "availableSeats": [101, 102, 103, 104, 105],
+    "departureTime": "2024-09-24T09:00:00.000Z",
+    "arrivalTime": "2024-09-24T10:00:00.000Z",
+    "flightNo": "BG101"
+  },
+  {
+    "from": "Hazrat Shahjalal International Airport, Dhaka",
+    "to": "Shah Amanat International Airport, Chittagong",
+    "ticketFare": "150.00",
+    "availableSeats": [106, 107, 108, 109, 110],
+    "departureTime": "2024-09-24T15:00:00.000Z",
+    "arrivalTime": "2024-09-24T16:00:00.000Z",
+    "flightNo": "BG102"
+  },
+  {
+    "from": "Osmani International Airport, Sylhet",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "120.00",
+    "availableSeats": [201, 202, 203, 204, 205],
+    "departureTime": "2024-09-24T12:00:00.000Z",
+    "arrivalTime": "2024-09-24T13:00:00.000Z",
+    "flightNo": "BG201"
+  },
+  {
+    "from": "Osmani International Airport, Sylhet",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "120.00",
+    "availableSeats": [206, 207, 208, 209, 210],
+    "departureTime": "2024-09-24T18:00:00.000Z",
+    "arrivalTime": "2024-09-24T19:00:00.000Z",
+    "flightNo": "BG202"
+  },
+  {
+    "from": "Saidpur Airport, Saidpur",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "100.00",
+    "availableSeats": [301, 302, 303, 304, 305],
+    "departureTime": "2024-09-24T08:00:00.000Z",
+    "arrivalTime": "2024-09-24T09:00:00.000Z",
+    "flightNo": "BG301"
+  },
+  {
+    "from": "Hazrat Shahjalal International Airport, Dhaka",
+    "to": "Shah Amanat International Airport, Chittagong",
+    "ticketFare": "150.00",
+    "availableSeats": [106, 107, 108, 109, 110],
+    "departureTime": "2024-09-25T09:00:00.000Z",
+    "arrivalTime": "2024-09-25T10:00:00.000Z",
+    "flightNo": "BG103"
+  },
+  {
+    "from": "Hazrat Shahjalal International Airport, Dhaka",
+    "to": "Shah Amanat International Airport, Chittagong",
+    "ticketFare": "150.00",
+    "availableSeats": [111, 112, 113, 114, 115],
+    "departureTime": "2024-09-25T15:00:00.000Z",
+    "arrivalTime": "2024-09-25T16:00:00.000Z",
+    "flightNo": "BG104"
+  },
+  {
+    "from": "Osmani International Airport, Sylhet",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "120.00",
+    "availableSeats": [206, 207, 208, 209, 210],
+    "departureTime": "2024-09-25T12:00:00.000Z",
+    "arrivalTime": "2024-09-25T13:00:00.000Z",
+    "flightNo": "BG203"
+  },
+  {
+    "from": "Osmani International Airport, Sylhet",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "120.00",
+    "availableSeats": [211, 212, 213, 214, 215],
+    "departureTime": "2024-09-25T18:00:00.000Z",
+    "arrivalTime": "2024-09-25T19:00:00.000Z",
+    "flightNo": "BG204"
+  },
+  {
+    "from": "Saidpur Airport, Saidpur",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "100.00",
+    "availableSeats": [301, 302, 303, 304, 305],
+    "departureTime": "2024-09-25T08:00:00.000Z",
+    "arrivalTime": "2024-09-25T09:00:00.000Z",
+    "flightNo": "BG302"
+  },
+  {
+    "from": "Hazrat Shahjalal International Airport, Dhaka",
+    "to": "Shah Amanat International Airport, Chittagong",
+    "ticketFare": "150.00",
+    "availableSeats": [101, 102, 103, 104, 105],
+    "departureTime": "2024-09-26T09:00:00.000Z",
+    "arrivalTime": "2024-09-26T10:00:00.000Z",
+    "flightNo": "BG105"
+  },
+  {
+    "from": "Hazrat Shahjalal International Airport, Dhaka",
+    "to": "Shah Amanat International Airport, Chittagong",
+    "ticketFare": "150.00",
+    "availableSeats": [106, 107, 108, 109, 110],
+    "departureTime": "2024-09-26T15:00:00.000Z",
+    "arrivalTime": "2024-09-26T16:00:00.000Z",
+    "flightNo": "BG106"
+  },
+  {
+    "from": "Osmani International Airport, Sylhet",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "120.00",
+    "availableSeats": [201, 202, 203, 204, 205],
+    "departureTime": "2024-09-26T12:00:00.000Z",
+    "arrivalTime": "2024-09-26T13:00:00.000Z",
+    "flightNo": "BG204"
+  },
+  {
+    "from": "Osmani International Airport, Sylhet",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "120.00",
+    "availableSeats": [206, 207, 208, 209, 210],
+    "departureTime": "2024-09-26T18:00:00.000Z",
+    "arrivalTime": "2024-09-26T19:00:00.000Z",
+    "flightNo": "BG205"
+  },
+  {
+    "from": "Saidpur Airport, Saidpur",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "100.00",
+    "availableSeats": [301, 302, 303, 304, 305],
+    "departureTime": "2024-09-26T08:00:00.000Z",
+    "arrivalTime": "2024-09-26T09:00:00.000Z",
+    "flightNo": "BG303"
+  },
+  {
+    "from": "Hazrat Shahjalal International Airport, Dhaka",
+    "to": "Shah Amanat International Airport, Chittagong",
+    "ticketFare": "150.00",
+    "availableSeats": [101, 102, 103, 104, 105],
+    "departureTime": "2024-09-27T09:00:00.000Z",
+    "arrivalTime": "2024-09-27T10:00:00.000Z",
+    "flightNo": "BG107"
+  },
+  {
+    "from": "Hazrat Shahjalal International Airport, Dhaka",
+    "to": "Shah Amanat International Airport, Chittagong",
+    "ticketFare": "150.00",
+    "availableSeats": [106, 107, 108, 109, 110],
+    "departureTime": "2024-09-27T15:00:00.000Z",
+    "arrivalTime": "2024-09-27T16:00:00.000Z",
+    "flightNo": "BG108"
+  },
+  {
+    "from": "Osmani International Airport, Sylhet",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "120.00",
+    "availableSeats": [201, 202, 203, 204, 205],
+    "departureTime": "2024-09-27T12:00:00.000Z",
+    "arrivalTime": "2024-09-27T13:00:00.000Z",
+    "flightNo": "BG206"
+  },
+  {
+    "from": "Osmani International Airport, Sylhet",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "120.00",
+    "availableSeats": [206, 207, 208, 209, 210],
+    "departureTime": "2024-09-27T18:00:00.000Z",
+    "arrivalTime": "2024-09-27T19:00:00.000Z",
+    "flightNo": "BG207"
+  },
+  {
+    "from": "Saidpur Airport, Saidpur",
+    "to": "Hazrat Shahjalal International Airport, Dhaka",
+    "ticketFare": "100.00",
+    "availableSeats": [301, 302, 303, 304, 305],
+    "departureTime": "2024-09-27T08:00:00.000Z",
+    "arrivalTime": "2024-09-27T09:00:00.000Z",
+    "flightNo": "BG304"
+  }
+]
