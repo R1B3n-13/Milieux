@@ -42,9 +42,9 @@ const CarouselContainer = () => {
     <>
       <section
         id="home"
-        className="w-full flex xl:flex-row flex-col justify-center max-h-full gap-10 max-container px-40"
+        className="w-full flex xl:flex-row flex-col justify-center pb-5 max-h-full gap-10 max-container"
       >
-        <div className="flex-1 flex justify-center items-center rounded-xl xl:min-h-full max-xl:py-40 bg-hero bg-cover bg-center overflow-hidden">
+        <div className="flex-1 flex justify-center items-center rounded-xl xl:min-h-full max-xl:py-40  bg-hero bg-cover bg-center overflow-hidden">
           <Carousel>
             <CarouselContent>
               {ui_images.map((img: string, index: number) => (
@@ -71,7 +71,7 @@ const CarouselContainer = () => {
       {/* update carousel images */}
       {loggedInUserId === storeInfo.id && <UpdateFromHome />}
 
-      <div className="flex w-full justify-center items-center gap-10">
+      <div className="flex w-full justify-center items-center gap-2">
         <Button
           // onClick={handleShopNow}
           style={{ backgroundColor: storeInfo.ui_accent_color }}

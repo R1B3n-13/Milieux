@@ -50,8 +50,8 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
                         <Image
                             src={product.imgurl} // Ensure this is an absolute path
                             alt={product.name}
-                            width={100}
-                            height={100}
+                            width={150}
+                            height={150}
                             className='w-full h-48 object-cover rounded'
                         />
                         <h3 className='text-lg font-medium mt-2'>{product.name}</h3>
@@ -59,7 +59,7 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
                     </Link>
                     <div className='flex items-center w-full mt-4'>
                         <Button
-                            className='font-montserrat'
+                            className='font-montserrat font-bold'
                             style={{ backgroundColor: storeInfo.ui_secondary_color }}
                             onClick={() => handleAddToCart(product)}
                         >

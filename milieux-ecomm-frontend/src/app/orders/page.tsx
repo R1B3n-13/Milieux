@@ -14,6 +14,9 @@ const Orders: React.FC = () => {
     useStoreContext();
   const [address, setAddress] = useState<String>(""); // State to store address
 
+  console.log("Store Info:", storeInfo);
+  
+
   const calculateTotal = () => {
     return cart
       .reduce((total, product) => total + product.price * product.quantity, 0)
@@ -98,16 +101,16 @@ const Orders: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-10 pt-5">
-              <div className="flex gap-10 space-y-6">
+              <div className="flex flex-col gap-2 space-y-6">
                 {cart.map((product) => (
                   <div
                     key={product.id}
-                    className="flex w-[80%] h-fit items-center space-x-4 bg-white p-4 shadow rounded"
+                    className="flex w-[80%] h-fit items-center bg-white p-4 shadow rounded"
                   >
                     <img
                       src={product.imageSrc}
                       alt={product.imageAlt}
-                      className="w-24 h-24 object-cover"
+                      className="w-24 h-24 pr-5 object-cover"
                     />
                     <div className="flex-1">
                       <h3 className="font-semibold">{product.name}</h3>
@@ -153,7 +156,8 @@ const Orders: React.FC = () => {
                   Total: ${calculateTotal()}
                 </p>
                 <Button
-                  className="bg-green-600 text-white hover:bg-green-500"
+                  className="text-white"
+                  style={{ backgroundColor: storeInfo.ui_accent_color ? storeInfo.ui_accent_color : "#333" }}
                   onClick={placeOrder}
                 >
                   Place Order

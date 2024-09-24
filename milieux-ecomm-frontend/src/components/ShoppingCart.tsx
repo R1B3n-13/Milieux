@@ -18,7 +18,7 @@ const ShoppingCart: React.FC = () => {
 
   const handleCheckout = () => {
     setOpen(false); // Close the cart dialog
-    router.push('/orders'); // Navigate to the orders page
+    router.push(`/orders?id=${storeInfo.id}`); // Navigate to the orders page
   };
 
   return (

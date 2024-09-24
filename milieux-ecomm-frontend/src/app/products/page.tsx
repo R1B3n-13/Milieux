@@ -119,7 +119,7 @@ const Page: React.FC = () => {
 
       <div className="container grid grid-cols-4 gap-6 pt-10 pb-16 items-start">
         <div className="col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hidden">
-          <div className="divide-y divide-gray-200 space-y-5">
+          <div className="divide-y divide-gray-200 space-y-5 p-5">
             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
               Categories
             </h3>
@@ -131,15 +131,15 @@ const Page: React.FC = () => {
           </div>
         </div>
         <div className="col-span-3">
-          <div className="flex items-center mb-4">
+          <div className="flex items-center mb-4 rounded-xl">
             <select
-              className="w-44 px-4 py-3 text-sm text-slate-gray border-gray-300 shadow-sm rounded focus:ring-0 focus:border-gray-100 font-montserrat"
+              className="w-44 px-4 py-3 text-sm text-slate-gray border-gray-300 shadow-sm rounded focus:ring-0 focus:border-gray-100 font-montserrat font-semibold"
               onChange={(e) => handleSortChange(e.target.value)}
             >
               <option value="">Default</option>
               <option value="lowToHigh">Price: Low to High</option>
               <option value="highToLow">Price: High to Low</option>
-              <option value="latest">Latest</option>
+              {/* <option value="latest">Latest</option> */}
             </select>
           </div>
 
@@ -152,7 +152,7 @@ const Page: React.FC = () => {
               <p className="text-lg text-gray-700 mb-8">
                 {storeInfo.banner_subtext}
               </p>
-              <ProductList products={sortedProducts()} />
+            <ProductList products={sortedProducts()} />
             </>
           )}
         </div>

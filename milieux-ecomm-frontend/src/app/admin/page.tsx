@@ -19,6 +19,7 @@ import AdminOrders from "@/components/AdminOrders";
 import { Separator } from "@/components/ui/separator";
 import PageCustomize from "@/components/PageCustomize";
 import AddProduct from "@/components/AddProduct";
+import CustomizeProducts from "@/components/Customization/CustomizeProducts";
 
 interface Product {
   id: number;
@@ -38,7 +39,7 @@ const Admin: React.FC = () => {
   const [totalOrders, setTotalOrders] = useState(0);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [showOrders, setShowOrders] = useState(false);
-  const [showAllItems, setShowAllItems] = useState(false);
+  const [showAllItems, setShowAllItems] = useState(true);
   const [showCustomization, setShowCustomization] = useState(false);
 
   const fetchTotalOrders = async () => {
@@ -74,7 +75,7 @@ const Admin: React.FC = () => {
     setTimeout(() => {
       console.log("Re-displaying AllProducts");
       setShowAllItems(true); // Re-show it to trigger useEffect in AllProducts
-    }, 0); // Small delay to trigger re-render
+    }, 1); // Small delay to trigger re-render
   };
 
   const handleAddItemClick = () => {
@@ -116,12 +117,6 @@ const Admin: React.FC = () => {
       <AdminTopBar name={storeInfo.name} headerLogo={storeInfo.logo_url} />
       <div className="flex flex-row gap-2">
         <Card className="flex flex-col justify-start items-start gap-5 border-0 rounded-xl px-10 shadow-none w-max font-normal text-xl">
-          <Button
-            className="p-2 border-1 rounded-md w-[100%] text-gray-600 hover:bg-white hover:text-gray-900"
-            variant={"ghost"}
-          >
-            Home
-          </Button>
 
           <Button
             onClick={handleShowItems}
@@ -150,14 +145,7 @@ const Admin: React.FC = () => {
           <div className="w-[70%]">
             {showAllItems && (
               <>
-                <div className="flex gap-5 w-full px-5">
-                  <AddProduct refreshProducts={refreshProducts} />
-                  <Separator
-                    orientation="vertical"
-                    className="border-1 border-gray-600"
-                  />
-                  <AllProducts refreshProducts={refreshProducts} />
-                </div>
+                <CustomizeProducts />
               </>
             )}
             {showOrders && (
