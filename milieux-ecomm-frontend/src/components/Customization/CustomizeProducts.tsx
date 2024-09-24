@@ -22,6 +22,7 @@ import { Separator } from "../ui/separator";
 
 import Image from "next/image";
 import { useStoreContext } from "@/contexts/StoreContext";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
     productName: z.string().min(2).max(50),
@@ -54,6 +55,7 @@ const CustomizeProducts = () => {
     const [error, setError] = useState<string | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const { toast } = useToast();
 
 
     useEffect(() => {
@@ -107,9 +109,14 @@ const CustomizeProducts = () => {
                 console.error("Server error:", response.status, errorData);
                 throw new Error("Failed to delete product");
             }
+            toast({
+                title: "Done!",
+                description: "Product has been removed successfully.",
+            });
 
             await fetchProducts(storeInfo.id); // Refresh products locally
             refreshProducts(); // Call refreshProducts to trigger external refresh
+
         } catch (error) {
             console.error("Error removing product:", error);
             setError("Failed to remove product");
@@ -128,8 +135,7 @@ const CustomizeProducts = () => {
     });
 
     const refreshProducts = () => {
-        console.log("refreshProducts called"); // Add this log to ensure the function is invoked
-        // setShowAllItems(false); // Temporarily hide AllProducts
+        console.log("refreshProducts called");
         setTimeout(() => {
             console.log("Re-displaying AllProducts");
             fetchProducts(storeInfo.id);
@@ -140,7 +146,6 @@ const CustomizeProducts = () => {
         const file = e.target.files && e.target.files[0];
         if (file) {
             setSelectedFile(file);
-            // handleImageUpdate();
         }
     };
 
@@ -207,7 +212,10 @@ const CustomizeProducts = () => {
             if (!response.ok) {
                 throw new Error("Failed to create product");
             }
-
+            toast({
+                title: "Done!",
+                description: `Added Product: ${newProduct.name}.`,
+            });
             refreshProducts();
             form.reset();
             setSelectedFile(null); // Reset the file input
@@ -327,10 +335,10 @@ const CustomizeProducts = () => {
                         products.map((product) => (
                             <li key={product.id} className="list-none">
                                 <div className="flex flex-row gap-2 px-5 h-20 items-center justify-evenly w-full rounded-xl border-[1px] border-slate-200">
-                                    <div>
+                                    <div className="w-[50px]">
                                         <p className="text-slate-400 pr-2">{product.id}</p>
                                     </div>
-                                    <div className="flex gap-2 items-center">
+                                    <div className="flex flex-wrap w-[200px] gap-2 items-center">
                                         <Image
                                             src={product.imgurl}
                                             alt={product.name}

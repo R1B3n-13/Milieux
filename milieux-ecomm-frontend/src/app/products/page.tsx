@@ -131,15 +131,15 @@ const Page: React.FC = () => {
           </div>
         </div>
         <div className="col-span-3">
-          <div className="flex items-center mb-4">
+          <div className="flex items-center mb-4 rounded-xl">
             <select
-              className="w-44 px-4 py-3 text-sm text-slate-gray border-gray-300 shadow-sm rounded focus:ring-0 focus:border-gray-100 font-montserrat"
+              className="w-44 px-4 py-3 text-sm text-slate-gray border-gray-300 shadow-sm rounded focus:ring-0 focus:border-gray-100 font-montserrat font-semibold"
               onChange={(e) => handleSortChange(e.target.value)}
             >
               <option value="">Default</option>
               <option value="lowToHigh">Price: Low to High</option>
               <option value="highToLow">Price: High to Low</option>
-              <option value="latest">Latest</option>
+              {/* <option value="latest">Latest</option> */}
             </select>
           </div>
 
@@ -152,7 +152,7 @@ const Page: React.FC = () => {
               <p className="text-lg text-gray-700 mb-8">
                 {storeInfo.banner_subtext}
               </p>
-              <ProductList products={sortedProducts()} />
+            <ProductList products={sortedProducts()} />
             </>
           )}
         </div>

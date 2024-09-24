@@ -145,15 +145,7 @@ const Admin: React.FC = () => {
           <div className="w-[70%]">
             {showAllItems && (
               <>
-              <CustomizeProducts />
-                {/* <div className="flex gap-5 w-full px-5">
-                  <AddProduct refreshProducts={refreshProducts} />
-                  <Separator
-                    orientation="vertical"
-                    className="border-1 border-gray-600"
-                  />
-                  <AllProducts refreshProducts={refreshProducts} />
-                </div> */}
+                <CustomizeProducts />
               </>
             )}
             {showOrders && (

@@ -187,7 +187,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
 	return (
 		<>
 			<ShoppingCartContainer />
-			<div className="flex flex-col h-full justify-start align-top items-start">
+			<div className="flex flex-col max-h-[800px] justify-start align-top items-start">
 				<div className="flex flex-row items-start justify-center w-full gap-12 py-[20px] min-h-[100%]">
 					<Image
 						src={product.imgurl}
