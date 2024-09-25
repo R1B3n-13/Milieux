@@ -58,7 +58,14 @@ async def generate_response(media_path: str, text: str):
     else:
         response = model.generate_content(text)
 
-    if response.candidates[0].finish_reason == 1:
+    if response.prompt_feedback.block_reason:
+        return {"success": True,
+                "status": 200,
+                "message": "Tidbits generation failed",
+                "finish_reason": 3,
+                "text": ""}    
+
+    elif response.candidates[0].finish_reason == 1:
         return {"success": True,
                 "status": 200,
                 "message": "Tidbits generated successfully",
