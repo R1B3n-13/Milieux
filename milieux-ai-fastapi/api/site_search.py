@@ -101,10 +101,13 @@ async def generate_media_analysis_response(media_path: str):
         response = media_analysis_model.generate_content(file)
         genai.delete_file(file)
         
-        if response.candidates[0].finish_reason == 1:
-            return response.text
+        if response.candidates:
+            if response.candidates[0].finish_reason == 1:
+                return response.text
+            else:
+                return None
         else:
-            return ""
+            return None
 
 @router.post("/add-post")
 async def add_post_to_corpus(request: AddPostRequest):
@@ -125,7 +128,7 @@ async def add_post_to_corpus(request: AddPostRequest):
             os.remove(media_path)
 
         post_document = glm.Document(name="corpora/" + os.environ['SITE_SEARCH_CORPUS'] + "/documents/post-id-" + 
-                                     str(request.postId), display_name="Social media post no. " + str(request.postId))
+                                    str(request.postId), display_name="Social media post no. " + str(request.postId))
 
         document_metadata = [
         glm.CustomMetadata(key="document_type", string_value="social_media_post_no_" + str(request.postId))]
