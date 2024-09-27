@@ -34,6 +34,7 @@ import { useState } from "react";
 import Link from "next/link";
 import MarkdownRenderer from "./MarkdownRenderer";
 import VideoPlayer from "./VideoPlayer";
+import EnlargeableImageWrapper from "./EnlargeableImageWrapper";
 
 const PostCard = ({
   post,
@@ -150,15 +151,17 @@ const PostCard = ({
               )}
 
               {post.imagePath && (
-                <div className="flex items-center justify-center mt-1">
-                  <Image
-                    src={post.imagePath}
-                    alt="post image"
-                    width={1000}
-                    height={0}
-                    className="w-full"
-                  />
-                </div>
+                <EnlargeableImageWrapper>
+                  <div className="flex items-center justify-center">
+                    <Image
+                      src={post.imagePath}
+                      alt="post image"
+                      width={1000}
+                      height={0}
+                      className="w-full"
+                    />
+                  </div>
+                </EnlargeableImageWrapper>
               )}
 
               {post.videoPath && (
