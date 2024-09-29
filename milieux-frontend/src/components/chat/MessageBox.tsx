@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "../ui/Select";
 import { chatbotPersonalityItems } from "./items/chatbotPersonalityItems";
+import ChatSlashedFilledIcon from "../icons/ChatSlashedFilledIcon";
 
 export const MessageBox = ({
   loggedInUser,
@@ -186,7 +187,15 @@ export const MessageBox = ({
         className="h-screen bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200"
         ref={scrollAreaRef}
       >
-        <div className="p-4 flex-grow bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 overflow-y-auto">
+        <div className="p-4 h-[90vh] flex-grow bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 overflow-y-auto">
+          {!selectedChat && (
+            <div className="flex items-center justify-center h-full text-violet-950">
+              <div className="text-[15rem] flex-col items-center justify-center">
+                <ChatSlashedFilledIcon />
+                <p className="text-4xl text-violet-500 font-semibold">No chat selected</p>
+              </div>
+            </div>
+          )}
           {messages.map((message) => (
             <div className="flex items-center gap-3" key={message.id}>
               {message.user?.id !== loggedInUser.id && (
