@@ -205,10 +205,10 @@ export const MessageBox = ({
               )}
 
               <div
-                className={`mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col ${
+                className={`mb-2 p-2 max-w-[30rem] min-w-14 min-h-10 flex flex-col ${
                   message.user?.id === loggedInUser.id
-                    ? "bg-indigo-500 text-white ml-auto rounded-br-none"
-                    : "bg-gray-300 text-black rounded-bl-none"
+                    ? "bg-white text-black ml-auto rounded-br-none"
+                    : "text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 rounded-bl-none"
                 } rounded-lg`}
               >
                 {message.imagePath && (

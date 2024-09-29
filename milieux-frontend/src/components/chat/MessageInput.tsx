@@ -147,6 +147,8 @@ export const MessageInput = () => {
   };
 
   const handleSendMessage = async () => {
+    if (!image && text.trim() === "") return;
+
     setIsLoading(true);
 
     try {
@@ -245,12 +247,12 @@ export const MessageInput = () => {
 
             <div
               onClick={handleSendMessage}
-              className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-violet-50"
+              className="text-xl text-indigo-700 cursor-pointer p-2 hover:bg-inherit"
             >
               {isLoading ? <Loading text="" /> : <SendFilledIcon />}
             </div>
 
-            <Label className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-violet-50">
+            <Label className="text-xl text-indigo-700 cursor-pointer p-2 hover:bg-inherit">
               <AttachmentIcon />
               <Input
                 type="file"
