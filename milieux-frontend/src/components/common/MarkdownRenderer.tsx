@@ -3,7 +3,7 @@ import { marked } from "marked";
 import DOMPurify from "dompurify";
 
 const MarkdownRenderer: React.FC<{ text: string }> = ({ text }) => {
-  const [html, setHtml] = useState<string>("");
+  const [html, setHtml] = useState("");
 
   useEffect(() => {
     const parseMarkdown = async () => {
@@ -11,13 +11,21 @@ const MarkdownRenderer: React.FC<{ text: string }> = ({ text }) => {
         breaks: true,
         gfm: true,
       });
-
       const cleanHtml = DOMPurify.sanitize(rawMarkup);
-      setHtml(cleanHtml);
+      const htmlWithHighlightedHashtags = highlightHashtags(cleanHtml);
+      setHtml(htmlWithHighlightedHashtags);
     };
 
     parseMarkdown();
   }, [text]);
+
+  const highlightHashtags = (html: string) => {
+    const regex = /(#\w+)/g;
+    return html.replace(
+      regex,
+      '<span class="text-blue-500 italic hover:underline cursor-pointer">$1</span>'
+    );
+  };
 
   return (
     <div

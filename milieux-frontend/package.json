@@ -25,6 +25,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@stomp/stompjs": "^7.0.0",
+    "@types/dompurify": "^3.0.5",
     "ai": "^3.3.7",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.2.0",
