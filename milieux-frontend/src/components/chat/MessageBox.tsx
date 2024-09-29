@@ -237,7 +237,7 @@ export const MessageBox = ({
 
           {tempMessage[0] && (
             <div className="flex items-center gap-3">
-              <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-indigo-500 text-white ml-auto rounded-br-none rounded-lg">
+              <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-white text-black ml-auto rounded-br-none rounded-lg">
                 {tempMessage[1] && (
                   <Image
                     src={tempMessage[1] as string}
@@ -268,7 +268,7 @@ export const MessageBox = ({
                 </AvatarFallback>
               </Avatar>
 
-              <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-gray-300 text-black rounded-bl-none rounded-lg">
+              <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 text-white rounded-bl-none rounded-lg">
                 <MarkdownRenderer text={aiStreamingText} />
               </div>
             </div>
