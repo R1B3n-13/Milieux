@@ -149,7 +149,7 @@ const PostCard = ({
 
               {post.imagePath && (
                 <EnlargeableImageWrapper>
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center mt-1">
                     <Image
                       src={post.imagePath}
                       alt="post image"

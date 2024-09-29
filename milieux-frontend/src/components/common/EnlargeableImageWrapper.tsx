@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 
 type EnlargeableImageWrapperProps = {
@@ -13,7 +13,11 @@ const EnlargeableImageWrapper: React.FC<EnlargeableImageWrapperProps> = ({
       ...children.props.style,
       width: "100%",
       height: "auto",
-      objectFit: "contain",
+      objectFit: "cover",
+      borderRadius: "0",
+      margin: "0",
+      padding: "0",
+      border: "0",
     },
   });
 
