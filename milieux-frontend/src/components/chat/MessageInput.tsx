@@ -216,7 +216,7 @@ export const MessageInput = () => {
       {selectedChat && (
         <>
           {image && (
-            <div className="flex items-center justify-start pl-5 bg-indigo-50">
+            <div className="flex items-center justify-start pl-5 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200">
               <div className="relative">
                 <Image
                   src={image as string}
@@ -234,23 +234,23 @@ export const MessageInput = () => {
               </div>
             </div>
           )}
-          <div className="p-4 bg-indigo-50 flex items-center gap-2">
+          <div className="p-4 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 flex items-center gap-2">
             <Input
               value={text}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
-              className="flex-grow border rounded-full bg-slate-50 h-11 mr-1 focus-visible:ring-slate-500"
+              className="flex-grow border border-violet-400 rounded-full bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 h-11 mr-1 focus-visible:ring-violet-200"
             />
 
             <div
               onClick={handleSendMessage}
-              className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200"
+              className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-violet-50"
             >
               {isLoading ? <Loading text="" /> : <SendFilledIcon />}
             </div>
 
-            <Label className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200">
+            <Label className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-violet-50">
               <AttachmentIcon />
               <Input
                 type="file"

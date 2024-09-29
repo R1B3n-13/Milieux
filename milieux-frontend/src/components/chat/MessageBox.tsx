@@ -123,10 +123,10 @@ export const MessageBox = ({
 
   return (
     <>
-      <div className="flex items-center justify-start min-h-[4.3rem] gap-2 p-4 border-b border-indigo-200 bg-indigo-100">
+      <div className="flex items-center justify-start min-h-[4.3rem] gap-2 p-4 border-b border-violet-400 bg-gradient-to-b from-indigo-100 via-violet-100 to-indigo-200">
         {selectedChat && (
           <>
-            <Avatar className="rounded-full bg-gray-200 p-1 items-center justify-center cursor-pointer">
+            <Avatar className="rounded-full bg-violet-50 items-center justify-center cursor-pointer">
               <AvatarImage
                 src={
                   selectedChat.users?.some((user) => user.id === -1)
@@ -153,13 +153,13 @@ export const MessageBox = ({
                   onValueChange={(str) => setChatPersonality(str)}
                   value={chatPersonality}
                 >
-                  <SelectTrigger className="w-64 rounded-full bg-amber-50">
+                  <SelectTrigger className="w-64 rounded-full bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 border border-violet-400 focus:ring-violet-200">
                     <SelectValue placeholder="Select a personality" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-gradient-to-r from-indigo-50 via-violet-50 to-indigo-100">
                     {chatbotPersonalityItems.map((model) => (
                       <SelectItem
-                        className="text-lg"
+                        className="text-lg hover:bg-gradient-to-r hover:from-indigo-100 hover:via-violet-100 hover:to-indigo-200"
                         key={model.value}
                         value={model.value}
                       >
@@ -171,19 +171,22 @@ export const MessageBox = ({
               </div>
             )}
 
-            <div className="ml-auto mr-3 text-slate-700 text-3xl rounded-full cursor-pointer p-1 hover:bg-purple-300">
+            <div className="ml-auto mr-3 text-slate-700 text-3xl rounded-full cursor-pointer p-1 hover:bg-violet-50">
               <AudioCallingFilledIcon />
             </div>
 
-            <div className="text-slate-700 text-3xl rounded-full cursor-pointer p-1 hover:bg-purple-300">
+            <div className="text-slate-700 text-3xl rounded-full cursor-pointer p-1 hover:bg-violet-50">
               <VideoCallingFilledIcon />
             </div>
           </>
         )}
       </div>
 
-      <ScrollArea className="h-screen bg-indigo-50" ref={scrollAreaRef}>
-        <div className="p-4 flex-grow bg-indigo-50 overflow-y-auto">
+      <ScrollArea
+        className="h-screen bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200"
+        ref={scrollAreaRef}
+      >
+        <div className="p-4 flex-grow bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 overflow-y-auto">
           {messages.map((message) => (
             <div className="flex items-center gap-3" key={message.id}>
               {message.user?.id !== loggedInUser.id && (
