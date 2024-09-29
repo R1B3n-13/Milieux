@@ -268,10 +268,10 @@ export default function PostSubmissionDialog({
       if (aiResponse.success) {
         if (aiResponse.finish_reason == 1) {
           await updatePost({ tidbits: aiResponse.text }, response.post.id);
-          revalidatePostUpdate();
+          await revalidatePostUpdate();
         } else if (aiResponse.finish_reason == 3) {
           await updatePost({ isSafe: false }, response.post.id);
-          revalidatePostUpdate();
+          await revalidatePostUpdate();
         }
       }
 
