@@ -15,6 +15,7 @@ import StoreButton from "./StoreButton";
 import Bot2FilledIcon from "../icons/Bot2FilledIcon";
 import Link from "next/link";
 import EnlargeableImageWrapper from "../common/EnlargeableImageWrapper";
+import EditFilledIcon from "../icons/EditFilledIcon";
 
 const Persona = async ({ id }: { id: number | null }) => {
   let user: z.infer<typeof UserSchema> = {};
@@ -97,12 +98,16 @@ const Persona = async ({ id }: { id: number | null }) => {
 
                 <Link
                   href={`/chappy/${user.id}`}
-                  className="w-36 py-[0.4rem] font-medium flex items-center gap-1 justify-center bg-rose-600 text-white rounded-full hover:bg-rose-500 cursor-pointer"
+                  className="w-36 p-[3px] flex items-center justify-center text-slate-800 font-medium rounded-full hover:bg-rose-500 cursor-pointer group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white"
                 >
-                  <div className="text-xl">
+                  <div className="text-xl flex items-center gap-1 justify-center w-full p-1 relative transition-all ease-in duration-75 bg-zinc-100 dark:bg-gray-900 rounded-full group-hover:bg-opacity-0">
                     <Bot2FilledIcon />
+                    <p className="text-base">
+                      {user.id === loggedInUser.id
+                        ? "Setup Chappy"
+                        : "Ask Chappy"}
+                    </p>
                   </div>
-                  {user.id === loggedInUser.id ? "Setup Chappy" : "Ask Chappy"}
                 </Link>
               </div>
             )}
@@ -110,12 +115,12 @@ const Persona = async ({ id }: { id: number | null }) => {
             {user.id === loggedInUser.id ? (
               <EditPersonaDialog
                 dialogButton={
-                  <Button
-                    variant="outline"
-                    className="w-32 rounded-full border border-gray-400 text-slate-600 text-md font-medium hover:bg-gray-100 cursor-pointer z-50 "
-                  >
-                    Edit persona
-                  </Button>
+                  <div className="flex items-center w-36 p-[3px] text-slate-800 font-medium text-center rounded-full cursor-pointer z-50 group bg-gradient-to-br from-cyan-600 to-blue-500 group-hover:from-cyan-600 group-hover:to-blue-500 hover:text-white dark:text-white">
+                    <span className="flex items-center justify-center gap-1 text-xl w-full p-1 relative transition-all ease-in duration-75 bg-zinc-100 dark:bg-gray-900 rounded-full group-hover:bg-opacity-0">
+                      <EditFilledIcon />
+                      <p className="text-base">Edit persona</p>
+                    </span>
+                  </div>
                 }
               />
             ) : (

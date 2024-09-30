@@ -189,10 +189,10 @@ export const MessageBox = ({
       >
         <div className="p-4 h-[90vh] flex-grow bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 overflow-y-auto">
           {!selectedChat && (
-            <div className="flex items-center justify-center h-full text-violet-950">
+            <div className="flex items-center justify-center h-full text-violet-900">
               <div className="text-[15rem] flex-col items-center justify-center">
                 <ChatSlashedFilledIcon />
-                <p className="text-4xl text-violet-500 font-semibold">No chat selected</p>
+                <p className="text-4xl text-violet-900 font-semibold">No chat selected</p>
               </div>
             </div>
           )}
