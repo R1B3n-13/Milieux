@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Button } from "../ui/Button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs";
 import PersonaPostList from "./PersonaPostList";
 import AboutCard from "./AboutCard";
