@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { headerLogo } from "@/assets/images";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import AllProducts from "@/components/AllProducts";
 import { useStoreContext } from "@/contexts/StoreContext";
 import {
   Card,
@@ -16,9 +14,7 @@ import {
 } from "@/components/ui/card";
 import AdminTopBar from "@/components/AdminTopBar";
 import AdminOrders from "@/components/AdminOrders";
-import { Separator } from "@/components/ui/separator";
 import PageCustomize from "@/components/PageCustomize";
-import AddProduct from "@/components/AddProduct";
 import CustomizeProducts from "@/components/Customization/CustomizeProducts";
 
 interface Product {
@@ -117,7 +113,6 @@ const Admin: React.FC = () => {
       <AdminTopBar name={storeInfo.name} headerLogo={storeInfo.logo_url} />
       <div className="flex flex-row gap-2">
         <Card className="flex flex-col justify-start items-start gap-5 border-0 rounded-xl px-10 shadow-none w-max font-normal text-xl">
-
           <Button
             onClick={handleShowItems}
             className="p-2 border-1 rounded-md w-[100%] text-gray-600 hover:bg-white hover:text-gray-900"
@@ -164,7 +159,10 @@ const Admin: React.FC = () => {
             )}
           </div>
 
-          <div className="flex flex-col gap-2 justify-center items-center">
+          <div
+            className="flex flex-col gap-2 justify-center items-center"
+            suppressHydrationWarning
+          >
             <Card className="w-full">
               <CardHeader>
                 <CardTitle>Total Orders</CardTitle>

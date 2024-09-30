@@ -96,7 +96,7 @@ const AboutCard = async ({ id }: { id: number | null }) => {
             <h4 className="font-medium">
               <ClockIcon />
             </h4>
-            <p className="text-gray-600">
+            <p className="text-gray-600" suppressHydrationWarning>
               Joined At {date?.getDate()} {months[date?.getMonth() || 0]}
               {", "}
               {date?.getFullYear()}

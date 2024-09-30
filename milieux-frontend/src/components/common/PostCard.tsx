@@ -121,7 +121,10 @@ const PostCard = ({
                 </Link>
               )}
 
-              <CardDescription className="mt-1 cursor-default">
+              <CardDescription
+                className="mt-1 cursor-default"
+                suppressHydrationWarning
+              >
                 {date?.getDate()} {months[date?.getMonth() || 0]}
                 {", "}
                 {date?.getFullYear()} {"at"} {date?.getHours()}
