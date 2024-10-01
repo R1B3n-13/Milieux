@@ -18,7 +18,12 @@ const FeedCard = ({ feed }: { feed: z.infer<typeof FeedSchema> }) => {
               {feed.title}
             </a>
           </div>
-          <div className="text-xs font-light text-gray-500">{feed.pubDate}</div>
+          <div
+            className="text-xs font-light text-gray-500"
+            suppressHydrationWarning
+          >
+            {feed.pubDate}
+          </div>
         </div>
       </div>
     </div>
