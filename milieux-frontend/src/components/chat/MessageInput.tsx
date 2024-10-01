@@ -17,8 +17,13 @@ import { z } from "zod";
 import { getChatMessages } from "@/services/chatService";
 import { readStreamableValue } from "ai/rsc";
 import { chatWithSentiaAi } from "@/actions/aiActions";
+import UserSchema from "@/schemas/userSchema";
 
-export const MessageInput = () => {
+export const MessageInput = ({
+  loggedInUser,
+}: {
+  loggedInUser: z.infer<typeof UserSchema>;
+}) => {
   const [messages, setMessages] = useState<z.infer<typeof MessageSchema>[]>([]);
   const [text, setText] = useState<string>("");
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
@@ -27,7 +32,6 @@ export const MessageInput = () => {
     triggerRefresh,
     setTriggerRefresh,
     stompClient,
-    setAiStreamingText,
     setTempMessage,
     chatPersonality,
   } = useChatContext();
@@ -95,10 +99,37 @@ export const MessageInput = () => {
       throw new Error("AI response generation failed.");
     }
 
+    const dummyUser = {
+      id: -1,
+      isBusiness: null,
+      isStoreLandingPage: null,
+      name: null,
+      email: null,
+      dp: null,
+      banner: null,
+      status: null,
+      intro: null,
+      address: null,
+      userType: null,
+      followers: null,
+      followings: null,
+      createdAt: null,
+    };
+
+    setTempMessage((prevMessages) => [
+      ...prevMessages,
+      { user: dummyUser, text: "Thinking...", imagePath: null },
+    ]);
+
     let textStream = "";
     for await (const delta of readStreamableValue(result)) {
       textStream += delta;
-      setAiStreamingText(textStream);
+
+      setTempMessage((prevMessages) => {
+        const updatedMessages = [...prevMessages];
+        updatedMessages[updatedMessages.length - 1].text = textStream;
+        return updatedMessages;
+      });
     }
 
     return textStream;
@@ -117,18 +148,22 @@ export const MessageInput = () => {
     });
 
     if (!response.success) {
-      throw new Error("Failed to send AI message.");
-    } else {
-      setAiStreamingText("");
-      setTempMessage([]);
+      throw new Error("Failed to persist AI message.");
     }
   };
 
-  const notifyOtherUsers = (chatId: number | undefined | null) => {
+  const notifyOtherUsers = (
+    chatId: number | undefined | null,
+    data: {
+      user: z.infer<typeof UserSchema>;
+      text: string;
+      imagePath: string | null;
+    }
+  ) => {
     if (stompClient && stompClient.active && stompClient.connected) {
       stompClient!.publish({
         destination: `/app/chat/${chatId}`,
-        body: chatId?.toString(),
+        body: JSON.stringify(data),
       });
     } else {
       toast.error(
@@ -141,27 +176,21 @@ export const MessageInput = () => {
     setIsLoading(false);
     setText("");
     setImage(null);
-    setTempMessage([]);
-    setAiStreamingText("");
     revalidateMessage();
   };
 
   const handleSendMessage = async () => {
+    if (!image && text.trim() === "") return;
+
     setIsLoading(true);
 
     try {
       const imagePath = await uploadImageIfPresent(image);
 
-      setTempMessage((prevMessages) => {
-        const updatedMessages = [...prevMessages];
-
-        updatedMessages[0] = text;
-        if (imagePath) {
-          updatedMessages[1] = imagePath;
-        }
-
-        return updatedMessages;
-      });
+      setTempMessage((prevMessages) => [
+        ...prevMessages,
+        { user: loggedInUser, text, imagePath },
+      ]);
 
       const isChatWithAi = selectedChat?.users?.some((user) => user.id === -1);
 
@@ -190,7 +219,11 @@ export const MessageInput = () => {
       if (isChatWithAi && streamedText) {
         await sendAiStreamingMessage(streamedText);
       } else {
-        notifyOtherUsers(selectedChat?.id);
+        notifyOtherUsers(selectedChat?.id, {
+          user: loggedInUser,
+          text,
+          imagePath,
+        });
       }
     } catch (error) {
       console.error("Error occurred: " + error);
@@ -216,7 +249,7 @@ export const MessageInput = () => {
       {selectedChat && (
         <>
           {image && (
-            <div className="flex items-center justify-start pl-5 bg-indigo-50">
+            <div className="flex items-center justify-start pl-5 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200">
               <div className="relative">
                 <Image
                   src={image as string}
@@ -234,23 +267,23 @@ export const MessageInput = () => {
               </div>
             </div>
           )}
-          <div className="p-4 bg-indigo-50 flex items-center gap-2">
+          <div className="p-4 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 flex items-center gap-2">
             <Input
               value={text}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
-              className="flex-grow border rounded-full bg-slate-50 h-11 mr-1 focus-visible:ring-slate-500"
+              className="flex-grow border border-violet-400 rounded-full bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 h-11 mr-1 focus-visible:ring-violet-200"
             />
 
             <div
               onClick={handleSendMessage}
-              className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200"
+              className="text-xl text-indigo-700 cursor-pointer p-2 hover:bg-inherit"
             >
               {isLoading ? <Loading text="" /> : <SendFilledIcon />}
             </div>
 
-            <Label className="text-xl text-slate-800 cursor-pointer p-2 rounded hover:bg-slate-200">
+            <Label className="text-xl text-indigo-700 cursor-pointer p-2 hover:bg-inherit">
               <AttachmentIcon />
               <Input
                 type="file"

@@ -4,6 +4,7 @@ import { getUserFromAuthToken } from "@/services/userService";
 import { z } from "zod";
 import PostCard from "../common/PostCard";
 import Image from "next/image";
+import EnlargeableImageWrapper from "../common/EnlargeableImageWrapper";
 
 const PersonaPostList = async ({ id }: { id: number | null }) => {
   const savedPostResponsePromise = getSavedPosts();
@@ -43,13 +44,15 @@ const PersonaPostList = async ({ id }: { id: number | null }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {photos.map((photo, index) => (
           <div key={index} className="w-full h-48">
-            <Image
-              src={photo || ""}
-              alt={`image-${index}`}
-              width={500}
-              height={500}
-              className="w-full h-full object-cover rounded-lg"
-            />
+            <EnlargeableImageWrapper>
+              <Image
+                src={photo || ""}
+                alt={`image-${index}`}
+                width={500}
+                height={500}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </EnlargeableImageWrapper>
           </div>
         ))}
       </div>

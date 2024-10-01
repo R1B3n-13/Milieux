@@ -176,7 +176,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
         <>
           <ScrollArea
             ref={scrollAreaRef}
-            className="bg-violet-200 rounded-lg py-7 px-20 w-full h-full max-h-[700px] overflow-y-auto z-10 relative"
+            className="bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 rounded-lg py-7 px-20 w-full h-full max-h-[700px] overflow-y-auto z-10 relative"
           >
             <div className="flex items-center text-3xl absolute -translate-x-12 rounded-lg bg-white p-1 gap-2">
               <ChappyIcon />
@@ -185,7 +185,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
               <div key={index} className="mb-4">
                 <div className="flex justify-end">
                   {chat.role === "user" && (
-                    <div className="flex items-start gap-3 text-sm text-slate-700 bg-white py-2 px-4 rounded-lg w-fit max-w-[40rem] break-words">
+                    <div className="flex items-start gap-3 text-sm text-black bg-white py-2 px-4 rounded-lg w-fit max-w-[40rem] break-words">
                       <div className="text-2xl mt-[0.1rem] text-slate-800 bg-violet-100 p-1 rounded-full">
                         <PersonLineIcon />
                       </div>
@@ -194,7 +194,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
                   )}
                 </div>
                 {chat.role === "model" && (
-                  <div className="flex items-start gap-3 text-slate-700 bg-violet-300 max-w-[40rem] text-sm py-2 px-4 rounded-lg w-fit mt-1 break-words">
+                  <div className="flex items-start gap-3 text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 max-w-[40rem] text-sm py-2 px-4 rounded-lg w-fit mt-1 break-words">
                     <div className="text-2xl mt-[0.1rem] text-black bg-gray-50 p-1 rounded-full">
                       <BotLineIcon />
                     </div>
@@ -210,7 +210,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
           </ScrollArea>
           <div className="relative flex items-center justify-center p-4">
             <TextArea
-              className="flex items-center justify-center pl-5 pr-11 py-[0.9rem] resize-none rounded-full min-h-0 h-12 bg-violet-100 border-none no-scrollbar max-h-40 overflow-y-auto"
+              className="flex items-center justify-center pl-5 pr-11 py-[0.9rem] resize-none rounded-full min-h-0 h-12 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 focus-visible:ring-violet-500 border-none no-scrollbar max-h-40 overflow-y-auto"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -219,7 +219,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
             <Button
               onClick={handleSubmit}
               disabled={isLoading}
-              className="absolute right-7 top-1/2 p-0 transform -translate-y-1/2 text-indigo-500 rounded-full"
+              className="absolute right-7 top-1/2 p-0 transform -translate-y-1/2 text-indigo-700 hover:bg-inherit hover:text-indigo-500"
               variant="ghost"
             >
               {isLoading ? <Loading text="" /> : <SendFilledIcon />}

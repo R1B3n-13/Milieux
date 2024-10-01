@@ -34,6 +34,8 @@ import { useState } from "react";
 import Link from "next/link";
 import MarkdownRenderer from "./MarkdownRenderer";
 import VideoPlayer from "./VideoPlayer";
+import EnlargeableImageWrapper from "./EnlargeableImageWrapper";
+import PostText from "./PostText";
 
 const PostCard = ({
   post,
@@ -119,7 +121,10 @@ const PostCard = ({
                 </Link>
               )}
 
-              <CardDescription className="mt-1 cursor-default">
+              <CardDescription
+                className="mt-1 cursor-default"
+                suppressHydrationWarning
+              >
                 {date?.getDate()} {months[date?.getMonth() || 0]}
                 {", "}
                 {date?.getFullYear()} {"at"} {date?.getHours()}
@@ -143,22 +148,20 @@ const PostCard = ({
         <CardContent className="px-0 py-0">
           {(post.isSafe !== false || isSafe === true) && (
             <div className="flex flex-col">
-              {post.text && (
-                <div className="px-6 text-slate-700 font-medium">
-                  <MarkdownRenderer text={post.text} />
-                </div>
-              )}
+              {post.text && <PostText text={post.text} />}
 
               {post.imagePath && (
-                <div className="flex items-center justify-center mt-1">
-                  <Image
-                    src={post.imagePath}
-                    alt="post image"
-                    width={1000}
-                    height={0}
-                    className="w-full"
-                  />
-                </div>
+                <EnlargeableImageWrapper>
+                  <div className="flex items-center justify-center mt-1">
+                    <Image
+                      src={post.imagePath}
+                      alt="post image"
+                      width={1000}
+                      height={0}
+                      className="w-full"
+                    />
+                  </div>
+                </EnlargeableImageWrapper>
               )}
 
               {post.videoPath && (

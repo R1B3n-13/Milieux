@@ -21,7 +21,7 @@ const StoreButton = async ({ id }: { id: number | null | undefined }) => {
   }
 
   const storeResponse = await getStoreById(user.id);
-  
+
   return (
     <div className="w-36 cursor-pointer">
       {user.id === loggedInUser?.id && storeResponse?.status === 404 && (
@@ -32,9 +32,9 @@ const StoreButton = async ({ id }: { id: number | null | undefined }) => {
           (user.id !== loggedInUser.id && storeResponse.data.ui_type)) && (
           <a
             href={`/ecomm?id=${user.id}`}
-            className="inline-block w-full py-[0.4rem] bg-orange-600 text-white font-medium text-center rounded-full hover:bg-orange-500"
+            className="flex items-center justify-center w-36 p-[3px] text-slate-800 font-medium text-center rounded-full group bg-gradient-to-br from-purple-600 to-pink-500 group-hover:from-purple-600 group-hover:to-pink-500 hover:text-white"
           >
-            <div className="flex items-center gap-1 justify-center">
+            <div className="flex items-center gap-1 justify-center w-full p-1 relative transition-all ease-in duration-75 bg-zinc-100 dark:bg-gray-900 rounded-full group-hover:bg-opacity-0">
               <StoreIcon />
               <span>Visit store</span>
             </div>

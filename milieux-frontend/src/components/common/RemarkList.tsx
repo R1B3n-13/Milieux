@@ -90,7 +90,10 @@ const RemarkList = ({
                           </Link>
                         )}
 
-                        <p className="text-xs text-slate-500">
+                        <p
+                          className="text-xs text-slate-500"
+                          suppressHydrationWarning
+                        >
                           {new Date(comment.createdAt || "")?.getDate()}{" "}
                           {
                             months[

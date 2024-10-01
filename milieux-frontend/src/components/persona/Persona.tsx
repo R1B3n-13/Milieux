@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Button } from "../ui/Button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs";
 import PersonaPostList from "./PersonaPostList";
 import AboutCard from "./AboutCard";
@@ -14,6 +13,8 @@ import FollowButton from "./FollowButton";
 import StoreButton from "./StoreButton";
 import Bot2FilledIcon from "../icons/Bot2FilledIcon";
 import Link from "next/link";
+import EnlargeableImageWrapper from "../common/EnlargeableImageWrapper";
+import EditFilledIcon from "../icons/EditFilledIcon";
 
 const Persona = async ({ id }: { id: number | null }) => {
   let user: z.infer<typeof UserSchema> = {};
@@ -34,21 +35,27 @@ const Persona = async ({ id }: { id: number | null }) => {
     <>
       {user.id && (
         <div className="flex flex-col mt-5 w-[68%] min-h-screen">
-          <div className="relative h-[27rem] z-30">
+          <div className="relative h-[27rem] w-full z-30">
             {user.banner ? (
-              <Image
-                src={user.banner}
-                alt=""
-                fill
-                className="object-cover rounded-t-xl"
-              />
+              <EnlargeableImageWrapper>
+                <Image
+                  src={user.banner}
+                  alt=""
+                  width={2000}
+                  height={2000}
+                  className="object-fill w-full h-full rounded-t-xl"
+                />
+              </EnlargeableImageWrapper>
             ) : (
-              <Image
-                src="/banner_placeholder.png"
-                alt=""
-                fill
-                className="object-cover rounded-t-xl"
-              />
+              <EnlargeableImageWrapper>
+                <Image
+                  src="/banner_placeholder.png"
+                  alt=""
+                  width={2000}
+                  height={2000}
+                  className="object-fill w-full h-full rounded-t-xl"
+                />
+              </EnlargeableImageWrapper>
             )}
           </div>
 
@@ -56,19 +63,25 @@ const Persona = async ({ id }: { id: number | null }) => {
             <div className="flex flex-col items-center justify-center ml-12">
               <div className="relative w-[12rem] h-[12rem] z-40">
                 {user.dp ? (
-                  <Image
-                    src={user.dp}
-                    alt=""
-                    fill
-                    className="object-cover rounded-full border-[6px] border-zinc-100"
-                  />
+                  <EnlargeableImageWrapper>
+                    <Image
+                      src={user.dp}
+                      alt=""
+                      width={1000}
+                      height={1000}
+                      className="object-cover w-full h-full rounded-full border-[6px] border-zinc-100"
+                    />
+                  </EnlargeableImageWrapper>
                 ) : (
-                  <Image
-                    src="/user_placeholder.svg"
-                    alt=""
-                    fill
-                    className="object-cover rounded-full border-[6px] bg-zinc-500 border-zinc-100"
-                  />
+                  <EnlargeableImageWrapper>
+                    <Image
+                      src="/user_placeholder.svg"
+                      alt=""
+                      width={1000}
+                      height={1000}
+                      className="object-cover w-full h-full border-[6px] bg-zinc-500 border-zinc-100"
+                    />
+                  </EnlargeableImageWrapper>
                 )}
               </div>
               <p className="relative flex items-start justify-start mt-4 text-xl font-semibold">
@@ -84,12 +97,16 @@ const Persona = async ({ id }: { id: number | null }) => {
 
                 <Link
                   href={`/chappy/${user.id}`}
-                  className="w-36 py-[0.4rem] font-medium flex items-center gap-1 justify-center bg-rose-600 text-white rounded-full hover:bg-rose-500 cursor-pointer"
+                  className="w-36 p-[3px] flex items-center justify-center text-slate-800 font-medium rounded-full hover:bg-rose-500 cursor-pointer group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white"
                 >
-                  <div className="text-xl">
+                  <div className="text-xl flex items-center gap-1 justify-center w-full p-1 relative transition-all ease-in duration-75 bg-zinc-100 dark:bg-gray-900 rounded-full group-hover:bg-opacity-0">
                     <Bot2FilledIcon />
+                    <p className="text-base">
+                      {user.id === loggedInUser.id
+                        ? "Setup Chappy"
+                        : "Ask Chappy"}
+                    </p>
                   </div>
-                  {user.id === loggedInUser.id ? "Setup Chappy" : "Ask Chappy"}
                 </Link>
               </div>
             )}
@@ -97,12 +114,12 @@ const Persona = async ({ id }: { id: number | null }) => {
             {user.id === loggedInUser.id ? (
               <EditPersonaDialog
                 dialogButton={
-                  <Button
-                    variant="outline"
-                    className="w-32 rounded-full border border-gray-400 text-slate-600 text-md font-medium hover:bg-gray-100 cursor-pointer z-50 "
-                  >
-                    Edit persona
-                  </Button>
+                  <div className="flex items-center w-36 p-[3px] text-slate-800 font-medium text-center rounded-full cursor-pointer z-50 group bg-gradient-to-br from-cyan-600 to-blue-500 group-hover:from-cyan-600 group-hover:to-blue-500 hover:text-white dark:text-white">
+                    <span className="flex items-center justify-center gap-1 text-xl w-full p-1 relative transition-all ease-in duration-75 bg-zinc-100 dark:bg-gray-900 rounded-full group-hover:bg-opacity-0">
+                      <EditFilledIcon />
+                      <p className="text-base">Edit persona</p>
+                    </span>
+                  </div>
                 }
               />
             ) : (
@@ -110,7 +127,7 @@ const Persona = async ({ id }: { id: number | null }) => {
             )}
           </div>
 
-          <Tabs defaultValue="posts" className="w-full mt-20 z-40">
+          <Tabs defaultValue="posts" className="w-full mt-[5.25rem] z-40">
             <div className="flex justify-center">
               <TabsList className="gap-5 w-full bg-zinc-100 border-b-2 border-zinc-200 rounded-b-xl p-2">
                 <TabsTrigger
@@ -139,7 +156,7 @@ const Persona = async ({ id }: { id: number | null }) => {
                 <div className="col-span-2 mt-2">
                   <AboutCard id={id} />
                 </div>
-                <div className="col-span-3 flex flex-col items-center justify-center gap-4 mt-2 ml-4">
+                <div className="col-span-3 flex flex-col items-center justify-start gap-4 mt-2 ml-4">
                   {user.id === loggedInUser.id && <PostCreationCard />}
                   <PersonaPostList id={id} />
                 </div>

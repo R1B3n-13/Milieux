@@ -14,7 +14,7 @@ export const ChatList = ({
   chatList: z.infer<typeof ChatSchema>[];
   loggedInUser: z.infer<typeof UserSchema>;
 }) => {
-  const { selectedChat, setSelectedChat } = useChatContext();
+  const { selectedChat, setSelectedChat, setTempMessage } = useChatContext();
 
   return (
     <div className="flex-grow overflow-y-auto p-2">
@@ -23,11 +23,14 @@ export const ChatList = ({
           <div key={chat.id}>
             {(chat.lastText || chat.id === selectedChat?.id) && (
               <div
-                onClick={() => setSelectedChat(chat)}
+                onClick={() => {
+                  setSelectedChat(chat);
+                  setTempMessage([]);
+                }}
                 className={`flex items-center gap-3 p-3 mb-3 mx-5 ${
                   chat.id === selectedChat?.id
-                    ? "bg-indigo-300"
-                    : "bg-slate-100 hover:bg-indigo-200"
+                    ? "bg-gradient-to-r from-indigo-300 via-violet-300 to-indigo-400"
+                    : "bg-gradient-to-r from-indigo-50 via-violet-50 to-indigo-100 hover:bg-gradient-to-r hover:from-indigo-200 hover:via-violet-200 hover:to-indigo-300"
                 } rounded-lg shadow  cursor-pointer`}
               >
                 <Avatar className="rounded-full p-1 items-center justify-center cursor-pointer">
@@ -35,7 +38,7 @@ export const ChatList = ({
                     src={
                       chat.users?.some((user) => user.id === -1)
                         ? "/sentia.png"
-                        : (selectedChat?.users?.find(
+                        : (chat?.users?.find(
                             (user) => user.id !== loggedInUser.id
                           )?.dp as string)
                     }

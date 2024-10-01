@@ -157,7 +157,7 @@ const NavBar = ({
               </DropdownMenuTrigger>
 
               <DropdownMenuContent className="p-2 mx-3 mt-1 w-fit text-slate-800">
-                <DropdownMenuLabel className="flex justify-center text-emerald-600 cursor-pointer">
+                <DropdownMenuLabel className="flex justify-center text-center text-emerald-600 cursor-pointer max-w-40">
                   {loggedInUser.name}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />

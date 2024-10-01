@@ -59,17 +59,17 @@ export const ChatSearchBar = () => {
           onChange={handleSearchChange}
           onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
           onFocus={() => users.length > 0 && setShowDropdown(true)}
-          className="w-full pl-9 rounded-full border bg-slate-50 h-10 focus-visible:ring-slate-500"
+          className="w-full pl-9 rounded-full border border-violet-400 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 h-10 focus-visible:ring-violet-200"
         />
       </div>
 
       {showDropdown && users.length > 0 && (
-        <div className="absolute mt-11 w-[90%] p-2 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto z-10">
+        <div className="absolute mt-11 w-[90%] p-2 bg-gradient-to-r from-indigo-50 via-violet-50 to-indigo-100 border rounded-lg shadow-lg max-h-60 overflow-y-auto z-10">
           {users.map((user) => (
             <div
               key={user.id}
               onClick={() => handleChatSelect(user)}
-              className="cursor-pointer p-2 hover:bg-slate-100 flex items-center space-x-3"
+              className="cursor-pointer p-2 hover:bg-gradient-to-r hover:from-indigo-100 hover:via-violet-100 hover:to-indigo-200 hover:rounded-lg flex items-center space-x-3"
             >
               <Avatar className="rounded-full p-1 items-center justify-center cursor-pointer">
                 <AvatarImage
