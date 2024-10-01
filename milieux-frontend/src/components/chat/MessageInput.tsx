@@ -32,7 +32,6 @@ export const MessageInput = ({
     triggerRefresh,
     setTriggerRefresh,
     stompClient,
-    tempMessage,
     setTempMessage,
     chatPersonality,
   } = useChatContext();
@@ -153,11 +152,18 @@ export const MessageInput = ({
     }
   };
 
-  const notifyOtherUsers = (chatId: number | undefined | null) => {
+  const notifyOtherUsers = (
+    chatId: number | undefined | null,
+    data: {
+      user: z.infer<typeof UserSchema>;
+      text: string;
+      imagePath: string | null;
+    }
+  ) => {
     if (stompClient && stompClient.active && stompClient.connected) {
       stompClient!.publish({
         destination: `/app/chat/${chatId}`,
-        body: chatId?.toString(),
+        body: JSON.stringify(data),
       });
     } else {
       toast.error(
@@ -213,7 +219,11 @@ export const MessageInput = ({
       if (isChatWithAi && streamedText) {
         await sendAiStreamingMessage(streamedText);
       } else {
-        notifyOtherUsers(selectedChat?.id);
+        notifyOtherUsers(selectedChat?.id, {
+          user: loggedInUser,
+          text,
+          imagePath,
+        });
       }
     } catch (error) {
       console.error("Error occurred: " + error);

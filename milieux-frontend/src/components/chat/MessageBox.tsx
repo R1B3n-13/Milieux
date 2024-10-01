@@ -36,10 +36,9 @@ export const MessageBox = ({
   const [messages, setMessages] = useState<z.infer<typeof MessageSchema>[]>([]);
   const {
     selectedChat,
-    triggerRefresh,
-    setTriggerRefresh,
     setStompClient,
     tempMessage,
+    setTempMessage,
     chatPersonality,
     setChatPersonality,
   } = useChatContext();
@@ -49,10 +48,12 @@ export const MessageBox = ({
   const subscribeToChat = (client: Client) => {
     if (selectedChat?.id) {
       client.subscribe(`/topic/chat/${selectedChat.id}`, (message) => {
-        if (message.body === selectedChat.id?.toString()) {
-          setTriggerRefresh(!triggerRefresh);
-          revalidateMessage();
+        const parsedMessage = JSON.parse(message.body);
+        if (parsedMessage.user.id !== loggedInUser.id) {
+          setTempMessage((prevMessages) => [...prevMessages, parsedMessage]);
         }
+
+        revalidateMessage();
       });
     }
   };
@@ -215,7 +216,7 @@ export const MessageBox = ({
               )}
 
               <div
-                className={`mb-2 p-2 max-w-[30rem] min-w-14 min-h-10 flex flex-col ${
+                className={`mb-2 p-2 max-w-[32rem] min-w-14 min-h-10 flex flex-col ${
                   message.user?.id === loggedInUser.id
                     ? "bg-white text-black ml-auto rounded-br-none"
                     : "text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 rounded-bl-none"
@@ -263,7 +264,7 @@ export const MessageBox = ({
               )}
 
               <div
-                className={`mb-2 p-2 max-w-[30rem] min-w-14 min-h-10 flex flex-col ${
+                className={`mb-2 p-2 max-w-[32rem] min-w-14 min-h-10 flex flex-col ${
                   message.user?.id === loggedInUser.id
                     ? "bg-white text-black ml-auto rounded-br-none"
                     : "text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 rounded-bl-none"
