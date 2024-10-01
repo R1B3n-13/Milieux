@@ -6,12 +6,15 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import com.milieux.dtos.requests.RealTimeChatRequestDto;
+
 @Controller
 public class RealTimeChatController {
 
 	@MessageMapping("/chat/{chatId}")
 	@SendTo("/topic/chat/{chatId}")
-	public String sendToUser(@Payload String message, @DestinationVariable String chatId) {
+	public RealTimeChatRequestDto sendToUser(@Payload RealTimeChatRequestDto message,
+			@DestinationVariable String chatId) {
 
 		return message;
 	}
