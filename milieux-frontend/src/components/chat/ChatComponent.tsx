@@ -31,7 +31,7 @@ const ChatComponent = async () => {
         />
         <div className="flex flex-col flex-grow">
           <MessageBox loggedInUser={loggedInUserResponse.user} />
-          <MessageInput />
+          <MessageInput loggedInUser={loggedInUserResponse.user} />
         </div>
       </ChatContextProvider>
     </div>

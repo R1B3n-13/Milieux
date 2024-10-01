@@ -4,6 +4,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { z } from "zod";
 import ChatSchema from "@/schemas/chatSchema";
 import { Client } from "@stomp/stompjs";
+import UserSchema from "@/schemas/userSchema";
 
 const ChatContext = createContext<{
   selectedChat: z.infer<typeof ChatSchema> | null;
@@ -14,10 +15,20 @@ const ChatContext = createContext<{
   setTriggerRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   stompClient: Client | undefined;
   setStompClient: React.Dispatch<React.SetStateAction<Client | undefined>>;
-  aiStreamingText: string;
-  setAiStreamingText: React.Dispatch<React.SetStateAction<string>>;
-  tempMessage: string[];
-  setTempMessage: React.Dispatch<React.SetStateAction<string[]>>;
+  tempMessage: {
+    user: z.infer<typeof UserSchema>;
+    text: string | null | undefined;
+    imagePath: string | null | undefined;
+  }[];
+  setTempMessage: React.Dispatch<
+    React.SetStateAction<
+      {
+        user: z.infer<typeof UserSchema>;
+        text: string | null | undefined;
+        imagePath: string | null | undefined;
+      }[]
+    >
+  >;
   chatPersonality: string | undefined;
   setChatPersonality: React.Dispatch<React.SetStateAction<string | undefined>>;
 } | null>(null);
@@ -28,8 +39,14 @@ export function ChatContextProvider({ children }: { children: ReactNode }) {
   > | null>(null);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const [stompClient, setStompClient] = useState<Client | undefined>(undefined);
-  const [aiStreamingText, setAiStreamingText] = useState("");
-  const [tempMessage, setTempMessage] = useState<string[]>([]);
+  const [tempMessage, setTempMessage] = useState<
+    {
+      user: z.infer<typeof UserSchema>;
+      text: string | null | undefined;
+      imagePath: string | null | undefined;
+    }[]
+  >([]);
+
   const [chatPersonality, setChatPersonality] = useState<string | undefined>(
     undefined
   );
@@ -43,8 +60,6 @@ export function ChatContextProvider({ children }: { children: ReactNode }) {
         setTriggerRefresh,
         stompClient,
         setStompClient,
-        aiStreamingText,
-        setAiStreamingText,
         tempMessage,
         setTempMessage,
         chatPersonality,

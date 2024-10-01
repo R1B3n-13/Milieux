@@ -17,8 +17,13 @@ import { z } from "zod";
 import { getChatMessages } from "@/services/chatService";
 import { readStreamableValue } from "ai/rsc";
 import { chatWithSentiaAi } from "@/actions/aiActions";
+import UserSchema from "@/schemas/userSchema";
 
-export const MessageInput = () => {
+export const MessageInput = ({
+  loggedInUser,
+}: {
+  loggedInUser: z.infer<typeof UserSchema>;
+}) => {
   const [messages, setMessages] = useState<z.infer<typeof MessageSchema>[]>([]);
   const [text, setText] = useState<string>("");
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
@@ -27,7 +32,7 @@ export const MessageInput = () => {
     triggerRefresh,
     setTriggerRefresh,
     stompClient,
-    setAiStreamingText,
+    tempMessage,
     setTempMessage,
     chatPersonality,
   } = useChatContext();
@@ -95,10 +100,37 @@ export const MessageInput = () => {
       throw new Error("AI response generation failed.");
     }
 
+    const dummyUser = {
+      id: -1,
+      isBusiness: null,
+      isStoreLandingPage: null,
+      name: null,
+      email: null,
+      dp: null,
+      banner: null,
+      status: null,
+      intro: null,
+      address: null,
+      userType: null,
+      followers: null,
+      followings: null,
+      createdAt: null,
+    };
+
+    setTempMessage((prevMessages) => [
+      ...prevMessages,
+      { user: dummyUser, text: "Thinking...", imagePath: null },
+    ]);
+
     let textStream = "";
     for await (const delta of readStreamableValue(result)) {
       textStream += delta;
-      setAiStreamingText(textStream);
+
+      setTempMessage((prevMessages) => {
+        const updatedMessages = [...prevMessages];
+        updatedMessages[updatedMessages.length - 1].text = textStream;
+        return updatedMessages;
+      });
     }
 
     return textStream;
@@ -117,10 +149,7 @@ export const MessageInput = () => {
     });
 
     if (!response.success) {
-      throw new Error("Failed to send AI message.");
-    } else {
-      setAiStreamingText("");
-      setTempMessage([]);
+      throw new Error("Failed to persist AI message.");
     }
   };
 
@@ -141,8 +170,6 @@ export const MessageInput = () => {
     setIsLoading(false);
     setText("");
     setImage(null);
-    setTempMessage([]);
-    setAiStreamingText("");
     revalidateMessage();
   };
 
@@ -154,16 +181,10 @@ export const MessageInput = () => {
     try {
       const imagePath = await uploadImageIfPresent(image);
 
-      setTempMessage((prevMessages) => {
-        const updatedMessages = [...prevMessages];
-
-        updatedMessages[0] = text;
-        if (imagePath) {
-          updatedMessages[1] = imagePath;
-        }
-
-        return updatedMessages;
-      });
+      setTempMessage((prevMessages) => [
+        ...prevMessages,
+        { user: loggedInUser, text, imagePath },
+      ]);
 
       const isChatWithAi = selectedChat?.users?.some((user) => user.id === -1);
 

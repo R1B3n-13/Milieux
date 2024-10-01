@@ -39,7 +39,6 @@ export const MessageBox = ({
     triggerRefresh,
     setTriggerRefresh,
     setStompClient,
-    aiStreamingText,
     tempMessage,
     chatPersonality,
     setChatPersonality,
@@ -114,7 +113,7 @@ export const MessageBox = ({
       }
     };
     fetchChatMessages();
-  }, [selectedChat, triggerRefresh]);
+  }, [selectedChat]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -192,7 +191,9 @@ export const MessageBox = ({
             <div className="flex items-center justify-center h-full text-violet-900">
               <div className="text-[15rem] flex-col items-center justify-center">
                 <ChatSlashedFilledIcon />
-                <p className="text-4xl text-violet-900 font-semibold">No chat selected</p>
+                <p className="text-4xl text-violet-900 font-semibold">
+                  No chat selected
+                </p>
               </div>
             </div>
           )}
@@ -244,44 +245,53 @@ export const MessageBox = ({
             </div>
           ))}
 
-          {tempMessage[0] && (
-            <div className="flex items-center gap-3">
-              <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-white text-black ml-auto rounded-br-none rounded-lg">
-                {tempMessage[1] && (
+          {tempMessage.map((message, index) => (
+            <div className="flex items-center gap-3" key={index}>
+              {message.user.id !== loggedInUser.id && (
+                <Avatar className="rounded-full bg-gray-200 w-8 h-8 items-center justify-center cursor-pointer">
+                  <AvatarImage
+                    src={
+                      message.user?.id === -1
+                        ? "/sentia.png"
+                        : (message.user?.dp as string)
+                    }
+                  />
+                  <AvatarFallback className="text-4xl text-gray-500">
+                    <AvatarIcon />
+                  </AvatarFallback>
+                </Avatar>
+              )}
+
+              <div
+                className={`mb-2 p-2 max-w-[30rem] min-w-14 min-h-10 flex flex-col ${
+                  message.user?.id === loggedInUser.id
+                    ? "bg-white text-black ml-auto rounded-br-none"
+                    : "text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 rounded-bl-none"
+                } rounded-lg`}
+              >
+                {message.imagePath && (
                   <Image
-                    src={tempMessage[1] as string}
+                    src={message.imagePath as string}
                     alt=""
                     width={350}
                     height={350}
                     className="rounded-lg mb-2"
                   />
                 )}
-                <MarkdownRenderer text={tempMessage[0]} />
+                <div></div>
+                <MarkdownRenderer text={message.text || ""} />
               </div>
 
-              <Avatar className="rounded-full bg-gray-200 w-8 h-8 items-center justify-center cursor-pointer">
-                <AvatarImage src={loggedInUser.dp as string} />
-                <AvatarFallback className="text-4xl text-gray-500">
-                  <AvatarIcon />
-                </AvatarFallback>
-              </Avatar>
+              {message.user?.id === loggedInUser.id && (
+                <Avatar className="rounded-full bg-gray-200 w-8 h-8 items-center justify-center cursor-pointer">
+                  <AvatarImage src={message.user?.dp as string} />
+                  <AvatarFallback className="text-4xl text-gray-500">
+                    <AvatarIcon />
+                  </AvatarFallback>
+                </Avatar>
+              )}
             </div>
-          )}
-
-          {aiStreamingText && (
-            <div className="flex items-center gap-3">
-              <Avatar className="rounded-full bg-gray-200 w-8 h-8 items-center justify-center cursor-pointer">
-                <AvatarImage src="/sentia.png" />
-                <AvatarFallback className="text-4xl text-gray-500">
-                  <AvatarIcon />
-                </AvatarFallback>
-              </Avatar>
-
-              <div className="mb-2 p-2 max-w-[25rem] min-w-14 min-h-10 flex flex-col bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 text-white rounded-bl-none rounded-lg">
-                <MarkdownRenderer text={aiStreamingText} />
-              </div>
-            </div>
-          )}
+          ))}
         </div>
       </ScrollArea>
     </>

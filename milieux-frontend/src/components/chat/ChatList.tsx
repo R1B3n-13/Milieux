@@ -14,7 +14,7 @@ export const ChatList = ({
   chatList: z.infer<typeof ChatSchema>[];
   loggedInUser: z.infer<typeof UserSchema>;
 }) => {
-  const { selectedChat, setSelectedChat } = useChatContext();
+  const { selectedChat, setSelectedChat, setTempMessage } = useChatContext();
 
   return (
     <div className="flex-grow overflow-y-auto p-2">
@@ -23,7 +23,10 @@ export const ChatList = ({
           <div key={chat.id}>
             {(chat.lastText || chat.id === selectedChat?.id) && (
               <div
-                onClick={() => setSelectedChat(chat)}
+                onClick={() => {
+                  setSelectedChat(chat);
+                  setTempMessage([]);
+                }}
                 className={`flex items-center gap-3 p-3 mb-3 mx-5 ${
                   chat.id === selectedChat?.id
                     ? "bg-gradient-to-r from-indigo-300 via-violet-300 to-indigo-400"
