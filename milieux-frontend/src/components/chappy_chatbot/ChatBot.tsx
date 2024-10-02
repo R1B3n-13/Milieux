@@ -18,6 +18,11 @@ import { defaultSystemInstruction } from "./items/defaultSystemInstruction";
 import { defaultSystemInstructionForTool } from "./items/defaultSystemInstructionForTool";
 import AiToolSchema from "@/schemas/aiToolSchema";
 import ChatBotSideBar from "./ChatBotSideBar";
+import {
+  ChatBotContextProvider,
+  useChatBotContext,
+} from "./ChatBotContextProvider";
+import ChatSlashedFilledIcon from "../icons/ChatSlashedFilledIcon";
 
 const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [query, setQuery] = useState("");
@@ -42,6 +47,8 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [toolSystemInstruction, setToolSystemInstruction] = useState(
     defaultSystemInstructionForTool
   );
+
+  const { selectedChatSession } = useChatBotContext();
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -180,50 +187,65 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
               ref={scrollAreaRef}
               className="border border-violet-300 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 rounded-e-lg py-7 px-20 w-full h-full overflow-y-auto z-10 relative"
             >
-              {chatHistory.map((chat, index) => (
-                <div key={index} className="mb-4">
-                  <div className="flex justify-end">
-                    {chat.role === "user" && (
-                      <div className="flex items-start gap-3 text-sm text-black bg-white py-2 px-4 rounded-lg w-fit max-w-[40rem] break-words">
-                        <div className="text-2xl mt-[0.1rem] text-slate-800 bg-violet-100 p-1 rounded-full">
-                          <PersonLineIcon />
+              {!selectedChatSession && (
+                <div className="flex items-center justify-center text-violet-900 h-full">
+                  <div className="text-[15rem] flex-col items-center justify-center h-full">
+                    <ChatSlashedFilledIcon />
+                    <p className="text-4xl text-violet-900 font-semibold">
+                      No chat selected
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {selectedChatSession &&
+                chatHistory.map((chat, index) => (
+                  <div key={index} className="mb-4">
+                    <div className="flex justify-end">
+                      {chat.role === "user" && (
+                        <div className="flex items-start gap-3 text-sm text-black bg-white py-2 px-4 rounded-lg w-fit max-w-[40rem] break-words">
+                          <div className="text-2xl mt-[0.1rem] text-slate-800 bg-violet-100 p-1 rounded-full">
+                            <PersonLineIcon />
+                          </div>
+                          <MarkdownRenderer text={chat.parts} />
                         </div>
-                        <MarkdownRenderer text={chat.parts} />
+                      )}
+                    </div>
+                    {chat.role === "model" && (
+                      <div className="flex items-start gap-3 text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 max-w-[40rem] text-sm py-2 px-4 rounded-lg w-fit mt-1 break-words">
+                        <div className="text-2xl mt-[0.1rem] text-black bg-gray-50 p-1 rounded-full">
+                          <BotLineIcon />
+                        </div>
+                        {chat.parts ? (
+                          <MarkdownRenderer text={chat.parts} />
+                        ) : (
+                          <MarkdownRenderer text={"Thinking..."} />
+                        )}
                       </div>
                     )}
                   </div>
-                  {chat.role === "model" && (
-                    <div className="flex items-start gap-3 text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 max-w-[40rem] text-sm py-2 px-4 rounded-lg w-fit mt-1 break-words">
-                      <div className="text-2xl mt-[0.1rem] text-black bg-gray-50 p-1 rounded-full">
-                        <BotLineIcon />
-                      </div>
-                      {chat.parts ? (
-                        <MarkdownRenderer text={chat.parts} />
-                      ) : (
-                        <MarkdownRenderer text={"Thinking..."} />
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
+                ))}
             </ScrollArea>
-            <div className="relative flex items-center justify-center p-4">
-              <TextArea
-                className="-translate-y-20 z-20 flex items-center justify-center pl-5 pr-11 py-[0.9rem] resize-none rounded-full min-h-0 h-12 bg-gradient-to-r from-indigo-50 via-violet-50 to-indigo-100 focus-visible:ring-violet-500 border-none no-scrollbar max-h-40 overflow-y-auto"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask Chappy about the business..."
-              />
-              <Button
-                onClick={handleSubmit}
-                disabled={isLoading}
-                className="-translate-y-[6.1rem] z-20 absolute right-7 top-1/2 p-0 transform text-indigo-700 hover:bg-inherit hover:text-indigo-500"
-                variant="ghost"
-              >
-                {isLoading ? <Loading text="" /> : <SendFilledIcon />}
-              </Button>
-            </div>
+
+            {selectedChatSession && (
+              <div className="relative flex items-center justify-center p-4">
+                <TextArea
+                  className="-translate-y-20 z-20 flex items-center justify-center pl-5 pr-11 py-[0.9rem] resize-none rounded-full min-h-0 h-12 bg-gradient-to-r from-indigo-50 via-violet-50 to-indigo-100 focus-visible:ring-violet-500 border-none no-scrollbar max-h-40 overflow-y-auto"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask Chappy about the business..."
+                />
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                  className="-translate-y-[6.1rem] z-20 absolute right-7 top-1/2 p-0 transform text-indigo-700 hover:bg-inherit hover:text-indigo-500"
+                  variant="ghost"
+                >
+                  {isLoading ? <Loading text="" /> : <SendFilledIcon />}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       ) : (

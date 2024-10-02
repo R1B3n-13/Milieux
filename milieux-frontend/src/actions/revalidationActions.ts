@@ -57,3 +57,15 @@ export async function revalidateAiToolUpdate() {
 export async function revalidateStore() {
   revalidateTag("createStore");
 }
+
+export async function revalidateAiChatSessions() {
+  revalidateTag("createAiChatSession");
+}
+
+export async function revalidateAiChatSessionUpdate() {
+  revalidateTag("updateAiChatSession");
+}
+
+export async function revalidateAiChatSessionDelete() {
+  revalidateTag("deleteAiChatSession");
+}
