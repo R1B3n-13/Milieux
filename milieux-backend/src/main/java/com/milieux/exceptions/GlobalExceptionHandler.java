@@ -66,6 +66,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
 	}
 
+	@ExceptionHandler(AiChatSessionNotFoundException.class)
+	public ResponseEntity<BaseResponseDto> handleAiChatSessionNotFoundException(AiChatSessionNotFoundException ex) {
+
+		return new ResponseEntity<>(new BaseResponseDto(404, false, ex.getMessage()), HttpStatus.NOT_FOUND);
+	}
+
 	@ExceptionHandler(AuthTokenNotFoundException.class)
 	public ResponseEntity<BaseResponseDto> handleAuthTokenNotFoundException(AuthTokenNotFoundException ex) {
 
