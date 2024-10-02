@@ -72,7 +72,7 @@ public class AiChatSessionController {
 	@DeleteMapping("/delete/{aiChatSessionId}")
 	public ResponseEntity<BaseResponseDto> deleteAiChatSession(@PathVariable Long aiChatSessionId) {
 
-		BaseResponseDto responseDto = userService.deleteUser(aiChatSessionId);
+		BaseResponseDto responseDto = aiChatSessionService.deleteAiChatSession(aiChatSessionId);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseDto);
 	}

@@ -88,7 +88,7 @@ public class AiChatSessionServiceImpl implements AiChatSessionService {
 	public BaseResponseDto deleteAiChatSession(Long aiChatSessionId) {
 
 		AiChatSession existingAiChatSession = aiChatSessionRepository.findById(aiChatSessionId)
-				.orElseThrow(() -> new AiChatSessionNotFoundException("No user present with id: " + aiChatSessionId));
+				.orElseThrow(() -> new AiChatSessionNotFoundException("No session found with id: " + aiChatSessionId));
 
 		aiChatSessionRepository.delete(existingAiChatSession);
 
