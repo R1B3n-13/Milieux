@@ -125,7 +125,7 @@ const PdfSubmissionField = ({
   };
 
   return (
-    <>
+    <div className="min-h-fit">
       <div
         onClick={() => setIsSettingsExpanded(!isSettingsExpanded)}
         className="flex items-center gap-1 text-slate-800 font-semibold mb-4 cursor-pointer"
@@ -140,7 +140,7 @@ const PdfSubmissionField = ({
         )}
       </div>
       {isSettingsExpanded && (
-        <div className="h-[80vh] w-full grid grid-cols-2 gap-4 mb-14">
+        <div className="h-fit w-full grid grid-cols-2 gap-4 mb-4">
           <div className="bg-white p-6 rounded-lg shadow-md w-full col-span-1">
             <h1 className="flex justify-center text-xl text-slate-800 font-semibold mb-6">
               Train Your Custom Chatbot
@@ -342,7 +342,7 @@ const PdfSubmissionField = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

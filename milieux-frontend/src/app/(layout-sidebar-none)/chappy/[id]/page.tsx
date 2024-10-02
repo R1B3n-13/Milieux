@@ -20,11 +20,9 @@ const ChappyPage = async ({ params }: { params: { id: number } }) => {
   }
 
   return (
-    <div className="px-10 py-4 min-h-[94vh]">
+    <div className="px-10 py-4 min-h-screen">
       {user.id === loggedInUser.id && user.isBusiness && (
-        <div>
-          <PdfSubmissionField userId={user.id} />
-        </div>
+        <PdfSubmissionField userId={user.id} />
       )}
       {user.isBusiness && (
         <div className="h-[85vh]">
