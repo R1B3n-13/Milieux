@@ -79,7 +79,7 @@ const Persona = async ({ id }: { id: number | null }) => {
                       alt=""
                       width={1000}
                       height={1000}
-                      className="object-cover w-full h-full border-[6px] bg-zinc-500 border-zinc-100"
+                      className="object-cover w-full h-full rounded-full border-[6px] bg-zinc-500 border-zinc-100"
                     />
                   </EnlargeableImageWrapper>
                 )}

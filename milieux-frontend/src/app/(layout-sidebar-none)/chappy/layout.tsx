@@ -7,7 +7,7 @@ const ChappyLayout = ({ children }: { children: React.ReactNode }) => {
         <NavBarContainer />
       </nav>
 
-      <div className="h-fit">{children}</div>
+      <div className="h-screen">{children}</div>
     </>
   );
 };

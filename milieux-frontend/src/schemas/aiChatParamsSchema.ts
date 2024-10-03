@@ -8,7 +8,7 @@ const AiChatParamsSchema = z.object({
   topP: z.number().nullable().optional(),
   topK: z.number().nullable().optional(),
   systemInstruction: z.string().nullable().optional(),
-  users: z.array(UserSchema).nullable().optional(),
+  user: UserSchema.nullable().optional(),
   createdAt: z
     .string()
     .transform((str) => new Date(str))
