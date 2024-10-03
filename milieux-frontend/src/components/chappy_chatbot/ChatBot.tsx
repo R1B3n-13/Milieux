@@ -218,7 +218,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
           <div className="w-full h-full">
             <ScrollArea
               ref={scrollAreaRef}
-              className="border border-violet-300 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 rounded-e-lg py-7 px-20 w-full h-full overflow-y-auto z-10 relative"
+              className="border border-violet-300 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 rounded-e-lg pt-5 pb-20 px-20 w-full h-full overflow-y-auto z-10 relative"
             >
               {!selectedChatSession && (
                 <div className="flex items-center justify-center text-violet-900 h-[70vh]">
