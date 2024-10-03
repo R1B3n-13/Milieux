@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.milieux.dtos.AiChatSessionDto;
+import com.milieux.dtos.ChatHistoryItemDto;
 import com.milieux.dtos.requests.AiChatSessionRequestDto;
 import com.milieux.dtos.responses.AiChatSessionHistoryResponseDto;
 import com.milieux.dtos.responses.AiChatSessionListResponseDto;
@@ -16,6 +17,7 @@ import com.milieux.exceptions.AiChatSessionNotFoundException;
 import com.milieux.exceptions.UserNotFoundException;
 import com.milieux.models.AiChatSession;
 import com.milieux.models.User;
+import com.milieux.models.embeddables.ChatHistoryItem;
 import com.milieux.repositories.AiChatSessionRepository;
 import com.milieux.repositories.UserRepository;
 import com.milieux.services.AiChatSessionService;
@@ -65,8 +67,13 @@ public class AiChatSessionServiceImpl implements AiChatSessionService {
 		AiChatSession existingAiChatSession = aiChatSessionRepository.findById(aiChatSessionId)
 				.orElseThrow(() -> new AiChatSessionNotFoundException("No session found with id: " + aiChatSessionId));
 
-		return new AiChatSessionHistoryResponseDto(200, true, "Ai chat sessions fetched successfully!",
-				existingAiChatSession.getChatHistory());
+		List<ChatHistoryItem> existingChatHistories = existingAiChatSession.getChatHistory();
+
+		List<ChatHistoryItemDto> dtos = existingChatHistories.stream()
+				.map(chatHistory -> modelMapper.map(chatHistory, ChatHistoryItemDto.class))
+				.collect(Collectors.toList());
+
+		return new AiChatSessionHistoryResponseDto(200, true, "Ai chat sessions fetched successfully!", dtos);
 	}
 
 	@Override
@@ -75,9 +82,13 @@ public class AiChatSessionServiceImpl implements AiChatSessionService {
 		AiChatSession existingAiChatSession = aiChatSessionRepository.findById(aiChatSessionId)
 				.orElseThrow(() -> new AiChatSessionNotFoundException("No session found with id: " + aiChatSessionId));
 
-		List<Object> existingChatHistory = existingAiChatSession.getChatHistory();
+		List<ChatHistoryItem> existingChatHistories = existingAiChatSession.getChatHistory();
 
-		existingChatHistory.addAll(requestDto.getChatHistory());
+		List<ChatHistoryItem> newChatHistories = requestDto.getChatHistory().stream()
+				.map(dto -> modelMapper.map(dto, ChatHistoryItem.class))
+				.collect(Collectors.toList());
+
+		existingChatHistories.addAll(newChatHistories);
 
 		aiChatSessionRepository.save(existingAiChatSession);
 

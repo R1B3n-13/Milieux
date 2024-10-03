@@ -8,6 +8,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.milieux.models.embeddables.ChatHistoryItem;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -44,7 +45,7 @@ public class AiChatSession {
 	@Column(name = "ai_chat_history")
 	@JdbcTypeCode(SqlTypes.JSON)
 	@JsonIgnore
-	private List<Object> chatHistory = new ArrayList<>();
+	private List<ChatHistoryItem> chatHistory = new ArrayList<>();
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
