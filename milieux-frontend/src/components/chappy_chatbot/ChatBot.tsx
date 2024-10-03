@@ -27,6 +27,9 @@ import { getAiChatSessionHistory } from "@/services/aiChatSessionService";
 import { updateAiChatSessionHistory } from "@/actions/aiChatSessionsAction";
 import { toast } from "sonner";
 import { revalidateAiChatSessionUpdate } from "@/actions/revalidationActions";
+import { useVoiceToText } from "react-speakup";
+import MicLineIcon from "../icons/MicLineIcon";
+import MicOffLineIcon from "../icons/MicOffLineIcon";
 
 const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [query, setQuery] = useState("");
@@ -52,7 +55,10 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     defaultSystemInstructionForTool
   );
 
+  const [isRecording, setIsRecording] = useState(false);
+
   const { selectedChatSession, triggerRefresh } = useChatBotContext();
+  const { startListening, stopListening, transcript, reset } = useVoiceToText();
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -269,6 +275,25 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
                   onKeyDown={handleKeyDown}
                   placeholder="Ask Chappy about the business..."
                 />
+
+                <div
+                  className="text-2xl -translate-y-[5.7rem] z-20 absolute right-16 top-1/2 p-0 transform text-indigo-800 hover:bg-inherit hover:text-indigo-700 cursor-pointer"
+                  onClick={() => {
+                    if (isRecording) {
+                      stopListening();
+                      setQuery(transcript);
+                      console.log(transcript);
+                      reset();
+                    } else {
+                      setQuery("");
+                      startListening();
+                    }
+                    setIsRecording(!isRecording);
+                  }}
+                >
+                  {isRecording ? <MicOffLineIcon /> : <MicLineIcon />}
+                </div>
+
                 <Button
                   onClick={handleSubmit}
                   disabled={isLoading}

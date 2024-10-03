@@ -151,7 +151,7 @@ const PdfSubmissionField = ({
             </h1>
 
             <div className="flex items-center mb-4 text-slate-800 text-sm">
-              <p className="font-semibold mr-1">Current Pdf : </p>
+              <p className="font-semibold mr-1">Current Knowledge Base : </p>
               <p className="text-amber-700">{currentPdfName}</p>
             </div>
 
