@@ -19,6 +19,7 @@ import {
 import CircleQuestionIcon from "../icons/CircleQuestionIcon";
 import { defaultSystemInstructionForTool } from "./items/defaultSystemInstructionForTool";
 import AiToolSchema from "@/schemas/aiToolSchema";
+import { useChatBotContext } from "./ChatBotContextProvider";
 
 const ToolSubmissionField = ({
   userId,
@@ -35,6 +36,8 @@ const ToolSubmissionField = ({
   const [systemInstruction, setSystemInstruction] = useState(
     defaultSystemInstructionForTool
   );
+
+  const { triggerRefresh, setTriggerRefresh } = useChatBotContext();
 
   let aiToolParams: z.infer<typeof AiToolSchema> = {
     temperature: 1,
@@ -102,6 +105,8 @@ const ToolSubmissionField = ({
         ? "Successfully created AI tool!"
         : "AI tools updated successfully!"
     );
+
+    setTriggerRefresh(!triggerRefresh);
     setIsLoading(false);
     setFile(null);
     revalidateAiTool();

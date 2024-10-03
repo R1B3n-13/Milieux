@@ -23,6 +23,10 @@ import {
   useChatBotContext,
 } from "./ChatBotContextProvider";
 import ChatSlashedFilledIcon from "../icons/ChatSlashedFilledIcon";
+import { getAiChatSessionHistory } from "@/services/aiChatSessionService";
+import { updateAiChatSessionHistory } from "@/actions/aiChatSessionsAction";
+import { toast } from "sonner";
+import { revalidateAiChatSessionUpdate } from "@/actions/revalidationActions";
 
 const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [query, setQuery] = useState("");
@@ -48,7 +52,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     defaultSystemInstructionForTool
   );
 
-  const { selectedChatSession } = useChatBotContext();
+  const { selectedChatSession, triggerRefresh } = useChatBotContext();
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +62,18 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     topK: 60,
     systemInstruction: defaultSystemInstruction,
   };
+
+  useEffect(() => {
+    const getChatSessionHistory = async () => {
+      const response = await getAiChatSessionHistory(selectedChatSession?.id);
+
+      if (response.success) {
+        setChatHistory(response.chatHistory);
+      }
+    };
+
+    getChatSessionHistory();
+  }, [selectedChatSession]);
 
   useEffect(() => {
     const initAiChatParams = async () => {
@@ -78,7 +94,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     };
 
     initAiChatParams();
-  }, []);
+  }, [triggerRefresh]);
 
   let aiToolParams: z.infer<typeof AiToolSchema> = {
     temperature: 1,
@@ -106,7 +122,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     };
 
     initAiTool();
-  }, []);
+  }, [triggerRefresh]);
 
   const handleSubmit = async () => {
     if (query.trim() === "" || !userId) return;
@@ -133,8 +149,6 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       { role: "model", parts: "" },
     ]);
 
-    setQuery("");
-
     const formData = new FormData();
     formData.append("request", JSON.stringify(data));
 
@@ -142,7 +156,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       formData.append("tool_file", new File([toolFile], "functions_n_schemas"));
     }
 
-    const { result } = await askCustomChatbot(formData);
+    const { result, success } = await askCustomChatbot(formData);
 
     let textStream = "";
 
@@ -156,6 +170,25 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       });
     }
 
+    if (success) {
+      const historyData: { role: "user" | "model"; parts: string }[] = [
+        { role: "user", parts: query },
+        { role: "model", parts: textStream },
+      ];
+
+      const response = await updateAiChatSessionHistory(
+        { chatHistory: historyData },
+        selectedChatSession?.id
+      );
+
+      if (!response.success) {
+        toast.error("Couldn't persist chat session history.");
+      } else {
+        revalidateAiChatSessionUpdate();
+      }
+    }
+
+    setQuery("");
     setIsLoading(false);
   };
 
@@ -188,11 +221,11 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
               className="border border-violet-300 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 rounded-e-lg py-7 px-20 w-full h-full overflow-y-auto z-10 relative"
             >
               {!selectedChatSession && (
-                <div className="flex items-center justify-center text-violet-900 h-full">
-                  <div className="text-[15rem] flex-col items-center justify-center h-full">
+                <div className="flex items-center justify-center text-violet-900 h-[70vh]">
+                  <div className="text-[15rem] flex flex-col items-center justify-center h-full">
                     <ChatSlashedFilledIcon />
-                    <p className="text-4xl text-violet-900 font-semibold">
-                      No chat selected
+                    <p className="text-3xl font-semibold">
+                      No session selected
                     </p>
                   </div>
                 </div>
