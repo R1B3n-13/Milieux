@@ -35,7 +35,7 @@ interface AddProductProps {
 const AddProduct: React.FC<AddProductProps> = ({ refreshProducts }) => {
   const { storeInfo, authToken } = useStoreContext();
   const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
-const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8082/api";
+const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
 

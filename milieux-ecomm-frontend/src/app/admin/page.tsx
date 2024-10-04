@@ -32,7 +32,7 @@ const Admin: React.FC = () => {
   const [isAddItemClicked, setIsAddItemClicked] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
-  const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8082/api";
+  const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
   const [totalOrders, setTotalOrders] = useState(0);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [showOrders, setShowOrders] = useState(false);
