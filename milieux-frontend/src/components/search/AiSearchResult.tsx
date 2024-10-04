@@ -1,4 +1,4 @@
-import { getQueryResponse } from "@/actions/aiActions";
+import { getQueryResponse, getVisualSearchResponse } from "@/actions/aiActions";
 import PostSchema from "@/schemas/postSchema";
 import { getPostsByIds } from "@/services/searchService";
 import { z } from "zod";
@@ -6,8 +6,17 @@ import PostCard from "../common/PostCard";
 import { getSavedPosts } from "@/services/postService";
 import { getUserFromAuthToken } from "@/services/userService";
 
-const AiSearchResult = async ({ query }: { query: string }) => {
-  const searchResponsePromise = getQueryResponse({ query });
+const AiSearchResult = async ({
+  query,
+  image_url,
+}: {
+  query: string;
+  image_url: string;
+}) => {
+  const searchResponsePromise =
+    image_url.trim() === ""
+      ? getQueryResponse({ query })
+      : getVisualSearchResponse({ query, image_url });
   const savedPostResponsePromise = getSavedPosts();
   const loggedInUserResponsePromise = getUserFromAuthToken();
 

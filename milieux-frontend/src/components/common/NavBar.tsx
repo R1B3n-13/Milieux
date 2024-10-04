@@ -116,6 +116,7 @@ const NavBar = ({
       }
 
       setQuery("");
+      setSelectedImage(null);
       setIsLoading(false);
     }
   };
