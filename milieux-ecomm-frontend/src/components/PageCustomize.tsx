@@ -25,7 +25,8 @@ const PageCustomize = () => {
   const { storeInfo, setStoreInfo, authToken, loggedUserInfo } =
     useStoreContext();
   const { toast } = useToast();
-  const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
+  const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
+const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8082/api";
 
   const [newStoreName, setNewStoreName] = useState<string>("");
   const [newStoreBanner, setNewStoreBanner] = useState<string>("");

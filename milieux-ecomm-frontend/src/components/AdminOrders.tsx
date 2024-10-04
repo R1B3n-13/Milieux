@@ -25,7 +25,8 @@ const Orders = () => {
   const [pendingOrders, setPendingOrders] = useState(false);
   const [shippedOrders, setShippedOrders] = useState(false);
 
-  const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
+  const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
+const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8082/api";
 
   // Fetch orders for the store
   useEffect(() => {
