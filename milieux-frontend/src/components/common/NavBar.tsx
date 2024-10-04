@@ -141,7 +141,7 @@ const NavBar = ({
 
           <div className="flex w-full max-w-sm items-center space-x-2 relative">
             <input
-              id="image-input"
+              id="image-input-search"
               type="file"
               accept="image/*"
               onChange={(event) => handleImageChange(event)}
@@ -154,7 +154,7 @@ const NavBar = ({
                   ? "cursor-pointer text-lime-950"
                   : "pointer-events-none"
               }`}
-              htmlFor="image-input"
+              htmlFor="image-input-search"
             >
               {isAiActive ? <ImageSearchLineIcon /> : <SearchLineIcon />}
             </Label>
