@@ -45,7 +45,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
   const storeId = useSearchParams().get("id");
   const loggedInUserId = loggedUserInfo.id;
   const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
-const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
+  const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
   const [authToken, setAuthToken] = useState<string | undefined>("");
 
   useEffect(() => {
