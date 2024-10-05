@@ -11,7 +11,7 @@ import uploadToCloudinary from "@/app/api/cloudinaryActions";
 
 const CustomizeUiImages = () => {
   const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
-const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
+const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
   const { storeInfo, setStoreInfo, authToken } = useStoreContext();
   const [error, setError] = useState<string | null>(null);
 

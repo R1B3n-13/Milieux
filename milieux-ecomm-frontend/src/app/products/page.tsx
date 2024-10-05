@@ -34,7 +34,7 @@ const Page: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<string>("");
   const [categories, setCategories] = useState<string[]>([]); // To store all unique categories
   const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
-const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
+  const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
   const { setOpen } = useShoppingCart(); // Use the setOpen from the context to open/close cart
   const { getCartItemCount } = useShoppingCart();
 

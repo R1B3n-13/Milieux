@@ -25,7 +25,7 @@ const AllProducts: React.FC<AllProductsProps> = ({ refreshProducts }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
-const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
+const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
 
   const fetchProducts = useCallback(
     async (store_id: number) => {
