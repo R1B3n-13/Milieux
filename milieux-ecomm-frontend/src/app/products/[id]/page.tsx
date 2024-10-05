@@ -51,7 +51,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
 	const [error, setError] = useState<string | null>(null);
 	const [reviews, setReviews] = useState<any[]>([]);
 
-	const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
+	const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
+const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
 
 	const [rating, setRating] = useState(4);
 	const [open, setOpen] = useState(false);

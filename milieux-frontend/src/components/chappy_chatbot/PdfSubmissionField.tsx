@@ -19,6 +19,7 @@ import ExpandLessIcon from "../icons/ExpandLessIcon";
 import ExpandMoreIcon from "../icons/ExpandMoreIcon";
 import CircleQuestionIcon from "../icons/CircleQuestionIcon";
 import ToolSubmissionField from "./ToolSubmissionField";
+import { useChatBotContext } from "./ChatBotContextProvider";
 
 const PdfSubmissionField = ({
   userId,
@@ -36,6 +37,8 @@ const PdfSubmissionField = ({
     defaultSystemInstruction
   );
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
+
+  const { triggerRefresh, setTriggerRefresh } = useChatBotContext();
 
   let aiChatParams: z.infer<typeof AiChatParamsSchema> = {
     temperature: 0.8,
@@ -82,7 +85,7 @@ const PdfSubmissionField = ({
         setIsLoading(false);
         return;
       } else {
-        toast.success("Upload successful!");
+        toast.success("Pdf Uploaded successfully!");
 
         const data = {
           currentPdfName: pdf.name,
@@ -120,6 +123,7 @@ const PdfSubmissionField = ({
       }
     }
 
+    setTriggerRefresh(!triggerRefresh);
     setIsLoading(false);
     setPdf(null);
   };
@@ -147,7 +151,7 @@ const PdfSubmissionField = ({
             </h1>
 
             <div className="flex items-center mb-4 text-slate-800 text-sm">
-              <p className="font-semibold mr-1">Current Pdf : </p>
+              <p className="font-semibold mr-1">Current Knowledge Base : </p>
               <p className="text-amber-700">{currentPdfName}</p>
             </div>
 

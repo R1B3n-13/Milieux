@@ -1,5 +1,5 @@
+import ChatBotSettingsFieldWrapper from "@/components/chappy_chatbot/ChatBotSettingsFieldWrapper";
 import ChatBotWrapper from "@/components/chappy_chatbot/ChatBotWrapper";
-import PdfSubmissionField from "@/components/chappy_chatbot/PdfSubmissionField";
 import UserSchema from "@/schemas/userSchema";
 import { getUserFromAuthToken, getUserById } from "@/services/userService";
 import { z } from "zod";
@@ -22,7 +22,7 @@ const ChappyPage = async ({ params }: { params: { id: number } }) => {
   return (
     <div className="px-10 py-4 min-h-screen">
       {user.id === loggedInUser.id && user.isBusiness && (
-        <PdfSubmissionField userId={user.id} />
+        <ChatBotSettingsFieldWrapper userId={user.id} />
       )}
       {user.isBusiness && (
         <div className="h-[85vh]">

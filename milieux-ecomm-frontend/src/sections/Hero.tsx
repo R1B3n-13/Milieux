@@ -12,7 +12,7 @@ const Hero = () => {
   const router = useRouter();
   const { storeInfo, loggedInUserId } = useStoreContext();
 
-  const socialFrontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+  const socialFrontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
 
   if (!storeInfo) {
     return <p>Loading store info...</p>;

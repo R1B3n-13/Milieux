@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: main-service
+          uri: ${SPRING_CLOUD_GATEWAY_ROUTES_0_URI:http://localhost:8082}
+          predicates:
+            - Path=${SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0:/ecomm/**}
+        - id: ecomm-service
+          uri: ${SPRING_CLOUD_GATEWAY_ROUTES_1_URI:http://localhost:8081}
+          predicates:
+            - Path=${SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0:/**}
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: ${SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS___ALLOWEDORIGINS:*}
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+
+server:
+  port: ${SERVER_PORT:8080}

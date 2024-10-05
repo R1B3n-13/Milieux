@@ -11,7 +11,10 @@ const SearchPage = ({
       {searchParams.forAi === "true" ? (
         <div className="grid grid-cols-9 mt-1">
           <div className="col-span-6 h-screen overflow-y-auto no-scrollbar">
-            <AiSearchResult query={searchParams.query as string} />
+            <AiSearchResult
+              query={searchParams.query as string}
+              image_url={searchParams.imageUrl as string}
+            />
           </div>
 
           <div className="col-span-3" />

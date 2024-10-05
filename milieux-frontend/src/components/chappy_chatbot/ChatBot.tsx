@@ -23,6 +23,13 @@ import {
   useChatBotContext,
 } from "./ChatBotContextProvider";
 import ChatSlashedFilledIcon from "../icons/ChatSlashedFilledIcon";
+import { getAiChatSessionHistory } from "@/services/aiChatSessionService";
+import { updateAiChatSessionHistory } from "@/actions/aiChatSessionsAction";
+import { toast } from "sonner";
+import { revalidateAiChatSessionUpdate } from "@/actions/revalidationActions";
+import { useVoiceToText } from "react-speakup";
+import MicLineIcon from "../icons/MicLineIcon";
+import MicOffLineIcon from "../icons/MicOffLineIcon";
 
 const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
   const [query, setQuery] = useState("");
@@ -48,7 +55,10 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     defaultSystemInstructionForTool
   );
 
-  const { selectedChatSession } = useChatBotContext();
+  const [isRecording, setIsRecording] = useState(false);
+
+  const { selectedChatSession, triggerRefresh } = useChatBotContext();
+  const { startListening, stopListening, transcript, reset } = useVoiceToText();
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +68,18 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     topK: 60,
     systemInstruction: defaultSystemInstruction,
   };
+
+  useEffect(() => {
+    const getChatSessionHistory = async () => {
+      const response = await getAiChatSessionHistory(selectedChatSession?.id);
+
+      if (response.success) {
+        setChatHistory(response.chatHistory);
+      }
+    };
+
+    getChatSessionHistory();
+  }, [selectedChatSession]);
 
   useEffect(() => {
     const initAiChatParams = async () => {
@@ -78,7 +100,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     };
 
     initAiChatParams();
-  }, []);
+  }, [triggerRefresh]);
 
   let aiToolParams: z.infer<typeof AiToolSchema> = {
     temperature: 1,
@@ -106,7 +128,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     };
 
     initAiTool();
-  }, []);
+  }, [triggerRefresh]);
 
   const handleSubmit = async () => {
     if (query.trim() === "" || !userId) return;
@@ -133,8 +155,6 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       { role: "model", parts: "" },
     ]);
 
-    setQuery("");
-
     const formData = new FormData();
     formData.append("request", JSON.stringify(data));
 
@@ -142,7 +162,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       formData.append("tool_file", new File([toolFile], "functions_n_schemas"));
     }
 
-    const { result } = await askCustomChatbot(formData);
+    const { result, success } = await askCustomChatbot(formData);
 
     let textStream = "";
 
@@ -156,6 +176,25 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
       });
     }
 
+    if (success) {
+      const historyData: { role: "user" | "model"; parts: string }[] = [
+        { role: "user", parts: query },
+        { role: "model", parts: textStream },
+      ];
+
+      const response = await updateAiChatSessionHistory(
+        { chatHistory: historyData },
+        selectedChatSession?.id
+      );
+
+      if (!response.success) {
+        toast.error("Couldn't persist chat session history.");
+      } else {
+        revalidateAiChatSessionUpdate();
+      }
+    }
+
+    setQuery("");
     setIsLoading(false);
   };
 
@@ -185,14 +224,14 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
           <div className="w-full h-full">
             <ScrollArea
               ref={scrollAreaRef}
-              className="border border-violet-300 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 rounded-e-lg py-7 px-20 w-full h-full overflow-y-auto z-10 relative"
+              className="border border-violet-300 bg-gradient-to-r from-indigo-100 via-violet-100 to-indigo-200 rounded-e-lg pt-5 pb-20 px-20 w-full h-full overflow-y-auto z-10 relative"
             >
               {!selectedChatSession && (
-                <div className="flex items-center justify-center text-violet-900 h-full">
-                  <div className="text-[15rem] flex-col items-center justify-center h-full">
+                <div className="flex items-center justify-center text-violet-900 h-[70vh]">
+                  <div className="text-[15rem] flex flex-col items-center justify-center h-full">
                     <ChatSlashedFilledIcon />
-                    <p className="text-4xl text-violet-900 font-semibold">
-                      No chat selected
+                    <p className="text-3xl font-semibold">
+                      No session selected
                     </p>
                   </div>
                 </div>
@@ -236,6 +275,25 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
                   onKeyDown={handleKeyDown}
                   placeholder="Ask Chappy about the business..."
                 />
+
+                <div
+                  className="text-2xl -translate-y-[5.7rem] z-20 absolute right-16 top-1/2 p-0 transform text-indigo-800 hover:bg-inherit hover:text-indigo-700 cursor-pointer"
+                  onClick={() => {
+                    if (isRecording) {
+                      stopListening();
+                      setQuery(transcript);
+                      console.log(transcript);
+                      reset();
+                    } else {
+                      setQuery("");
+                      startListening();
+                    }
+                    setIsRecording(!isRecording);
+                  }}
+                >
+                  {isRecording ? <MicOffLineIcon /> : <MicLineIcon />}
+                </div>
+
                 <Button
                   onClick={handleSubmit}
                   disabled={isLoading}

@@ -20,7 +20,8 @@ interface Product {
 
 const CustomizeFeatured = () => {
     const { storeInfo, setStoreInfo, authToken } = useStoreContext();
-    const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
+    const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
+const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
 
     const [loading, setLoading] = useState<boolean>(true);
     const [products, setProducts] = useState<Product[]>([]);

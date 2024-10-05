@@ -16,7 +16,7 @@ import Link from "next/link";
 const CarouselContainer = () => {
   const router = useRouter();
 
-  const socialFrontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+  const socialFrontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
 
   const { storeInfo, loggedInUserId, loading } = useStoreContext();
   const [ui_images, setUi_images] = useState([

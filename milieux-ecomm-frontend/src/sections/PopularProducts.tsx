@@ -19,7 +19,8 @@ interface Product {
 const PopularProducts: React.FC = () => {
   const { storeInfo, loggedInUserId, setStoreInfo, authToken } =
     useStoreContext();
-  const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
+  const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
+const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
 
   if (!storeInfo) {
     return <p>Loading store info...</p>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Input } from "../ui/Input";
 import { Avatar, AvatarImage } from "../ui/Avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
@@ -28,6 +28,9 @@ import HelpCenterIcon from "../icons/HelpCenterIcon";
 import LogoutIcon from "../icons/LogoutIcon";
 import { logoutUser } from "@/actions/authActions";
 import { toast } from "sonner";
+import ImageSearchLineIcon from "../icons/ImageSearchLineIcon";
+import { Label } from "../ui/Label";
+import uploadToCloudinary from "@/actions/cloudinaryActions";
 
 const NavBar = ({
   loggedInUser,
@@ -35,21 +38,86 @@ const NavBar = ({
   loggedInUser: z.infer<typeof UserSchema>;
 }) => {
   const pathname = usePathname();
+
+  const [isLoading, setIsLoading] = useState(false);
   const [activeItem, setActiveItem] = useState(pathname);
   const [isAiActive, setIsAiActive] = useState(false);
   const [query, setQuery] = useState("");
+  const [selectedImage, setSelectedImage] = useState<
+    string | ArrayBuffer | null
+  >(null);
+
   const router = useRouter();
+
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const fReader = new FileReader();
+      fReader.readAsDataURL(file);
+
+      fReader.onloadend = function (event) {
+        const result = event.target?.result;
+        if (result) {
+          setSelectedImage(result);
+        }
+      };
+    }
+  };
+
+  const clearImage = () => {
+    setSelectedImage(null);
+  };
 
   useEffect(() => {
     setActiveItem(pathname);
   }, [pathname]);
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = async (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.key === "Enter") {
-      router.push(
-        `/search?query=${encodeURIComponent(query)}&forAi=${isAiActive}`
-      );
+      setIsLoading(true);
+
+      let imageUrl = null;
+
+      if (selectedImage) {
+        const uploadResult = await uploadToCloudinary(
+          selectedImage as string,
+          "image"
+        );
+
+        if (!uploadResult.success) {
+          toast.error("Upload failed.");
+          setIsLoading(false);
+          return;
+        } else {
+          imageUrl = uploadResult.url;
+
+          if (query.trim() === "") {
+            setQuery("Show posts relevant to this image.");
+          }
+        }
+      } else if (query.trim() === "") {
+        return;
+      }
+
+      if (imageUrl) {
+        router.push(
+          `/search?query=${encodeURIComponent(
+            query
+          )}&forAi=${isAiActive}&imageUrl=${imageUrl}`
+        );
+      } else {
+        router.push(
+          `/search?query=${encodeURIComponent(
+            query
+          )}&forAi=${isAiActive}&imageUrl`
+        );
+      }
+
       setQuery("");
+      setSelectedImage(null);
+      setIsLoading(false);
     }
   };
   const handleLogout = async () => {
@@ -66,16 +134,31 @@ const NavBar = ({
 
   return (
     <div className="grid grid-cols-11 font-medium text-slate-700 transition-all shadow-md bg-[#FAFAFA] px-4">
-      <div className="col-span-3">
+      <div className="col-span-3 flex flex-col">
         <div className="flex py-2 items-center justify-start gap-5">
           <Link className="flex items-center cursor-pointer" href={"/stream"}>
             <Image src="/logo.png" width={38} height={38} alt="" />
           </Link>
 
           <div className="flex w-full max-w-sm items-center space-x-2 relative">
-            <div className="absolute text-xl inset-y-0 left-1 flex items-center pl-4 pointer-events-none">
-              <SearchLineIcon />
-            </div>
+            <input
+              id="image-input-search"
+              type="file"
+              accept="image/*"
+              onChange={(event) => handleImageChange(event)}
+              style={{ display: "none" }}
+              className="w-0 h-0"
+            />
+            <Label
+              className={`absolute text-xl inset-y-0 left-1 flex items-center pl-2 ${
+                isAiActive
+                  ? "cursor-pointer text-lime-950"
+                  : "pointer-events-none"
+              }`}
+              htmlFor="image-input-search"
+            >
+              {isAiActive ? <ImageSearchLineIcon /> : <SearchLineIcon />}
+            </Label>
             <Input
               type="search"
               value={query}
@@ -104,6 +187,25 @@ const NavBar = ({
             </div>
           </div>
         </div>
+        {selectedImage && (
+          <div className="absolute flex items-center justify-center mt-12 ml-20">
+            <div className="relative p-1 bg-slate-500 rounded-lg drop-shadow-lg">
+              <Image
+                src={selectedImage as string}
+                alt=""
+                width={150}
+                height={150}
+                className="rounded-lg"
+              />
+              <button
+                className="absolute top-1 right-1 px-1 rounded-sm bg-red-500 text-white text-sm cursor-pointer"
+                onClick={() => clearImage()}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="col-span-4 content-center">

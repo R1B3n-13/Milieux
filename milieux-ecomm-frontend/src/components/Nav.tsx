@@ -16,7 +16,7 @@ import { Button } from './ui/button'
 const Nav = () => {
 
     const { storeInfo, loggedUserInfo, loading } = useStoreContext();
-    const socialFrontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+    
     console.log(storeInfo);
     console.log(loggedUserInfo);
     

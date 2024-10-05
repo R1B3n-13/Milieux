@@ -192,7 +192,7 @@ export const MessageBox = ({
             <div className="flex items-center justify-center h-full text-violet-900">
               <div className="text-[15rem] flex-col items-center justify-center">
                 <ChatSlashedFilledIcon />
-                <p className="text-4xl text-violet-900 font-semibold">
+                <p className="text-4xl font-semibold">
                   No chat selected
                 </p>
               </div>

@@ -1,4 +1,5 @@
 .venv
+milieux_ai_env
 .env
 .vscode
 __pycache__

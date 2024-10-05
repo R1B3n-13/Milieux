@@ -14,7 +14,8 @@ const CustomizeUiType = () => {
     "https://res.cloudinary.com/dify5wcxm/image/upload/v1726767655/osruln7kmmtat0jkamz4.png";
   const [error, setError] = useState<string | null>(null);
 
-  const PORT = process.env.ECOMM_BACKEND_URL || "http://localhost:8082/api";
+  const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
+const PORT = ecommBackend ? process.env[ecommBackend] : "http://localhost:8080/ecomm/api" ;
 
   const updateStoreUiType = async () => {
     try {
