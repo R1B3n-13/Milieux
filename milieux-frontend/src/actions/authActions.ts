@@ -11,7 +11,7 @@ const jwtConfig = {
   path: "/",
   sameSite: "none" as const,
   domain: process.env.HOST ?? "localhost",
-  httpOnly: true,
+  httpOnly: false,
   secure: process.env.NODE_ENV === "production",
 };
 
