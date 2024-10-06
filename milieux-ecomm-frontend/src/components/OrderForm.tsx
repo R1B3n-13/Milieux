@@ -42,11 +42,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ onAddressSubmit }) => {
     },
   });
 
-  const handleSubmit = (values: AddressFormValues) => {
-    if (showAddressForm) {
-      onAddressSubmit(values); // Send the address data to parent
-    }
-  };
+   const handleSubmit = (values: AddressFormValues) => {
+     onAddressSubmit(values);
+   };  
 
   return (
     <div className="w-full optional-address mt-6">

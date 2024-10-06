@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useStoreContext } from "@/contexts/StoreContext";
 import Link from "next/link";
 import OrderForm from "@/components/OrderForm";
+import { toast, useToast } from "@/hooks/use-toast";
 
 const Orders: React.FC = () => {
   const { cart, updateQuantity, removeFromCart, clearCart } = useShoppingCart(); // Added clearCart function
@@ -14,8 +15,10 @@ const Orders: React.FC = () => {
     useStoreContext();
   const [address, setAddress] = useState<String>(""); // State to store address
 
+  const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
+  const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
+
   console.log("Store Info:", storeInfo);
-  
 
   const calculateTotal = () => {
     return cart
@@ -24,12 +27,15 @@ const Orders: React.FC = () => {
   };
 
   const handleAddressSubmit = (address: any) => {
-    // Combine the address fields into a formatted string
     const formattedAddress = `${address.street}, ${address.city}, ${address.state}, ${address.postalCode}`;
-
     console.log("Address submitted:", formattedAddress);
 
-    setAddress(formattedAddress); // Store the formatted address in the parent component state
+    setAddress(formattedAddress);
+
+    toast({
+      title: "Addess recorded",
+      description: `${formattedAddress}`,
+    });
   };
 
   const placeOrder = async () => {
@@ -46,7 +52,7 @@ const Orders: React.FC = () => {
         status: 0,
       };
 
-      const response = await fetch("http://localhost:8082/api/order/create", {
+      const response = await fetch(`${PORT}/order/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,11 +65,23 @@ const Orders: React.FC = () => {
         console.log("Order placed:", cart);
         setOrderPlaced(true);
         clearCart(); // Clear the cart after the order is placed
+        toast({
+          title: "Order placed successfully!",
+          description: "Your order has been placed.",
+        });
       } else {
         console.error("Failed to place the order");
+        toast({
+          title: "Failed placing order.",
+          description: "Your order couldn't be placed. Try again.",
+        });
       }
     } catch (error) {
       console.error("Error placing the order:", error);
+      toast({
+        title: "Failed placing order.",
+        description: "Your order couldn't be placed. Try again.",
+      });
     }
   };
 
@@ -76,7 +94,7 @@ const Orders: React.FC = () => {
           className="w-fit m-10 border-[1.5px] border-gray-200 hover:bg-black hover:text-white"
           variant={"ghost"}
         >
-          <Link href={"/"}>Back to Home</Link>
+          <Link href={`/?id=${storeInfo.id}`}>Back to Home</Link>
         </Button>
       </div>
     );
@@ -96,7 +114,7 @@ const Orders: React.FC = () => {
                 className="w-fit m-10 border-[1.5px] border-gray-200 hover:bg-black hover:text-white"
                 variant={"ghost"}
               >
-                <Link href={"/"}>Back to Home</Link>
+                <Link href={`/?id=${storeInfo.id}`}>Back to Home</Link>
               </Button>
             </div>
           ) : (
@@ -157,7 +175,11 @@ const Orders: React.FC = () => {
                 </p>
                 <Button
                   className="text-white"
-                  style={{ backgroundColor: storeInfo.ui_accent_color ? storeInfo.ui_accent_color : "#333" }}
+                  style={{
+                    backgroundColor: storeInfo.ui_accent_color
+                      ? storeInfo.ui_accent_color
+                      : "#333",
+                  }}
                   onClick={placeOrder}
                 >
                   Place Order
