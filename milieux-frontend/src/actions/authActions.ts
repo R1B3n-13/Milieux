@@ -10,7 +10,6 @@ const jwtConfig = {
   maxAge: parseInt(process.env.JWT_EXPIRATION || "86400"),
   path: "/",
   sameSite: "none" as const,
-  domain: process.env.HOST ?? "localhost",
   httpOnly: false,
   secure: process.env.NODE_ENV === "production",
 };
@@ -20,6 +19,7 @@ export async function registerUser(userData: z.infer<typeof RegisterSchema>) {
     const url = new URL("/auth/register", backendUrl);
 
     const response = await fetch(url, {
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,6 +44,7 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
     const url = new URL("/auth/login", backendUrl);
 
     const response = await fetch(url, {
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +60,7 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
       return {
         status: responseData.status,
         success: responseData.success,
-        message: responseData.message,
+        message: responseData.token,
       };
     }
 
