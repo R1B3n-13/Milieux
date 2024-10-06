@@ -19,6 +19,7 @@ const nextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "100mb",
+      allowedOrigins: ["milieux-ecomm.vercel.app", "milieux.vercel.app"],
     },
   },
   async rewrites() {
