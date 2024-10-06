@@ -12,11 +12,8 @@ const Hero = () => {
   const router = useRouter();
   const { storeInfo, loggedInUserId } = useStoreContext();
 
-  const socialFrontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
-
-  if (!storeInfo) {
-    return <p>Loading store info...</p>;
-  }
+  const socialFrontendUrl =
+    process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
 
   const banner = storeInfo.banner;
   const accentColor = storeInfo.ui_accent_color;
@@ -40,6 +37,10 @@ const Hero = () => {
       setBigImage(storeInfo.ui_images[0]);
     }
   }, [storeInfo.ui_images]);
+
+  if (!storeInfo) {
+    return <p>Loading store info...</p>;
+  }
 
   return (
     <>
