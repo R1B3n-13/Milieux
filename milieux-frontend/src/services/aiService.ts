@@ -2,6 +2,8 @@ import getAuthToken from "@/actions/authActions";
 import { getBackendUrl } from "@/actions/getEnvVarActions";
 
 export async function getAiChatParams(userId: number | null | undefined) {
+  const authToken = await getAuthToken();
+
   try {
     if (!userId) {
       throw new Error("Invalid user id.");
@@ -9,7 +11,6 @@ export async function getAiChatParams(userId: number | null | undefined) {
 
     const url = new URL(`/ai-chat/params/${userId}`, await getBackendUrl());
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -38,6 +39,8 @@ export async function getAiChatParams(userId: number | null | undefined) {
 }
 
 export async function getAiTool(userId: number | null | undefined) {
+  const authToken = await getAuthToken();
+
   try {
     if (!userId) {
       throw new Error("Invalid user id.");
@@ -45,7 +48,6 @@ export async function getAiTool(userId: number | null | undefined) {
 
     const url = new URL(`/ai-chat/tools/${userId}`, await getBackendUrl());
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

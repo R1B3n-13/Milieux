@@ -7,10 +7,11 @@ import { z } from "zod";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function createPost(postData: z.infer<typeof PostSchema>) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/posts/create", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -46,12 +47,13 @@ export async function updatePost(
   postData: z.infer<typeof PostSchema>,
   postId: number | null | undefined
 ) {
+  const authToken = await getAuthToken();
+
   try {
     if (!postId) throw new Error("Invalid post id.");
 
     const url = new URL(`/posts/update/${postId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -84,12 +86,13 @@ export async function updatePost(
 }
 
 export async function appreciatePost(postId: number | undefined | null) {
+  const authToken = await getAuthToken();
+
   try {
     if (!postId) throw new Error("Invalid post id.");
 
     const url = new URL(`/posts/like/${postId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -121,12 +124,13 @@ export async function appreciatePost(postId: number | undefined | null) {
 }
 
 export async function bookmarkPost(postId: number | undefined | null) {
+  const authToken = await getAuthToken();
+
   try {
     if (!postId) throw new Error("Invalid post id.");
 
     const url = new URL(`/posts/save/${postId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

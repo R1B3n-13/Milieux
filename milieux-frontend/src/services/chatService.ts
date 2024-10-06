@@ -4,10 +4,11 @@ import { getBackendUrl } from "@/actions/getEnvVarActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function getChats() {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/chats/by-user_id", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -38,6 +39,8 @@ export async function getChats() {
 }
 
 export async function getChatMessages(chatId: number | null | undefined) {
+  const authToken = await getAuthToken();
+
   try {
     if (!chatId) {
       throw new Error("Invalid chat id.");
@@ -45,7 +48,6 @@ export async function getChatMessages(chatId: number | null | undefined) {
 
     const url = new URL(`/messages/${chatId}`, await getBackendUrl());
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

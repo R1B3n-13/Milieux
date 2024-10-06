@@ -3,10 +3,11 @@ import getAuthToken from "@/actions/authActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function getBusinessUsers() {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/users/by-is_business", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

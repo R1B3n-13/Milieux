@@ -8,10 +8,11 @@ export async function createAiChatSession(data: {
   name: string;
   chatHistory: { role: "user" | "model"; parts: string }[];
 }) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/ai-chat-session/create", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -49,6 +50,8 @@ export async function updateAiChatSessionHistory(
   },
   chatSessionId: number | null | undefined
 ) {
+  const authToken = await getAuthToken();
+
   try {
     if (!chatSessionId) {
       throw new Error("Invalid chat session id.");
@@ -56,7 +59,6 @@ export async function updateAiChatSessionHistory(
 
     const url = new URL(`/ai-chat-session/update/${chatSessionId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -91,6 +93,8 @@ export async function updateAiChatSessionHistory(
 export async function deleteAiChatSession(
   chatSessionId: number | null | undefined
 ) {
+  const authToken = await getAuthToken();
+
   try {
     if (!chatSessionId) {
       throw new Error("Invalid chat session id.");
@@ -98,7 +102,6 @@ export async function deleteAiChatSession(
 
     const url = new URL(`/ai-chat-session/delete/${chatSessionId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
