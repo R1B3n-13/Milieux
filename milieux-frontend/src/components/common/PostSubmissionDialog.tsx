@@ -202,6 +202,12 @@ export default function PostSubmissionDialog({
   const clearMedia = () => {
     setSelectedMedia(null);
     setMediaType(undefined);
+    setMedia(null);
+  };
+
+  const clearAll = () => {
+    setSelectedMedia(null);
+    setMediaType(undefined);
     setText("");
     setAiText("");
     setMedia(null);
@@ -210,6 +216,10 @@ export default function PostSubmissionDialog({
     setIsAiPicOn(false);
     setPromptForPicGen("");
     setSelectedModel(undefined);
+    setIsLoading(false);
+    setIsLoading2(false);
+    setIsLoading3(false);
+    setIsLoading4(false);
   };
 
   const handleSubmit = async () => {
@@ -505,7 +515,7 @@ export default function PostSubmissionDialog({
 
           <AlertDialogFooter>
             <div className="flex justify-end gap-4">
-              <AlertDialogCancel onClick={clearMedia}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel onClick={clearAll}>Cancel</AlertDialogCancel>
               <Button
                 onClick={handleSubmit}
                 disabled={isLoading || (!text && !selectedMedia)}

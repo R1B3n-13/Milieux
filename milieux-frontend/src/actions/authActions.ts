@@ -60,7 +60,7 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
       return {
         status: responseData.status,
         success: responseData.success,
-        message: responseData.token,
+        message: responseData.message,
       };
     }
 
