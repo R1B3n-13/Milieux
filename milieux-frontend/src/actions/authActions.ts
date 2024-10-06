@@ -10,7 +10,6 @@ const jwtConfig = {
   maxAge: parseInt(process.env.JWT_EXPIRATION || "86400"),
   path: "/",
   sameSite: "none" as const,
-  domain: process.env.HOST ?? "localhost",
   httpOnly: false,
   secure: process.env.NODE_ENV === "production",
 };
@@ -56,6 +55,7 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
 
     if (response.ok) {
       cookies().set("jwt", responseData.token, jwtConfig);
+      console.log(responseData.token);
       return {
         status: responseData.status,
         success: responseData.success,
