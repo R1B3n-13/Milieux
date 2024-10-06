@@ -26,7 +26,7 @@ const PageCustomize = () => {
     useStoreContext();
   const { toast } = useToast();
   const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
-const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
+  const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
 
   const [newStoreName, setNewStoreName] = useState<string>("");
   const [newStoreBanner, setNewStoreBanner] = useState<string>("");
@@ -122,6 +122,11 @@ const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
         ...prevStoreInfo,
         banner: newStoreBanner,
       }));
+
+      toast({
+        title: "Store banner has been updated successfully.",
+        description: `${newStoreBanner}`,
+      });
     } catch (error: any) {
       console.error("Error updating store name:", error);
       setError(error.message || "Failed to update store name");
