@@ -19,6 +19,7 @@ export async function registerUser(userData: z.infer<typeof RegisterSchema>) {
     const url = new URL("/auth/register", backendUrl);
 
     const response = await fetch(url, {
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,6 +44,7 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
     const url = new URL("/auth/login", backendUrl);
 
     const response = await fetch(url, {
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,11 +57,10 @@ export async function loginUser(userData: z.infer<typeof LoginSchema>) {
 
     if (response.ok) {
       cookies().set("jwt", responseData.token, jwtConfig);
-      console.log(responseData.token);
       return {
         status: responseData.status,
         success: responseData.success,
-        message: responseData.message,
+        message: responseData.token,
       };
     }
 
