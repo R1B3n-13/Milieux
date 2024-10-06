@@ -5,6 +5,7 @@ import { StoreProvider } from "@/contexts/StoreContext";
 import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
 import { Toaster } from "@/components/ui/toaster";
 import Nav from "@/components/Nav";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,26 +21,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-
-    <StoreProvider>
-      <ShoppingCartProvider>
-        <html lang="en">
-          <head>
-            <meta charSet="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <link rel="stylesheet" href="path-to-your-globals.css" />
-            <link rel="icon" href="/icon.png" sizes="any" />
-          </head>
-          <body className={inter.className}>
-            <div className="relative h-screen">
-              <Nav />
-              {children}
-            </div>
-            <Toaster />
-          </body>
-        </html>
-      </ShoppingCartProvider>
-    </StoreProvider>
-
+    <Suspense fallback={<div>Loading...</div>}>
+      <StoreProvider>
+        <ShoppingCartProvider>
+          <html lang="en">
+            <head>
+              <meta charSet="UTF-8" />
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+              />
+              <link rel="stylesheet" href="path-to-your-globals.css" />
+              <link rel="icon" href="/icon.png" sizes="any" />
+            </head>
+            <body className={inter.className}>
+              <div className="relative h-screen">
+                <Nav />
+                {children}
+              </div>
+              <Toaster />
+            </body>
+          </html>
+        </ShoppingCartProvider>
+      </StoreProvider>
+    </Suspense>
   );
 }

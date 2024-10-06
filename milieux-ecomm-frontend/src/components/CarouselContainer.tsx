@@ -16,7 +16,8 @@ import Link from "next/link";
 const CarouselContainer = () => {
   const router = useRouter();
 
-  const socialFrontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+  const socialFrontendUrl =
+    process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
 
   const { storeInfo, loggedInUserId, loading } = useStoreContext();
   const [ui_images, setUi_images] = useState([
@@ -24,15 +25,15 @@ const CarouselContainer = () => {
     "https://placehold.co/600x400/png",
   ]);
 
-  if (!storeInfo) {
-    return <p>Loading store info...</p>;
-  }
-
   useEffect(() => {
     if (storeInfo.ui_images !== null) {
       setUi_images(storeInfo.ui_images);
     }
   }, [storeInfo.ui_images]);
+
+  if (!storeInfo) {
+    return <p>Loading store info...</p>;
+  }
 
   if (loading) {
     return <div>Loading...</div>;

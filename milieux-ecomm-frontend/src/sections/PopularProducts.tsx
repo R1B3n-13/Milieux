@@ -20,11 +20,7 @@ const PopularProducts: React.FC = () => {
   const { storeInfo, loggedInUserId, setStoreInfo, authToken } =
     useStoreContext();
   const ecommBackend = process.env.NEXT_PUBLIC_ECOMM_BACKEND_URL;
-const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
-
-  if (!storeInfo) {
-    return <p>Loading store info...</p>;
-  }
+  const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
 
   const accentColor = storeInfo.ui_accent_color;
 
@@ -74,6 +70,10 @@ const PORT = ecommBackend ? ecommBackend : "http://localhost:8080/ecomm/api";
     ));
   } else {
     content = <p>No products available</p>;
+  }
+
+  if (!storeInfo) {
+    return <p>Loading store info...</p>;
   }
 
   return (
