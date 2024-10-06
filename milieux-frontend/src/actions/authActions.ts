@@ -9,6 +9,7 @@ const backendUrl = process.env.BACKEND_URL;
 const jwtConfig = {
   maxAge: parseInt(process.env.JWT_EXPIRATION || "86400"),
   path: "/",
+  sameSite: "none" as const,
   domain: process.env.HOST ?? "localhost",
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
