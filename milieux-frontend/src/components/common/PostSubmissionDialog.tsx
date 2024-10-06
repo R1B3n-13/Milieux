@@ -291,7 +291,7 @@ export default function PostSubmissionDialog({
           <div className="flex flex-col gap-2 items-center justify-center">
             <AlertDialogTitle>Create post</AlertDialogTitle>
             <AlertDialogDescription>
-              Post to the stream from here. Click post when you're done.
+              Post to the stream from here. Click post when you&apos;re done.
             </AlertDialogDescription>
           </div>
         </AlertDialogHeader>

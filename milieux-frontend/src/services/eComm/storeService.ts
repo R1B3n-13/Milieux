@@ -3,6 +3,8 @@ import getAuthToken from "@/actions/authActions";
 const backendUrl = process.env.ECOMM_BACKEND_URL;
 
 export async function getStoreById(storeId: number | null | undefined) {
+  const authToken = await getAuthToken();
+
   try {
     if (!storeId) {
       throw new Error("Invalid store id.");
@@ -10,7 +12,6 @@ export async function getStoreById(storeId: number | null | undefined) {
 
     const url = `${backendUrl}/store/find/${storeId}`;
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

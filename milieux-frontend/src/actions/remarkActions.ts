@@ -10,12 +10,13 @@ export async function createRemark(
   remarkData: z.infer<typeof RemarkSchema>,
   postId: number | undefined | null
 ) {
+  const authToken = await getAuthToken();
+
   try {
     if (!postId) throw new Error("Invalid post id.");
 
     const url = new URL(`/comments/create/post/${postId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

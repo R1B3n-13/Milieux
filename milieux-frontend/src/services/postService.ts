@@ -3,10 +3,11 @@ import getAuthToken from "@/actions/authActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function getAllPosts() {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/posts", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -35,12 +36,13 @@ export async function getAllPosts() {
 }
 
 export async function getPostsByUserId(userId: number | null) {
+  const authToken = await getAuthToken();
+
   try {
     if (!userId) throw Error("Invalid user id.");
 
     const url = new URL(`/posts/by-user_id/${userId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -69,10 +71,11 @@ export async function getPostsByUserId(userId: number | null) {
 }
 
 export async function getSavedPosts() {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/posts/saved", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

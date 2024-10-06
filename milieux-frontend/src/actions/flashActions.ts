@@ -7,10 +7,11 @@ import { z } from "zod";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function createFlash(flashData: z.infer<typeof FlashSchema>) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/reels/create", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

@@ -7,10 +7,11 @@ import UserSchema from "@/schemas/userSchema";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function updateUser(userData: z.infer<typeof UserSchema>) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/users/update", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -43,12 +44,13 @@ export async function updateUser(userData: z.infer<typeof UserSchema>) {
 }
 
 export async function followUser(userId: number | null | undefined) {
+  const authToken = await getAuthToken();
+
   try {
     if (!userId) throw new Error("Invalid user id");
 
     const url = new URL(`/users/follow/${userId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

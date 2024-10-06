@@ -3,10 +3,11 @@ import getAuthToken from "@/actions/authActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function getUserFromAuthToken() {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/users/profile", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -39,6 +40,8 @@ export async function getUserFromAuthToken() {
 }
 
 export async function getUserById(userId: number | undefined | null) {
+  const authToken = await getAuthToken();
+
   try {
     if (!userId) {
       throw Error("Invalid user id.");
@@ -46,7 +49,6 @@ export async function getUserById(userId: number | undefined | null) {
 
     const url = new URL(`/users/${userId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -77,10 +79,11 @@ export async function getUserById(userId: number | undefined | null) {
 }
 
 export async function getUsersByIds(data: number[]) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/users/by-ids", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

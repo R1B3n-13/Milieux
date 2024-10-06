@@ -3,10 +3,11 @@ import getAuthToken from "@/actions/authActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function getAllFlash() {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/reels", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -35,12 +36,13 @@ export async function getAllFlash() {
 }
 
 export async function getFlashById(reelId: number | null | undefined) {
+  const authToken = await getAuthToken();
+
   try {
     if (!reelId) throw new Error("Invalid reel id.");
 
     const url = new URL(`/reels/${reelId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

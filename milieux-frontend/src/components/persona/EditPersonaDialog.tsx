@@ -136,7 +136,8 @@ const EditPersonaDialog = ({ dialogButton }: { dialogButton: JSX.Element }) => {
         <AlertDialogHeader className="flex items-center justify-center">
           <AlertDialogTitle>Edit Your Persona</AlertDialogTitle>
           <AlertDialogDescription>
-            Update the fields below and click save changes when you're done.
+            Update the fields below and click save changes when you&apos;re
+            done.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <ScrollArea className="max-h-[80vh] p-3">

@@ -5,10 +5,11 @@ import getAuthToken from "@/actions/social/authActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function updateUser(userData: { isStoreLandingPage: boolean }) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/users/update", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

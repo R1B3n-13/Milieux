@@ -4,13 +4,14 @@ import { getBackendUrl } from "@/actions/getEnvVarActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function searchUsers(query: string) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL(
       `/users/search?query=${query}`,
       backendUrl || (await getBackendUrl())
     );
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -41,10 +42,11 @@ export async function searchUsers(query: string) {
 }
 
 export async function getPostsByIds(data: number[]) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL("/posts/by-ids", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

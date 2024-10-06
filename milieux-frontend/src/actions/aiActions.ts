@@ -475,10 +475,11 @@ export async function createAiChatParams(data: {
   topK: number;
   systemInstruction: string;
 }) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL(`/ai-chat/params/create`, await getBackendUrl());
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -511,12 +512,13 @@ export async function createAiChatParams(data: {
 }
 
 export async function createAiTool(data: FormData) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL(`/ai-chat/tools/create`, await getBackendUrl());
 
     console.log(data);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -548,10 +550,11 @@ export async function createAiTool(data: FormData) {
 }
 
 export async function updateAiTool(data: FormData) {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL(`/ai-chat/tools/update`, await getBackendUrl());
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

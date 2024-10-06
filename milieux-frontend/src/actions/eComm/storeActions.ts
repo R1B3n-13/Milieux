@@ -9,6 +9,8 @@ export async function createStore(data: {
   name: string;
   category: string;
 }) {
+  const authToken = await getAuthToken();
+
   try {
     if (!data.id) {
       throw new Error("Invalid user id.");
@@ -16,7 +18,6 @@ export async function createStore(data: {
 
     const url = `${backendUrl}/store/create`;
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

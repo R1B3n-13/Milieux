@@ -4,13 +4,14 @@ import { getBackendUrl } from "@/actions/social/getEnvVarActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function getUserFromAuthToken() {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL(
       "/users/profile",
       backendUrl || (await getBackendUrl())
     );
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

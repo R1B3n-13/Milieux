@@ -5,6 +5,8 @@ import getAuthToken from "@/actions/authActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function createChat(userId: number | null | undefined) {
+  const authToken = await getAuthToken();
+
   try {
     if (!userId) {
       throw new Error("Invalid user id.");
@@ -12,7 +14,6 @@ export async function createChat(userId: number | null | undefined) {
 
     const url = new URL("/chats/create", backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -51,6 +52,8 @@ export async function sendMessage({
   chatId: number | null | undefined;
   message: { text: string; imagePath: string | null; messageType: string };
 }) {
+  const authToken = await getAuthToken();
+
   try {
     if (!chatId) {
       throw new Error("Invalid chat id.");
@@ -58,7 +61,6 @@ export async function sendMessage({
 
     const url = new URL(`/messages/create/${chatId}`, backendUrl);
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,

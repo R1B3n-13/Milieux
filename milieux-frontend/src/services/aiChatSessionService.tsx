@@ -4,13 +4,14 @@ import { getBackendUrl } from "@/actions/getEnvVarActions";
 const backendUrl = process.env.BACKEND_URL;
 
 export async function getAiChatSessions() {
+  const authToken = await getAuthToken();
+
   try {
     const url = new URL(
       "/ai-chat-session/by-user_id",
       backendUrl || (await getBackendUrl())
     );
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
@@ -43,6 +44,8 @@ export async function getAiChatSessions() {
 export async function getAiChatSessionHistory(
   chatSessionId: number | null | undefined
 ) {
+  const authToken = await getAuthToken();
+
   try {
     if (!chatSessionId) {
       throw new Error("Invalid chat session id.");
@@ -53,7 +56,6 @@ export async function getAiChatSessionHistory(
       backendUrl || (await getBackendUrl())
     );
 
-    const authToken = await getAuthToken();
     if (!authToken)
       return {
         status: 401,
