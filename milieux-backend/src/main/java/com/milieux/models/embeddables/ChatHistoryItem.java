@@ -20,6 +20,6 @@ public class ChatHistoryItem {
     private String role;
 
     @JsonProperty("parts")
-    @Column(length = 4000)
+    @Column(length = 10000)
     private String parts;
 }

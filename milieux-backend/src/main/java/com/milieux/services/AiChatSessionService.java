@@ -7,9 +7,9 @@ import com.milieux.dtos.responses.BaseResponseDto;
 
 public interface AiChatSessionService {
 
-	public BaseResponseDto createAiChatSession(Long userId, AiChatSessionRequestDto requestDto);
+	public BaseResponseDto createAiChatSession(Long chatbotId, Long userId, AiChatSessionRequestDto requestDto);
 
-	public AiChatSessionListResponseDto getAiChatSessionsByUserId(Long userId);
+	public AiChatSessionListResponseDto getAiChatSessionsByChatbotId(Long chatbotId, Long userId);
 
 	public AiChatSessionHistoryResponseDto getAiChatSessionHistory(Long aiChatSessionId);
 

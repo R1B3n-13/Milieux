@@ -35,13 +35,14 @@ public class AiChatSessionServiceImpl implements AiChatSessionService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public BaseResponseDto createAiChatSession(Long userId, AiChatSessionRequestDto requestDto) {
+	public BaseResponseDto createAiChatSession(Long chatbotId, Long userId, AiChatSessionRequestDto requestDto) {
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("No user present with id: " + userId));
 
 		AiChatSession aiChatSession = modelMapper.map(requestDto, AiChatSession.class);
 
+		aiChatSession.setChatbotId(chatbotId);
 		aiChatSession.setUser(user);
 
 		aiChatSessionRepository.save(aiChatSession);
@@ -50,9 +51,10 @@ public class AiChatSessionServiceImpl implements AiChatSessionService {
 	}
 
 	@Override
-	public AiChatSessionListResponseDto getAiChatSessionsByUserId(Long userId) {
+	public AiChatSessionListResponseDto getAiChatSessionsByChatbotId(Long chatbotId, Long userId) {
 
-		List<AiChatSession> aiChatSessions = aiChatSessionRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
+		List<AiChatSession> aiChatSessions = aiChatSessionRepository
+				.findAllByUserIdAndChatbotIdOrderByCreatedAtDesc(userId, chatbotId);
 
 		List<AiChatSessionDto> dtos = aiChatSessions.stream()
 				.map(aiChatSession -> modelMapper.map(aiChatSession, AiChatSessionDto.class))

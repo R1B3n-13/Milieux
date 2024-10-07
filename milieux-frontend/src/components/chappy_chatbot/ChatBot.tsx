@@ -220,7 +220,7 @@ const ChatBot = ({ userId }: { userId: number | null | undefined }) => {
     >
       {currentPdfName ? (
         <div className="flex h-full w-full">
-          <ChatBotSideBar />
+          <ChatBotSideBar userId={userId} />
           <div className="w-full h-full">
             <ScrollArea
               ref={scrollAreaRef}

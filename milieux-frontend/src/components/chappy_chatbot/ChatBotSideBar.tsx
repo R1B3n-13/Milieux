@@ -11,7 +11,7 @@ import Loading from "../common/Loading";
 import ChatSessionList from "./ChatSessionList";
 import { useChatBotContext } from "./ChatBotContextProvider";
 
-const ChatBotSideBar = () => {
+const ChatBotSideBar = ({ userId }: { userId: number | null | undefined }) => {
   const [newSessionName, setNewSessionName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,7 +22,7 @@ const ChatBotSideBar = () => {
 
     setIsLoading(true);
 
-    const response = await createAiChatSession({
+    const response = await createAiChatSession(userId, {
       name: newSessionName,
       chatHistory: [],
     });
@@ -58,7 +58,7 @@ const ChatBotSideBar = () => {
           {isLoading ? <Loading text={""} /> : <AddFolderLineIcon />}
         </div>
       </div>
-      <ChatSessionList />
+      <ChatSessionList userId={userId} />
     </div>
   );
 };

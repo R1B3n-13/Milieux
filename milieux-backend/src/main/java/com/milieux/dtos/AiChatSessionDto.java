@@ -17,6 +17,8 @@ public class AiChatSessionDto {
 
 	private Long id;
 
+	private Long chatbotId;
+
 	private String name;
 
 	private User user;
