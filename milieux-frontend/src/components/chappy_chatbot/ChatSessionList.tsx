@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { revalidateAiChatSessionDelete } from "@/actions/revalidationActions";
 
-const ChatSessionList = () => {
+const ChatSessionList = ({ userId }: { userId: number | null | undefined }) => {
   const [aiChatSessions, setAiChatSessions] = useState<
     z.infer<typeof AiChatSessionSchema>[]
   >([]);
@@ -28,7 +28,7 @@ const ChatSessionList = () => {
 
   useEffect(() => {
     const fetchAiChatSessions = async () => {
-      const aiChatSessionsResponse = await getAiChatSessions();
+      const aiChatSessionsResponse = await getAiChatSessions(userId);
 
       if (aiChatSessionsResponse.success) {
         setAiChatSessions(aiChatSessionsResponse.aiChatSessions);

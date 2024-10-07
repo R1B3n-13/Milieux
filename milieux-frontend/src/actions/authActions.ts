@@ -11,7 +11,7 @@ const jwtConfig = {
   path: "/",
   sameSite: "none" as const,
   httpOnly: false,
-  secure: process.env.NODE_ENV === "production",
+  secure: true,
 };
 
 export async function registerUser(userData: z.infer<typeof RegisterSchema>) {

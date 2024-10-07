@@ -3,12 +3,16 @@ import { getBackendUrl } from "@/actions/getEnvVarActions";
 
 const backendUrl = process.env.BACKEND_URL;
 
-export async function getAiChatSessions() {
+export async function getAiChatSessions(chatbotId: number | null | undefined) {
   const authToken = await getAuthToken();
 
   try {
+    if (!chatbotId) {
+      throw new Error("Invalid chatbot id.");
+    }
+
     const url = new URL(
-      "/ai-chat-session/by-user_id",
+      `/ai-chat-session/by-chatbot_id/${chatbotId}`,
       backendUrl || (await getBackendUrl())
     );
 

@@ -30,7 +30,7 @@ public class ChatMessage {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(length = 4000)
+	@Column(length = 10000)
 	private String text;
 	private String imagePath;
 

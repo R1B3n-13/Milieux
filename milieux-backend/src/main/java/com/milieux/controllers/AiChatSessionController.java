@@ -30,24 +30,26 @@ public class AiChatSessionController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping("/create")
-	public ResponseEntity<BaseResponseDto> createAiChatSession(@RequestBody AiChatSessionRequestDto requestDto,
+	@PostMapping("/create/{chatbotId}")
+	public ResponseEntity<BaseResponseDto> createAiChatSession(@PathVariable Long chatbotId,
+			@RequestBody AiChatSessionRequestDto requestDto,
 			@RequestHeader("Authorization") String header) {
 
 		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
-		BaseResponseDto responseDto = aiChatSessionService.createAiChatSession(userId, requestDto);
+		BaseResponseDto responseDto = aiChatSessionService.createAiChatSession(chatbotId, userId, requestDto);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 
-	@GetMapping("/by-user_id")
-	public ResponseEntity<AiChatSessionListResponseDto> getAiChatSessionsByUserId(
+	@GetMapping("/by-chatbot_id/{chatbotId}")
+	public ResponseEntity<AiChatSessionListResponseDto> getAiChatSessionsByChatbotId(@PathVariable Long chatbotId,
 			@RequestHeader("Authorization") String header) {
 
 		Long userId = userService.getUserFromAuthHeader(header).getUser().getId();
 
-		AiChatSessionListResponseDto responseDtos = aiChatSessionService.getAiChatSessionsByUserId(userId);
+		AiChatSessionListResponseDto responseDtos = aiChatSessionService.getAiChatSessionsByChatbotId(chatbotId,
+				userId);
 
 		return ResponseEntity.ok(responseDtos);
 	}

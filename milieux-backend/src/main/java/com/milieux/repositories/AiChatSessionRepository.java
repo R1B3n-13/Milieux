@@ -8,5 +8,5 @@ import com.milieux.models.AiChatSession;
 
 public interface AiChatSessionRepository extends JpaRepository<AiChatSession, Long> {
 
-	public List<AiChatSession> findAllByUserIdOrderByCreatedAtDesc(Long userId);
+	List<AiChatSession> findAllByUserIdAndChatbotIdOrderByCreatedAtDesc(Long userId, Long chatbotId);
 }

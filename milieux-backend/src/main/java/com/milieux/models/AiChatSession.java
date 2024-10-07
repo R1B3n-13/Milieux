@@ -38,6 +38,8 @@ public class AiChatSession {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	private Long chatbotId;
+
 	private String name;
 
 	@ElementCollection

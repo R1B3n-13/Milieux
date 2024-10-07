@@ -3,6 +3,7 @@ import UserSchema from "./userSchema";
 
 const AiChatSessionSchema = z.object({
   id: z.number().nullable().optional(),
+  chatbotId: z.number().nullable().optional(),
   name: z.string().nullable().optional(),
   user: UserSchema.nullable().optional(),
   createdAt: z

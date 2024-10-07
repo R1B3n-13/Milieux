@@ -4,14 +4,21 @@ import getAuthToken from "@/actions/authActions";
 
 const backendUrl = process.env.BACKEND_URL;
 
-export async function createAiChatSession(data: {
-  name: string;
-  chatHistory: { role: "user" | "model"; parts: string }[];
-}) {
+export async function createAiChatSession(
+  chatbotId: number | null | undefined,
+  data: {
+    name: string;
+    chatHistory: { role: "user" | "model"; parts: string }[];
+  }
+) {
   const authToken = await getAuthToken();
 
   try {
-    const url = new URL("/ai-chat-session/create", backendUrl);
+    if (!chatbotId) {
+      throw new Error("Invalid chatbot id.");
+    }
+
+    const url = new URL(`/ai-chat-session/create/${chatbotId}`, backendUrl);
 
     if (!authToken)
       return {
